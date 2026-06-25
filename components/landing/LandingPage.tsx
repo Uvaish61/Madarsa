@@ -1,8 +1,18 @@
 "use client";
 
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  ArrowRight, BadgeCheck, BarChart2, Check, Cloud, Code2,
+  Globe, GraduationCap, Hammer, Languages, Link2, Menu,
+  Paintbrush, Server, Smartphone, Sparkles, Star, UserCheck,
+  Wifi, X,
+  type LucideIcon,
+} from "lucide-react";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import heroStudentGreen from "../../assets/images/hero-student-green.png";
+import CourseLogo from "@/components/CourseLogo";
 import {
   certificationBullets,
   courses,
@@ -23,6 +33,23 @@ import {
 
 const text = (copy: Copy, locale: Locale) => copy[locale];
 
+const ICONS: Record<string, LucideIcon> = {
+  Languages, Wifi, Smartphone, Hammer, UserCheck, BadgeCheck, GraduationCap,
+  Code2, BarChart2, Paintbrush, Server, Sparkles, Cloud,
+};
+
+function Icon({ name, className }: { name: string; className?: string }) {
+  const C = ICONS[name];
+  return C ? <C className={className} /> : null;
+}
+
+const SKILL_DOT_COLORS: Record<string, string> = {
+  React: "#61DAFB", "Next.js": "#aaaaaa", JavaScript: "#F7DF1E",
+  Python: "#4B8BBE", Flutter: "#54C5F8", TensorFlow: "#FF6F00",
+  SQL: "#e04d2f", Figma: "#F24E1E", "Node.js": "#68A063",
+  Cloud: "#FF9900", AI: "#8B5CF6", GitHub: "#6e5494",
+};
+
 function SectionHeading({ eyebrow, title, description, locale }: { eyebrow: Copy; title: Copy; description?: Copy; locale: Locale }) {
   return (
     <div className="mx-auto mb-10 max-w-3xl text-center">
@@ -37,6 +64,74 @@ export default function LandingPage() {
   const [locale, setLocale] = useState<Locale>("en");
   const [menuOpen, setMenuOpen] = useState(false);
 
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // #4 Hero entrance — badge → h1 → p → CTAs → badges → stats
+    gsap.from("[data-hero-item]", {
+      y: 26,
+      opacity: 0,
+      duration: 0.65,
+      stagger: 0.1,
+      ease: "power3.out",
+      clearProps: "all",
+    });
+
+    // #5 Stats counter — green banner
+    document.querySelectorAll<HTMLElement>("[data-count]").forEach((el) => {
+      const raw = el.dataset.count ?? "";
+      const num = parseFloat(raw.replace(/[^0-9.]/g, ""));
+      const suffix = raw.replace(/[0-9,.]/g, "");
+      const obj = { val: 0 };
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 88%",
+        once: true,
+        onEnter: () => {
+          gsap.to(obj, {
+            val: num,
+            duration: 1.6,
+            ease: "power2.out",
+            onUpdate() {
+              el.textContent =
+                (num >= 1000 ? Math.round(obj.val).toLocaleString() : Math.round(obj.val)) + suffix;
+            },
+          });
+        },
+      });
+    });
+
+    // #6 Track cards stagger
+    const trackCards = document.querySelectorAll("[data-track-card]");
+    if (trackCards.length) {
+      gsap.from(trackCards, {
+        y: 30,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.07,
+        ease: "power2.out",
+        clearProps: "all",
+        scrollTrigger: { trigger: trackCards[0], start: "top 85%" },
+      });
+    }
+
+    // #6 Course cards stagger
+    const courseCards = document.querySelectorAll("[data-course-card]");
+    if (courseCards.length) {
+      gsap.from(courseCards, {
+        y: 30,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.07,
+        ease: "power2.out",
+        clearProps: "all",
+        scrollTrigger: { trigger: courseCards[0], start: "top 85%" },
+      });
+    }
+
+    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
+  }, []);
+
   const pageText = useMemo(
     () => ({
       navCta: locale === "en" ? "Get Started" : "شروع کریں",
@@ -44,7 +139,7 @@ export default function LandingPage() {
       startFree: locale === "en" ? "Start Learning Free" : "مفت سیکھنا شروع کریں",
       explore: locale === "en" ? "Explore Tracks" : "ٹریکس دیکھیں",
       featuredCourses: locale === "en" ? "Featured Courses" : "نمایاں کورسز",
-      allCourses: locale === "en" ? "View all courses →" : "تمام کورسز دیکھیں →",
+      allCourses: locale === "en" ? "View all courses" : "تمام کورسز دیکھیں",
       certTitle: locale === "en" ? "A certificate that carries weight" : "ایک سرٹیفکیٹ جو معنی رکھتا ہے",
       ctaTitle: locale === "en" ? "Start your tech journey today" : "آج ہی اپنا ٹیک سفر شروع کریں",
       ctaDescription:
@@ -90,10 +185,10 @@ export default function LandingPage() {
               onClick={() => setLocale(locale === "en" ? "ur" : "en")}
               className="inline-flex items-center gap-2 rounded-lg border border-green-100 bg-green-50 px-3 py-2 text-[12.5px] font-bold text-green-700 transition hover:translate-y-[-1px]"
             >
-              <span className="h-2 w-2 rounded-full bg-green-500" />
+              <Globe className="h-3.5 w-3.5" />
               {locale === "en" ? "اردو" : "English"}
             </button>
-            <a href="#contact" className="rounded-lg border border-line px-4 py-2 text-sm font-bold text-ink transition hover:bg-white">
+            <a href="#contact" className="text-sm font-semibold text-muted transition hover:text-ink">
               {pageText.signIn}
             </a>
             <a href="#cta" className="rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-2 text-sm font-bold text-white shadow-[0_8px_18px_-9px_var(--green-600)] transition hover:translate-y-[-1px]">
@@ -108,11 +203,7 @@ export default function LandingPage() {
             aria-label="Menu"
             aria-expanded={menuOpen}
           >
-            <span className="flex flex-col gap-1.5">
-              <span className="h-0.5 w-4 rounded-full bg-current" />
-              <span className="h-0.5 w-4 rounded-full bg-current" />
-              <span className="h-0.5 w-4 rounded-full bg-current" />
-            </span>
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </nav>
         <div className="h-1 w-full bg-gradient-to-r from-green-500 to-green-700 shadow-[0_0_12px_var(--green-500)]" />
@@ -152,18 +243,18 @@ export default function LandingPage() {
 
           <div className="relative z-10 grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
             <div>
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-green-100 bg-green-50 px-4 py-2 text-[12.5px] font-bold text-green-700 shadow-soft-sm">
+              <div data-hero-item className="mb-6 inline-flex items-center gap-2 rounded-full border border-green-100 bg-green-50 px-4 py-2 text-[12.5px] font-bold text-green-700 shadow-soft-sm">
                 <span className="h-2 w-2 rounded-full bg-green-500 animate-pulseSoft" />
                 {text(heroBadge, locale)}
               </div>
 
-              <h1 className="mb-5 max-w-2xl whitespace-pre-line font-serif text-[clamp(2.6rem,5.4vw,3.9rem)] font-medium leading-[1.04] tracking-[-0.025em] text-ink">
+              <h1 data-hero-item className="mb-5 max-w-2xl whitespace-pre-line font-serif text-[clamp(2.6rem,5.4vw,3.9rem)] font-medium leading-[1.04] tracking-[-0.025em] text-ink">
                 {text(heroTitle, locale)}
               </h1>
 
-              <p className="max-w-2xl text-[17.5px] leading-7 text-muted md:text-[18px]">{text(heroDescription, locale)}</p>
+              <p data-hero-item className="max-w-2xl text-[17.5px] leading-7 text-muted md:text-[18px]">{text(heroDescription, locale)}</p>
 
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div data-hero-item className="mt-8 flex flex-wrap gap-3">
                 <a href="#cta" className="rounded-xl bg-gradient-to-br from-green-500 to-green-700 px-6 py-3.5 text-[15.5px] font-bold text-white shadow-[0_12px_26px_-12px_var(--green-600)] transition hover:translate-y-[-1px]">
                   {pageText.startFree}
                 </a>
@@ -172,26 +263,40 @@ export default function LandingPage() {
                 </a>
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-2.5">
+              <div data-hero-item className="mt-6 flex flex-wrap gap-2.5">
                 {heroBadges.map((badge) => (
                   <span key={badge.en} className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3.5 py-2 text-[13px] font-semibold text-ink shadow-soft-sm">
-                    <span className="font-extrabold text-green-600">✓</span>
+                    <Check className="h-3.5 w-3.5 text-green-600" strokeWidth={3} />
                     {text(badge, locale)}
                   </span>
+                ))}
+              </div>
+
+              <div data-hero-item className="mt-8 flex flex-wrap gap-x-7 gap-y-3 border-t border-line pt-6">
+                {stats.map((stat, index) => (
+                  <div key={stat.value} className="flex items-center gap-2.5">
+                    {index > 0 && <span className="hidden h-5 w-px bg-line sm:block" />}
+                    <div>
+                      <div className="font-serif text-[1.35rem] font-semibold leading-none text-ink" data-count={stat.value}>{stat.value}</div>
+                      <div className="mt-0.5 text-[11.5px] font-semibold text-muted">{text(stat.label, locale)}</div>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
 
             <div className="relative">
-              <div className="absolute -end-8 -top-8 h-72 w-72 rounded-full bg-[radial-gradient(circle_at_32%_32%,color-mix(in_oklab,var(--green-500)_60%,transparent),transparent_68%)] blur-[36px] opacity-50 animate-aurora" />
-              <div className="absolute -bottom-8 -start-4 h-60 w-60 rounded-full bg-[radial-gradient(circle_at_50%_50%,var(--gold),transparent_70%)] blur-[40px] opacity-25 animate-aurora [animation-direction:reverse]" />
+              <div className="absolute -end-8 -top-8 h-72 w-72 rounded-full bg-[radial-gradient(circle_at_32%_32%,color-mix(in_oklab,var(--green-500)_60%,transparent),transparent_68%)] blur-[18px] opacity-50 animate-aurora" />
+              <div className="absolute -bottom-8 -start-4 h-60 w-60 rounded-full bg-[radial-gradient(circle_at_50%_50%,var(--gold),transparent_70%)] blur-[22px] opacity-25 animate-aurora [animation-direction:reverse]" />
 
               <div className="relative overflow-hidden rounded-[24px] border border-line bg-white shadow-soft animate-floatY">
                 <Image src={heroStudentGreen} alt="Madrasa student learning tech on a laptop and mobile" priority className="h-auto w-full object-cover" />
               </div>
 
               <div className="absolute -bottom-4 end-0 z-10 flex items-center gap-3 rounded-2xl border border-line bg-white px-4 py-3 shadow-soft animate-floatY2">
-                <span className="grid h-8 w-8 place-items-center rounded-lg bg-gold text-sm font-extrabold text-white">★</span>
+                <span className="grid h-8 w-8 place-items-center rounded-lg bg-gold text-white">
+                  <Star className="h-4 w-4 fill-current" />
+                </span>
                 <div className="leading-tight">
                   <div className="text-sm font-extrabold">Certificate ready</div>
                   <div className="text-xs text-muted">Shareable · verified</div>
@@ -211,7 +316,7 @@ export default function LandingPage() {
                 .flatMap(() => ["React", "Next.js", "JavaScript", "Python", "Flutter", "TensorFlow", "SQL", "Figma", "Node.js", "Cloud", "AI", "GitHub"])
                 .map((skill, index) => (
                   <span key={`${skill}-${index}`} className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line bg-white px-4 py-2.5 text-sm font-bold text-ink shadow-soft-sm">
-                    <span className="grid h-5 w-5 place-items-center rounded-full bg-green-50 text-[10px] font-extrabold text-green-700">{skill.slice(0, 1)}</span>
+                    <span className="h-2.5 w-2.5 flex-none rounded-full" style={{ background: SKILL_DOT_COLORS[skill] ?? "#16a34a" }} />
                     {skill}
                   </span>
                 ))}
@@ -219,16 +324,22 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 pt-4 md:px-6">
-          <div className="rounded-[22px] bg-gradient-to-br from-green-700 to-green-600 bg-[repeating-linear-gradient(60deg,rgba(255,255,255,.06)_0_1px,transparent_1px_24px),repeating-linear-gradient(-60deg,rgba(255,255,255,.05)_0_1px,transparent_1px_24px)] px-6 py-7 shadow-[0_26px_50px_-28px_var(--green-700)] md:px-7">
-            <div className="grid gap-6 text-center text-white sm:grid-cols-2 xl:grid-cols-4">
-              {stats.map((stat, index) => (
-                <div key={stat.value} className={index > 0 ? "border-s border-white/20" : ""}>
-                  <div className="font-serif text-[clamp(2rem,3.5vw,2.6rem)] font-semibold leading-none">{stat.value}</div>
-                  <div className="mt-1 text-sm font-semibold text-white/85">{text(stat.label, locale)}</div>
+        <section className="mx-auto max-w-7xl px-5 pt-20 md:px-6">
+          <SectionHeading eyebrow={{ en: "How It Works", ur: "طریقہ کار" }} title={{ en: "Four simple steps", ur: "چار آسان مراحل" }} locale={locale} />
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {steps.map((step) => (
+              <article key={step.number} className="rounded-[18px] border border-line bg-white p-6 shadow-soft-sm">
+                <div className="mb-4 flex items-center gap-3">
+                  <span className="grid h-8 w-8 flex-none place-items-center rounded-full bg-green-600 text-[13px] font-extrabold text-white">
+                    {step.number}
+                  </span>
+                  <div className="h-px flex-1 bg-line" />
                 </div>
-              ))}
-            </div>
+                <h3 className="mb-1.5 text-base font-extrabold">{text(step.title, locale)}</h3>
+                <p className="text-[13px] leading-6 text-muted">{text(step.description, locale)}</p>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -244,6 +355,7 @@ export default function LandingPage() {
             {tracks.map((track) => (
               <article
                 key={track.index}
+                data-track-card
                 className={`overflow-hidden rounded-[18px] border bg-white p-6 shadow-soft-sm transition-transform duration-300 hover:-translate-y-1 ${track.featured ? "border-green-700 bg-gradient-to-br from-green-700 to-green-600 text-white shadow-soft" : "border-line"}`}
               >
                 <div className={`mb-4 grid h-12 w-12 place-items-center rounded-[13px_13px_13px_4px] border font-extrabold ${track.featured ? "border-white/20 bg-white/15 text-white" : "border-green-100 bg-green-50 text-green-700"}`}>
@@ -260,7 +372,7 @@ export default function LandingPage() {
                 </div>
                 <a href="#courses" className={`flex items-center justify-between border-t pt-3.5 text-[13.5px] font-bold ${track.featured ? "border-white/20 text-white" : "border-line text-green-700"}`}>
                   <span>{text(track.courses, locale)}</span>
-                  <span className="text-base">→</span>
+                  <ArrowRight className="h-4 w-4" />
                 </a>
               </article>
             ))}
@@ -276,7 +388,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="courses" className="mt-16 border-y border-line bg-paper-2">
+        <section id="courses" className="mt-16 border-y border-line bg-paper-2 bg-grid-subtle">
           <div className="mx-auto max-w-7xl px-5 py-16 md:px-6">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -285,31 +397,101 @@ export default function LandingPage() {
                   {locale === "en" ? "Start learning today" : "آج ہی سیکھنا شروع کریں"}
                 </h2>
               </div>
-              <a href="#tracks" className="text-sm font-bold text-green-700">
+              <a href="#tracks" className="inline-flex items-center gap-1 text-sm font-bold text-green-700">
                 {pageText.allCourses}
+                <ArrowRight className="h-4 w-4" />
               </a>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {courses.map((course) => (
-                <article key={course.title} className="flex flex-col overflow-hidden rounded-[18px] border border-line bg-white shadow-soft-sm transition-transform duration-300 hover:-translate-y-1">
-                  <div className="flex items-center justify-between px-5 pt-5">
-                    <span className="grid h-11 w-11 place-items-center rounded-xl border border-line bg-white text-lg font-extrabold text-green-700">{course.title.slice(0, 1)}</span>
-                    <span className={`rounded-full px-2.5 py-1 text-[11.5px] font-extrabold ${course.price === "Free" ? "bg-green-50 text-green-700" : "bg-line text-ink"}`}>
+                <article
+                  key={course.title}
+                  data-course-card
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-line/60 bg-white shadow-[0_2px_20px_-6px_rgba(0,0,0,0.10)] transition-all duration-300 hover:-translate-y-2 hover:border-green-200 hover:shadow-[0_24px_52px_-14px_rgba(0,0,0,0.18)]"
+                >
+                  {/* ── Tall header: logo fills bg, title overlaid at bottom ── */}
+                  <div className="relative h-48 overflow-hidden">
+                    <CourseLogo title={course.title} />
+
+                    {/* dark gradient veil at bottom so white text is legible */}
+                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
+
+                    {/* badge pill — top left */}
+                    <span className="absolute left-3.5 top-3.5 rounded-full border border-white/25 bg-black/35 px-3 py-1 text-[11px] font-bold text-white backdrop-blur-sm">
                       {course.badge[locale]}
                     </span>
-                  </div>
-                  <div className="flex flex-1 flex-col px-5 pb-5 pt-4">
-                    <h3 className="mb-1 text-base font-extrabold">{course.title}</h3>
-                    <div className="mb-3 text-[12.5px] text-muted">
-                      {text(course.level, locale)} · {course.duration} · {course.lessons} {locale === "en" ? "lessons" : "اسباق"}
+
+                    {/* course title on the dark bg — premium feel */}
+                    <div className="absolute inset-x-0 bottom-0 px-4 pb-3.5">
+                      <h3 className="text-[15.5px] font-extrabold leading-snug tracking-[-0.01em] text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
+                        {course.title}
+                      </h3>
                     </div>
-                    <div className="mt-auto flex items-center justify-between border-t border-line pt-3">
-                      <span className="text-[13px] font-bold">
-                        <span className="text-gold">★</span> {course.rating}
+                  </div>
+
+                  {/* ── Card body ── */}
+                  <div className="flex flex-1 flex-col px-5 pb-5 pt-4">
+
+                    {/* Skill tags */}
+                    <div className="mb-4 flex flex-wrap gap-1.5">
+                      {course.tags.map((tag) => (
+                        <span key={tag} className="rounded-lg bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700 ring-1 ring-green-100">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Stats row: rating · lessons · duration · level */}
+                    <div className="mb-5 flex items-center gap-2 text-[12px] text-muted">
+                      <span className="flex items-center gap-1 font-semibold">
+                        <Star className="h-3.5 w-3.5 fill-current text-gold" />
+                        {course.rating}
                       </span>
-                      <a href="#cta" className="rounded-lg bg-green-600 px-3.5 py-2 text-[13px] font-bold text-white transition hover:bg-green-700">
-                        {locale === "en" ? (course.price === "Free" ? "View Course" : "Enroll Now") : course.price === "Free" ? "کورس دیکھیں" : "ابھی داخلہ لیں"}
+                      <span className="h-3 w-px bg-line" />
+                      <span>{course.lessons} {locale === "en" ? "lessons" : "اسباق"}</span>
+                      <span className="h-3 w-px bg-line" />
+                      <span>{course.duration}</span>
+                      <span className="h-3 w-px bg-line" />
+                      <span>{text(course.level, locale)}</span>
+                    </div>
+
+                    {/* Price row */}
+                    <div className="mb-4 mt-auto flex items-baseline gap-2 border-t border-line pt-4">
+                      <span className={`text-[20px] font-extrabold leading-none ${course.price === "Free" ? "text-green-600" : "text-ink"}`}>
+                        {course.price === "Free" ? (locale === "en" ? "Free" : "مفت") : course.price}
+                      </span>
+                      {course.originalPrice && (
+                        <span className="text-[12px] text-muted line-through">{course.originalPrice}</span>
+                      )}
+                      {course.originalPrice && (
+                        <span className="ml-auto rounded-md bg-amber-50 px-1.5 py-0.5 text-[10.5px] font-bold text-amber-700">
+                          {Math.round((1 - parseInt(course.price.replace(/\D/g,"")) / parseInt(course.originalPrice.replace(/\D/g,""))) * 100)}% off
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Two CTA buttons */}
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <a
+                        href={`/courses/${course.slug}`}
+                        className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-line py-2.5 text-[12.5px] font-bold text-ink transition-all duration-200 hover:border-green-400 hover:bg-green-50 hover:text-green-700"
+                      >
+                        <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="2" y1="4" x2="14" y2="4" />
+                          <line x1="2" y1="8" x2="10" y2="8" />
+                          <line x1="2" y1="12" x2="7" y2="12" />
+                        </svg>
+                        {locale === "en" ? "Curriculum" : "نصاب"}
+                      </a>
+                      <a
+                        href="#cta"
+                        className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-br from-green-500 to-green-700 py-2.5 text-[12.5px] font-bold text-white shadow-[0_5px_14px_-5px_var(--green-600)] transition-all duration-200 hover:shadow-[0_8px_20px_-6px_var(--green-600)] hover:opacity-95"
+                      >
+                        {locale === "en"
+                          ? course.price === "Free" ? "Enroll Free" : "Enroll Now"
+                          : course.price === "Free" ? "مفت داخلہ" : "ابھی داخلہ"}
+                        <ArrowRight className="h-3.5 w-3.5" />
                       </a>
                     </div>
                   </div>
@@ -329,7 +511,9 @@ export default function LandingPage() {
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {features.map((feature, index) => (
               <article key={feature.title.en} className={`rounded-[16px] border bg-white p-5 shadow-soft-sm ${index >= 4 ? "xl:col-span-1" : ""}`}>
-                <div className="mb-3 grid h-10 w-10 place-items-center rounded-[11px] bg-green-50 font-extrabold text-green-700">{feature.icon}</div>
+                <div className="mb-3 grid h-10 w-10 place-items-center rounded-[11px] bg-green-50 text-green-700">
+                  <Icon name={feature.icon} className="h-5 w-5" />
+                </div>
                 <h3 className="mb-1 text-[15px] font-extrabold">{text(feature.title, locale)}</h3>
                 <p className="text-[13px] leading-6 text-muted">{text(feature.description, locale)}</p>
               </article>
@@ -341,28 +525,18 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 pt-20 md:px-6">
-          <SectionHeading eyebrow={{ en: "How It Works", ur: "طریقہ کار" }} title={{ en: "Four simple steps", ur: "چار آسان مراحل" }} locale={locale} />
-
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {steps.map((step) => (
-              <article key={step.number} className="rounded-[18px] border border-line bg-white p-6 shadow-soft-sm">
-                <div className="mb-3 font-serif text-[34px] font-semibold leading-none text-green-100">{step.number}</div>
-                <h3 className="mb-1.5 text-base font-extrabold">{text(step.title, locale)}</h3>
-                <p className="text-[13px] leading-6 text-muted">{text(step.description, locale)}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="stories" className="mt-16 border-y border-line bg-paper-2">
+        <section id="stories" className="mt-16 border-y border-line bg-paper-2 bg-grid-subtle">
           <div className="mx-auto max-w-7xl px-5 py-16 md:px-6">
             <SectionHeading eyebrow={{ en: "Success Stories", ur: "کامیابی کی کہانیاں" }} title={{ en: "Students across India, real results", ur: "بھارت بھر کے طلبہ، حقیقی نتائج" }} locale={locale} />
 
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {stories.map((story) => (
                 <article key={story.name} className="flex flex-col rounded-[18px] border border-line bg-white p-6 shadow-soft-sm">
-                  <div className="mb-3 text-[14px] text-gold">★★★★★</div>
+                  <div className="mb-3 flex gap-0.5 text-gold">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="h-3.5 w-3.5 fill-current" />
+                    ))}
+                  </div>
                   <p className="mb-5 flex-1 text-[14.5px] leading-7 text-ink">“{text(story.quote, locale)}”</p>
                   <div className="flex items-center gap-3 border-t border-line pt-4">
                     <span className="grid h-12 w-12 place-items-center rounded-full bg-green-100 font-extrabold text-green-800">{story.initials}</span>
@@ -392,7 +566,9 @@ export default function LandingPage() {
               <div className="mt-6 space-y-3">
                 {certificationBullets.map((bullet) => (
                   <div key={bullet.en} className="flex items-center gap-3">
-                    <span className="grid h-6 w-6 place-items-center rounded-md bg-green-50 text-[13px] font-extrabold text-green-700">✓</span>
+                    <span className="grid h-6 w-6 place-items-center rounded-md bg-green-50 text-green-700">
+                      <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                    </span>
                     <span className="text-[14.5px] font-semibold">{text(bullet, locale)}</span>
                   </div>
                 ))}
@@ -416,11 +592,13 @@ export default function LandingPage() {
                     <div className="text-[10px] uppercase tracking-[0.1em] text-muted">Certificate ID</div>
                     <div className="font-mono text-[12px] font-bold">MTA-2026-7F3A9</div>
                   </div>
-                  <span className="grid h-11 w-11 place-items-center rounded-full bg-gold text-[18px] font-extrabold text-white shadow-[0_6px_14px_-6px_var(--gold)]">★</span>
+                  <span className="grid h-11 w-11 place-items-center rounded-full bg-gold text-white shadow-[0_6px_14px_-6px_var(--gold)]">
+                    <Star className="h-5 w-5 fill-current" />
+                  </span>
                 </div>
               </div>
               <div className="mt-4 flex items-center gap-2 rounded-xl border border-green-100 bg-green-50 px-3 py-2 text-green-700">
-                <span className="font-extrabold">🔗</span>
+                <Link2 className="h-4 w-4 flex-none" />
                 <span className="truncate font-mono text-[11.5px]">verify.madarsatech.com/MTA-2026-7F3A9</span>
               </div>
             </div>

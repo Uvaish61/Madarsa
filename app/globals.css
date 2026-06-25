@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@config "../tailwind.config.ts";
 
 :root {
   --paper: oklch(0.994 0.004 150);
@@ -50,4 +51,18 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .bg-grid-subtle {
+    background-image: radial-gradient(circle, oklch(0.88 0.012 160) 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+}
+
+/* GPU-promote heavy animated elements */
+.animate-aurora,
+.animate-floatY,
+.animate-floatY2 {
+  will-change: transform;
+}
+.animate-marquee {
+  will-change: transform;
 }
