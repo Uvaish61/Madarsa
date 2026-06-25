@@ -1,33 +1,53 @@
-/* Global styles, fonts loaded in layout.jsx <head> */
-:root{
-    --paper:oklch(0.994 0.004 150);
-    --paper-2:oklch(0.975 0.012 155);
-    --green-50:oklch(0.965 0.022 158);
-    --green-100:oklch(0.93 0.04 158);
-    --green-500:oklch(0.64 0.115 158);
-    --green-600:oklch(0.55 0.115 158);
-    --green-700:oklch(0.46 0.10 159);
-    --green-800:oklch(0.37 0.075 160);
-    --gold:oklch(0.74 0.085 84);
-    --ink:oklch(0.27 0.018 160);
-    --muted:oklch(0.52 0.015 162);
-    --line:oklch(0.915 0.008 160);
-    --shadow:0 1px 2px rgba(20,50,35,.05), 0 14px 34px -18px rgba(20,60,40,.20);
-    --shadow-sm:0 1px 2px rgba(20,50,35,.05), 0 6px 16px -10px rgba(20,60,40,.14);
+@import "tailwindcss";
+
+:root {
+  --paper: oklch(0.994 0.004 150);
+  --paper-2: oklch(0.975 0.012 155);
+  --green-50: oklch(0.965 0.022 158);
+  --green-100: oklch(0.93 0.04 158);
+  --green-500: oklch(0.64 0.115 158);
+  --green-600: oklch(0.55 0.115 158);
+  --green-700: oklch(0.46 0.1 159);
+  --green-800: oklch(0.37 0.075 160);
+  --gold: oklch(0.74 0.085 84);
+  --ink: oklch(0.27 0.018 160);
+  --muted: oklch(0.52 0.015 162);
+  --line: oklch(0.915 0.008 160);
+  --shadow: 0 1px 2px rgba(20, 50, 35, 0.05), 0 14px 34px -18px rgba(20, 60, 40, 0.2);
+  --shadow-sm: 0 1px 2px rgba(20, 50, 35, 0.05), 0 6px 16px -10px rgba(20, 60, 40, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+::selection {
+  background: var(--green-100);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
-  *{box-sizing:border-box;}
-  body{margin:0;}
-  ::selection{background:var(--green-100);}
-  @keyframes mtaFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-  @keyframes mtaFloat2{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
-  @keyframes mtaPulse{0%,100%{opacity:.5}50%{opacity:1}}
-  @keyframes mtaMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-  @keyframes mtaAurora{0%{transform:translate(0,0) scale(1)}33%{transform:translate(4%,-3%) scale(1.08)}66%{transform:translate(-3%,4%) scale(.96)}100%{transform:translate(0,0) scale(1)}}
-  @keyframes mtaShine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(220%)}}
-  @keyframes mtaSpin{to{transform:rotate(360deg)}}
-  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;}}
-  [data-mta] a{text-decoration:none;color:inherit;}
-  [data-mta]{scroll-behavior:smooth;}
-  [data-mta] *::-webkit-scrollbar{height:6px;width:6px;}
-  [data-mta] *::-webkit-scrollbar-thumb{background:var(--line);border-radius:9px;}
-html,body{margin:0;padding:0;}
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

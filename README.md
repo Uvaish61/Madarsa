@@ -1,7 +1,7 @@
-# Madarsa Tech Academy — Landing Page (Next.js)
+# Madarsa Tech Academy — Landing Page
 
-Next.js (App Router) port of the Madarsa Tech Academy landing page.
-Bilingual EN/Urdu (RTL), scroll animations, real tech logos.
+Next.js App Router landing page rebuilt with TypeScript and Tailwind CSS.
+The page is bilingual EN/Urdu, RTL-ready, mobile-first, and split into a cleaner production-style structure.
 
 ## Run it
 
@@ -21,11 +21,16 @@ npm start
 
 ## Structure
 
-- `app/page.jsx` — the whole landing page (client component)
-- `app/layout.jsx` — root layout + Google Fonts
-- `app/globals.css` — color tokens, keyframes, resets
-- `public/hero-student-green.png` — hero image
+- `app/page.tsx` — route entry for the landing page
+- `app/layout.tsx` — root layout + font loading
+- `app/globals.css` — Tailwind layers, tokens, and base reset
+- `components/landing/LandingPage.tsx` — full landing page UI
+- `lib/landing-data.ts` — structured page copy and content data
+- `assets/images/` — image assets used by the landing page
+- `assets/fonts/` — reserved for local font files if needed later
 
 ## Notes
-- Brand logos load from the Simple Icons CDN (cdn.simpleicons.org). For fully offline builds, download them into `public/` and update the `src` URLs.
-- The language toggle (top-right) switches EN ⇄ Urdu and flips the layout to RTL.
+
+- Fonts currently load through `next/font/google` in the layout for better performance.
+- The main hero image now lives in `assets/images/` instead of `public/`.
+- Tailwind is the primary styling system; the old inline-style page was replaced.
