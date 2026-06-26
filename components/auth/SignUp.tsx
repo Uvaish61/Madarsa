@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AuthShell from "@/components/auth/AuthShell";
 import FormField from "@/components/auth/FormField";
+import SignupScene from "@/components/auth/SignupScene";
 import { isValidEmail, MIN_PASSWORD_LENGTH } from "@/lib/validators";
 
 type Field = "firstName" | "lastName" | "email" | "password" | "confirmPassword";
@@ -61,9 +62,10 @@ export default function SignUp() {
       activeTab="signup"
       title="Start your learning journey"
       subtitle="Create your free account and unlock a world of knowledge."
+      scene={<SignupScene />}
     >
-      <form onSubmit={handleSubmit} noValidate className="space-y-4">
-        <div className="grid gap-4 sm:grid-cols-2">
+      <form onSubmit={handleSubmit} noValidate className="space-y-3">
+        <div className="grid gap-3 sm:grid-cols-2">
           <FormField
             id="firstName"
             label="First name"
