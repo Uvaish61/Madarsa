@@ -51,7 +51,7 @@ export default function FormField({
           autoComplete={autoComplete}
           required={required}
           aria-invalid={!!error}
-          className={`w-full rounded-xl border bg-paper/60 py-3 text-[15px] text-ink outline-none transition placeholder:text-muted/55 focus:bg-white focus:ring-4 focus:ring-green-500/12 ${
+          className={`w-full rounded-xl border bg-paper/60 py-2.5 text-[15px] text-ink outline-none transition placeholder:text-muted/55 focus:bg-white focus:ring-4 focus:ring-green-500/12 ${
             Icon ? "pl-11" : "pl-4"
           } ${isPassword ? "pr-11" : "pr-4"} ${
             error ? "border-red-300 focus:border-red-400" : "border-line focus:border-green-500"

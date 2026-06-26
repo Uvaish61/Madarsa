@@ -1,8 +1,9 @@
 import { Award, Globe, GraduationCap, Settings, ShieldCheck, Star } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import quranImg from "../../assets/images/decor/quran.png";
 import BrandLogo from "./BrandLogo";
-import BrandScene from "./BrandScene";
 
 const FEATURES = [
   { icon: GraduationCap, title: "First course free", sub: "No card needed" },
@@ -16,17 +17,19 @@ export default function AuthShell({
   activeTab,
   title,
   subtitle,
+  scene,
   children,
 }: {
   activeTab: "signup" | "login";
   title: string;
   subtitle: string;
+  scene: ReactNode;
   children: ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-paper-2 lg:grid lg:grid-cols-[1.04fr_1fr]">
+    <div className="min-h-screen bg-paper-2 lg:grid lg:h-screen lg:max-h-screen lg:grid-cols-[1.04fr_1fr] lg:overflow-hidden">
       {/* ════════ Brand panel ════════ */}
-      <aside className="relative isolate hidden overflow-hidden bg-gradient-to-br from-[#0a3326] via-green-800 to-[#061b14] px-10 py-12 text-white lg:flex lg:flex-col xl:px-14">
+      <aside className="relative isolate hidden overflow-hidden bg-gradient-to-br from-[#0a3326] via-green-800 to-[#061b14] px-10 py-8 text-white lg:flex lg:flex-col xl:px-14">
         {/* starfield + organic curved right edge */}
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle,rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:22px_22px] opacity-60" />
         <svg className="absolute -right-1 top-0 -z-10 h-full w-32" viewBox="0 0 100 600" preserveAspectRatio="none" fill="var(--paper-2)">
@@ -41,24 +44,31 @@ export default function AuthShell({
           </span>
         </Link>
 
-        <div className="relative z-10 mt-9">
+        <div className="relative z-10 mt-6">
           <span className="inline-flex items-center gap-2 rounded-full border border-green-300/30 bg-green-300/10 px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.16em] text-green-200">
             Learn • Build • Grow
           </span>
-          <h2 className="mt-5 max-w-md font-serif text-[clamp(2.4rem,3.6vw,3.1rem)] font-medium leading-[1.02] tracking-[-0.025em]">
+          <h2 className="mt-4 max-w-md font-serif text-[clamp(2.2rem,3.4vw,3rem)] font-medium leading-[1.02] tracking-[-0.025em]">
             From madarsa to a modern <span className="text-green-300">future.</span>
           </h2>
-          <p className="mt-4 max-w-sm text-[15px] leading-7 text-green-50/80">
+          <p className="mt-3 max-w-sm text-[14.5px] leading-6 text-green-50/80">
             Join thousands of students learning tech skills, building projects and earning verified certificates.
           </p>
         </div>
 
         {/* illustration */}
-        <div className="relative z-0 my-1 hidden flex-1 items-center justify-center xl:flex">
-          <BrandScene />
+        <div className="relative z-0 my-1 hidden min-h-0 flex-1 items-center justify-center xl:flex">
+          {scene}
         </div>
 
-        <div className="relative z-10 mt-8 space-y-3.5">
+        <Image
+          src={quranImg}
+          alt=""
+          sizes="200px"
+          className="pointer-events-none absolute bottom-10 right-8 z-20 hidden w-[175px] drop-shadow-[0_24px_40px_-18px_rgba(0,0,0,0.35)] xl:block"
+        />
+
+        <div className="relative z-10 mt-5 space-y-3">
           {FEATURES.map(({ icon: Icon, title: t, sub }) => (
             <div key={t} className="flex items-center gap-3.5">
               <span className="grid h-11 w-11 flex-none place-items-center rounded-xl bg-green-600/90 shadow-[0_8px_18px_-8px_rgba(0,0,0,0.6)] ring-1 ring-white/10">
@@ -73,7 +83,7 @@ export default function AuthShell({
         </div>
 
         {/* social proof */}
-        <div className="relative z-10 mt-8 flex items-center gap-3 rounded-2xl border border-white/12 bg-white/[0.07] px-4 py-3.5 backdrop-blur-sm">
+        <div className="relative z-10 mt-5 flex items-center gap-3 rounded-2xl border border-white/12 bg-white/[0.07] px-4 py-3 backdrop-blur-sm">
           <div className="flex -space-x-2.5">
             {SOCIAL_PROOF.map((initials, i) => (
               <span
@@ -97,12 +107,12 @@ export default function AuthShell({
       </aside>
 
       {/* ════════ Form panel ════════ */}
-      <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-5 py-10 sm:px-8">
+      <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-5 py-8 sm:px-8 lg:h-full lg:min-h-0 lg:overflow-y-auto">
         {/* ambient decor — dots grid, cream + green circles */}
         <div className="pointer-events-none absolute right-8 top-8 h-20 w-28 bg-[radial-gradient(circle,var(--green-100)_1.5px,transparent_1.5px)] [background-size:13px_13px] opacity-70" />
-        <div className="pointer-events-none absolute -right-16 top-1/3 h-44 w-44 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--gold)_45%,transparent),transparent_70%)] opacity-50" />
+        <div className="pointer-events-none absolute -right-16 top-1/4 h-44 w-44 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--gold)_45%,transparent),transparent_70%)] opacity-50" />
         <div className="pointer-events-none absolute -left-20 bottom-4 h-56 w-56 rounded-full bg-[radial-gradient(circle,var(--green-100),transparent_72%)] opacity-70" />
-        <div className="pointer-events-none absolute bottom-10 right-10 h-28 w-28 rounded-full bg-green-50 opacity-80" />
+        <div className="pointer-events-none absolute -bottom-6 -right-6 h-44 w-44 rounded-full bg-green-50" />
 
         {/* mobile brand bar */}
         <Link href="/" className="relative z-10 mb-6 flex items-center gap-3 lg:hidden">
@@ -113,7 +123,7 @@ export default function AuthShell({
           </span>
         </Link>
 
-        <div className="relative z-10 w-full max-w-md rounded-[26px] border border-line bg-white p-6 shadow-soft sm:p-8">
+        <div className="relative z-10 w-full max-w-md rounded-[24px] border border-line bg-white p-5 shadow-soft sm:p-6">
           {/* tabs */}
           <div className="grid grid-cols-2 border-b border-line">
             <TabLink href="/signup" active={activeTab === "signup"}>Create Account</TabLink>
@@ -121,21 +131,21 @@ export default function AuthShell({
           </div>
 
           {/* heading */}
-          <div className="mt-6 text-center">
-            <h1 className="text-[clamp(1.55rem,2.4vw,1.85rem)] font-extrabold tracking-[-0.02em] text-ink">{title}</h1>
-            <div className="mx-auto my-3 flex w-28 items-center gap-2">
+          <div className="mt-4 text-center">
+            <h1 className="text-[clamp(1.4rem,2.2vw,1.7rem)] font-extrabold tracking-[-0.02em] text-ink">{title}</h1>
+            <div className="mx-auto my-2 flex w-24 items-center gap-2">
               <span className="h-px flex-1 bg-line" />
               <Settings className="h-3.5 w-3.5 text-green-500" />
               <span className="h-px flex-1 bg-line" />
             </div>
-            <p className="text-[14px] leading-6 text-muted">{subtitle}</p>
+            <p className="text-[13.5px] leading-5 text-muted">{subtitle}</p>
           </div>
 
           {/* form */}
-          <div className="mt-6">{children}</div>
+          <div className="mt-5">{children}</div>
 
           {/* social */}
-          <div className="my-5 flex items-center gap-3">
+          <div className="my-4 flex items-center gap-3">
             <span className="h-px flex-1 bg-line" />
             <span className="text-[12px] font-semibold text-muted">or continue with</span>
             <span className="h-px flex-1 bg-line" />
@@ -155,7 +165,7 @@ export default function AuthShell({
         </div>
 
         {/* safe-learning strip */}
-        <div className="relative z-10 mt-6 flex items-center gap-2.5 text-muted">
+        <div className="relative z-10 mt-4 flex items-center gap-2.5 text-muted">
           <ShieldCheck className="h-5 w-5 text-green-600" />
           <p className="text-[13px] leading-5">
             <span className="font-bold text-ink">Safe learning environment.</span> No spam. Just knowledge.

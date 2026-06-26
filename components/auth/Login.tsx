@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AuthShell from "@/components/auth/AuthShell";
 import FormField from "@/components/auth/FormField";
+import LoginScene from "@/components/auth/LoginScene";
 import { isValidEmail } from "@/lib/validators";
 
 type Field = "email" | "password";
@@ -48,8 +49,9 @@ export default function Login() {
       activeTab="login"
       title="Welcome back"
       subtitle="Sign in to pick up where you left off and keep building."
+      scene={<LoginScene />}
     >
-      <form onSubmit={handleSubmit} noValidate className="space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="space-y-3.5">
         <FormField
           id="email"
           label="Email address"
