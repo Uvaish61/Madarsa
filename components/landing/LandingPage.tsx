@@ -9,10 +9,15 @@ import {
   Wifi, X,
   type LucideIcon,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import heroStudentGreen from "../../assets/images/hero-student-green.png";
 import CourseLogo from "@/components/CourseLogo";
+import { floatDots, pulseOrb } from "@/lib/animations";
+
+const LottieWidget = dynamic(() => import("@/components/LottieWidget"), { ssr: false });
 import {
   certificationBullets,
   courses,
@@ -188,12 +193,12 @@ export default function LandingPage() {
               <Globe className="h-3.5 w-3.5" />
               {locale === "en" ? "اردو" : "English"}
             </button>
-            <a href="#contact" className="text-sm font-semibold text-muted transition hover:text-ink">
+            <Link href="/login" className="text-sm font-semibold text-muted transition hover:text-ink">
               {pageText.signIn}
-            </a>
-            <a href="#cta" className="rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-2 text-sm font-bold text-white shadow-[0_8px_18px_-9px_var(--green-600)] transition hover:translate-y-[-1px]">
+            </Link>
+            <Link href="/signup" className="rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-2 text-sm font-bold text-white shadow-[0_8px_18px_-9px_var(--green-600)] transition hover:translate-y-[-1px]">
               {pageText.navCta}
-            </a>
+            </Link>
           </div>
 
           <button
@@ -225,10 +230,13 @@ export default function LandingPage() {
               >
                 {locale === "en" ? "اردو" : "English"}
               </button>
-              <a href="#cta" onClick={() => setMenuOpen(false)} className="flex-1 rounded-lg bg-green-600 px-4 py-3 text-center text-sm font-bold text-white">
-                {pageText.navCta}
-              </a>
+              <Link href="/login" onClick={() => setMenuOpen(false)} className="flex-1 rounded-lg border border-line bg-white px-4 py-3 text-center text-sm font-bold text-green-700">
+                {pageText.signIn}
+              </Link>
             </div>
+            <Link href="/signup" onClick={() => setMenuOpen(false)} className="mt-3 block rounded-lg bg-green-600 px-4 py-3 text-center text-sm font-bold text-white">
+              {pageText.navCta}
+            </Link>
           </div>
         ) : null}
       </header>
@@ -239,6 +247,10 @@ export default function LandingPage() {
             <div className="absolute -top-10 end-[-60px] h-[520px] w-[420px] rounded-[210px_210px_30px_30px] border border-green-100/80 opacity-55" />
             <div className="absolute top-5 end-0 h-[380px] w-[300px] rounded-[150px_150px_22px_22px] border border-green-100/70 opacity-40" />
             <div className="absolute top-28 start-[-70px] h-[200px] w-[160px] rounded-[80px_80px_14px_14px] border border-green-100/60 opacity-30" />
+            {/* Lottie floating dots — subtle tech-particle background */}
+            <div className="absolute bottom-0 start-[8%] h-[300px] w-[300px] opacity-35">
+              <LottieWidget animationData={floatDots} />
+            </div>
           </div>
 
           <div className="relative z-10 grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
@@ -255,9 +267,9 @@ export default function LandingPage() {
               <p data-hero-item className="max-w-2xl text-[17.5px] leading-7 text-muted md:text-[18px]">{text(heroDescription, locale)}</p>
 
               <div data-hero-item className="mt-8 flex flex-wrap gap-3">
-                <a href="#cta" className="rounded-xl bg-gradient-to-br from-green-500 to-green-700 px-6 py-3.5 text-[15.5px] font-bold text-white shadow-[0_12px_26px_-12px_var(--green-600)] transition hover:translate-y-[-1px]">
+                <Link href="/signup" className="rounded-xl bg-gradient-to-br from-green-500 to-green-700 px-6 py-3.5 text-[15.5px] font-bold text-white shadow-[0_12px_26px_-12px_var(--green-600)] transition hover:translate-y-[-1px]">
                   {pageText.startFree}
-                </a>
+                </Link>
                 <a href="#tracks" className="rounded-xl border border-line bg-white px-6 py-3.5 text-[15.5px] font-bold text-green-700 shadow-soft-sm transition hover:translate-y-[-1px]">
                   {pageText.explore}
                 </a>
@@ -609,12 +621,20 @@ export default function LandingPage() {
           <div className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-green-700 to-green-600 px-6 py-14 text-center text-white shadow-[0_30px_60px_-30px_var(--green-700)] md:px-8">
             <div className="absolute inset-x-1/2 top-[-60px] h-[440px] w-[360px] -translate-x-1/2 rounded-[180px_180px_24px_24px] border border-white/15" />
             <div className="absolute inset-y-0 start-0 z-0 w-[38%] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent)] animate-shine" />
+            {/* Lottie pulsing orb — bottom-right corner accent */}
+            <div className="pointer-events-none absolute bottom-[-30px] end-[-30px] h-[180px] w-[180px] opacity-25">
+              <LottieWidget animationData={pulseOrb} />
+            </div>
+            {/* Lottie pulsing orb — top-left echo */}
+            <div className="pointer-events-none absolute top-[-20px] start-[-20px] h-[140px] w-[140px] opacity-15">
+              <LottieWidget animationData={pulseOrb} />
+            </div>
             <div className="relative z-10">
               <h2 className="font-serif text-[clamp(2rem,4.2vw,3rem)] font-medium leading-[1.08] tracking-[-0.02em]">{pageText.ctaTitle}</h2>
               <p className="mx-auto mt-4 max-w-3xl text-[17px] leading-7 text-white/90">{pageText.ctaDescription}</p>
-              <a href="#top" className="mt-7 inline-flex rounded-xl bg-white px-8 py-4 text-base font-extrabold text-green-700 shadow-[0_12px_26px_-10px_rgba(0,0,0,.3)] transition hover:translate-y-[-1px]">
+              <Link href="/signup" className="mt-7 inline-flex rounded-xl bg-white px-8 py-4 text-base font-extrabold text-green-700 shadow-[0_12px_26px_-10px_rgba(0,0,0,.3)] transition hover:translate-y-[-1px]">
                 {locale === "en" ? "Create Free Account" : "مفت اکاؤنٹ بنائیں"}
-              </a>
+              </Link>
             </div>
           </div>
         </section>
