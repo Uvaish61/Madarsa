@@ -61,6 +61,13 @@ export default function AuthShell({
           {scene}
         </div>
 
+        <Image
+          src={quranImg}
+          alt=""
+          sizes="200px"
+          className="pointer-events-none absolute bottom-10 right-8 z-20 hidden w-[175px] drop-shadow-[0_24px_40px_-18px_rgba(0,0,0,0.35)] xl:block"
+        />
+
         <div className="relative z-10 mt-5 space-y-3">
           {FEATURES.map(({ icon: Icon, title: t, sub }) => (
             <div key={t} className="flex items-center gap-3.5">
@@ -106,14 +113,6 @@ export default function AuthShell({
         <div className="pointer-events-none absolute -right-16 top-1/4 h-44 w-44 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--gold)_45%,transparent),transparent_70%)] opacity-50" />
         <div className="pointer-events-none absolute -left-20 bottom-4 h-56 w-56 rounded-full bg-[radial-gradient(circle,var(--green-100),transparent_72%)] opacity-70" />
         <div className="pointer-events-none absolute -bottom-6 -right-6 h-44 w-44 rounded-full bg-green-50" />
-
-        {/* Quran-on-rehal — bottom-right corner accent */}
-        <Image
-          src={quranImg}
-          alt=""
-          sizes="200px"
-          className="pointer-events-none absolute -bottom-8 -right-3 z-10 hidden w-[195px] drop-shadow-[0_24px_40px_-18px_rgba(0,0,0,0.35)] lg:block xl:w-[225px]"
-        />
 
         {/* mobile brand bar */}
         <Link href="/" className="relative z-10 mb-6 flex items-center gap-3 lg:hidden">
