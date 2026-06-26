@@ -22,9 +22,14 @@ import {
   Wifi,
   Zap,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import CourseLogo from "@/components/CourseLogo";
-import { courses, curricula, courseConfigs } from "@/lib/landing-data";
+import { courses } from "@/lib/landing-data";
+import { curricula, courseConfigs } from "@/lib/course-data";
+import { floatDots, pulseOrb } from "@/lib/animations";
+
+const LottieWidget = dynamic(() => import("@/components/LottieWidget"), { ssr: false });
 
 function discountPercent(price: string, original?: string): number | null {
   if (!original) return null;
@@ -61,37 +66,42 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
           stagger: 0.09,
           ease: "power3.out",
           delay: 0.1,
+          clearProps: "all",
         });
 
-        // Section cards fade + rise on scroll
-        gsap.utils.toArray<Element>(".gsap-reveal").forEach((el) => {
-          gsap.from(el, {
-            scrollTrigger: { trigger: el, start: "top 88%", once: true },
-            y: 40,
-            opacity: 0,
-            duration: 0.65,
-            ease: "power2.out",
-          });
+        // Left-column sections are above the fold on load — plain page-load stagger
+        // avoids the ScrollTrigger bug where gsap.from() sets opacity:0 immediately
+        // but the trigger never fires for elements already past start:"top 88%".
+        gsap.from(".gsap-reveal", {
+          y: 32,
+          opacity: 0,
+          duration: 0.6,
+          stagger: 0.12,
+          ease: "power2.out",
+          clearProps: "all",
+          delay: 0.15,
         });
 
-        // Outcome items stagger from left
+        // Outcome items stagger from left (scroll-triggered — inside a gsap-reveal card)
         gsap.from(".outcome-item", {
-          scrollTrigger: { trigger: ".outcomes-grid", start: "top 85%", once: true },
+          scrollTrigger: { trigger: ".outcomes-grid", start: "top 90%", once: true },
           x: -18,
           opacity: 0,
           duration: 0.38,
           stagger: 0.045,
           ease: "power1.out",
+          clearProps: "all",
         });
 
-        // Module cards stagger up
+        // Module cards stagger up — definitely below fold
         gsap.from(".module-card", {
-          scrollTrigger: { trigger: ".modules-container", start: "top 82%", once: true },
+          scrollTrigger: { trigger: ".modules-container", start: "top 88%", once: true },
           y: 18,
           opacity: 0,
           duration: 0.38,
           stagger: 0.065,
           ease: "power1.out",
+          clearProps: "all",
         });
       }, pageRef.current);
 
@@ -270,8 +280,12 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
           <section className="gsap-reveal mb-8 overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
             <div className="border-b border-line px-6 py-4">
               <div className="flex items-center gap-3">
-                <div className="grid h-9 w-9 place-items-center rounded-xl bg-green-600 text-white shadow-sm">
+                <div className="relative grid h-9 w-9 flex-none place-items-center rounded-xl bg-green-600 text-white shadow-sm">
                   <GraduationCap className="h-5 w-5" />
+                  {/* Lottie pulse behind the icon */}
+                  <div className="pointer-events-none absolute inset-[-14px] opacity-50">
+                    <LottieWidget animationData={pulseOrb} />
+                  </div>
                 </div>
                 <h2 className="text-[17px] font-extrabold text-ink">What you will learn</h2>
               </div>
@@ -571,6 +585,14 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
               background: `radial-gradient(ellipse at center top, ${config.accentColor}30 0%, transparent 65%)`,
             }}
           />
+          {/* Lottie floating dots — left background */}
+          <div className="pointer-events-none absolute bottom-0 left-0 h-[260px] w-[260px] opacity-20">
+            <LottieWidget animationData={floatDots} />
+          </div>
+          {/* Lottie pulsing orb — right corner accent */}
+          <div className="pointer-events-none absolute bottom-[-20px] right-[-20px] h-[180px] w-[180px] opacity-20">
+            <LottieWidget animationData={pulseOrb} />
+          </div>
 
           <div className="relative">
             <div className="mb-2 text-[11.5px] font-bold uppercase tracking-[0.18em] text-white/55">
