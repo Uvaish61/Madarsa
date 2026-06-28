@@ -7,6 +7,7 @@ import { useState } from "react";
 import AuthShell from "@/components/auth/AuthShell";
 import FormField from "@/components/auth/FormField";
 import LoginScene from "@/components/auth/LoginScene";
+import { setLoggedIn } from "@/lib/auth";
 import { isValidEmail } from "@/lib/validators";
 
 type Field = "email" | "password";
@@ -40,8 +41,11 @@ export default function Login() {
     if (Object.keys(nextErrors).length > 0) return;
 
     setSubmitting(true);
-    // TODO: wire to real auth API. For now, send the user on to the app.
-    router.push("/");
+    // TODO: wire to real auth API. For now, mark the session as signed in and
+    // return the user wherever they came from (e.g. the course they were buying).
+    setLoggedIn();
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+    router.push(redirect || "/");
   };
 
   return (

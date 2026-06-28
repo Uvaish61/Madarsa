@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import quranImg from "../../assets/images/decor/quran.png";
+import AuthTabs from "./AuthTabs";
 import BrandLogo from "./BrandLogo";
 
 const FEATURES = [
@@ -125,10 +126,7 @@ export default function AuthShell({
 
         <div className="relative z-10 w-full max-w-md rounded-[24px] border border-line bg-white p-5 shadow-soft sm:p-6">
           {/* tabs */}
-          <div className="grid grid-cols-2 border-b border-line">
-            <TabLink href="/signup" active={activeTab === "signup"}>Create Account</TabLink>
-            <TabLink href="/login" active={activeTab === "login"}>Sign In</TabLink>
-          </div>
+          <AuthTabs activeTab={activeTab} />
 
           {/* heading */}
           <div className="mt-4 text-center">
@@ -173,19 +171,6 @@ export default function AuthShell({
         </div>
       </main>
     </div>
-  );
-}
-
-function TabLink({ href, active, children }: { href: string; active: boolean; children: ReactNode }) {
-  return (
-    <Link
-      href={href}
-      className={`-mb-px border-b-2 pb-3 text-center text-[15px] font-bold transition ${
-        active ? "border-green-600 text-green-700" : "border-transparent text-muted hover:text-ink"
-      }`}
-    >
-      {children}
-    </Link>
   );
 }
 

@@ -25,6 +25,7 @@ import {
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import CourseLogo from "@/components/CourseLogo";
+import EnrollBill from "@/components/EnrollBill";
 import { courses } from "@/lib/landing-data";
 import { curricula, courseConfigs } from "@/lib/course-data";
 import { floatDots, pulseOrb } from "@/lib/animations";
@@ -45,6 +46,7 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
   const sections = curricula[slug] ?? [];
   const config = courseConfigs[slug];
   const [openSections, setOpenSections] = useState<Set<number>>(new Set([0]));
+  const [billOpen, setBillOpen] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -169,13 +171,14 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
           </Link>
           <ChevronDown className="h-3.5 w-3.5 -rotate-90 text-muted/50" />
           <span className="truncate text-sm font-bold text-ink">{course.title}</span>
-          <a
-            href="#enroll"
+          <button
+            type="button"
+            onClick={() => setBillOpen(true)}
             className="ml-auto hidden shrink-0 items-center gap-1.5 rounded-xl bg-gradient-to-br from-green-500 to-green-700 px-4 py-2 text-sm font-bold text-white shadow-md transition hover:-translate-y-0.5 md:flex"
           >
             {course.price === "Free" ? "Enroll Free" : `Enroll — ${course.price}`}
             <ArrowRight className="h-3.5 w-3.5" />
-          </a>
+          </button>
         </div>
       </header>
 
@@ -523,13 +526,14 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
               </div>
 
               {/* CTA */}
-              <a
-                href="#enroll"
+              <button
+                type="button"
+                onClick={() => setBillOpen(true)}
                 className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-green-500 to-green-700 py-3.5 text-[14.5px] font-extrabold text-white shadow-[0_6px_18px_-6px_var(--green-600)] transition hover:-translate-y-0.5"
               >
                 {course.price === "Free" ? "Enroll Free — Start Now" : `Enroll — ${course.price}`}
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </button>
               <p className="mb-5 text-center text-[11.5px] text-muted">
                 {course.price === "Free"
                   ? "No credit card required"
@@ -557,13 +561,14 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
 
       {/* ── Mobile sticky enroll bar ── */}
       <div className="sticky bottom-0 z-30 border-t border-line bg-paper/95 px-4 py-3 backdrop-blur-md lg:hidden">
-        <a
-          href="#enroll"
+        <button
+          type="button"
+          onClick={() => setBillOpen(true)}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-green-500 to-green-700 py-3.5 text-[14px] font-extrabold text-white shadow-md"
         >
           {course.price === "Free" ? "Enroll Free — Start Now" : `Enroll — ${course.price}`}
           <ArrowRight className="h-4 w-4" />
-        </a>
+        </button>
       </div>
 
       {/* ── Bottom CTA ─────────────────────────────────────── */}
@@ -615,13 +620,14 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
                 </span>
               )}
             </div>
-            <a
-              href="/"
+            <button
+              type="button"
+              onClick={() => setBillOpen(true)}
               className="inline-flex items-center gap-2.5 rounded-xl bg-white px-8 py-4 text-[15px] font-extrabold text-green-700 shadow-[0_10px_28px_-8px_rgba(0,0,0,0.3)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-8px_rgba(0,0,0,0.35)]"
             >
               {course.price === "Free" ? "Enroll Free — Start Today" : `Enroll Now — ${course.price}`}
               <ArrowRight className="h-4 w-4" />
-            </a>
+            </button>
             <p className="mt-3.5 text-[12px] text-white/45">
               {course.price === "Free"
                 ? "No card required. Start instantly."
@@ -630,6 +636,9 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
           </div>
         </div>
       </div>
+
+      {/* ── Enrollment bill / checkout ── */}
+      <EnrollBill course={course} open={billOpen} onClose={() => setBillOpen(false)} />
     </div>
   );
 }
