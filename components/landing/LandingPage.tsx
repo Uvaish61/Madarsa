@@ -619,6 +619,28 @@ export default function LandingPage() {
                       {course.badge[locale]}
                     </span>
 
+                    {/* save / wishlist heart — top right */}
+                    {(() => {
+                      const saved = savedSet.has(course.slug);
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => toggleWishlist(course.slug)}
+                          aria-pressed={saved}
+                          aria-label={
+                            saved
+                              ? locale === "en" ? "Remove from saved" : "محفوظ سے ہٹائیں"
+                              : locale === "en" ? "Save course" : "کورس محفوظ کریں"
+                          }
+                          className="absolute right-3.5 top-3.5 grid h-9 w-9 place-items-center rounded-full border border-white/25 bg-black/35 text-white backdrop-blur-sm transition hover:scale-110 hover:bg-black/50"
+                        >
+                          <Heart
+                            className={`h-4 w-4 transition ${saved ? "fill-rose-500 text-rose-500" : "text-white"}`}
+                          />
+                        </button>
+                      );
+                    })()}
+
                     {/* course title on the dark bg — premium feel */}
                     <div className="absolute inset-x-0 bottom-0 px-4 pb-3.5">
                       <h3 className="text-[15.5px] font-extrabold leading-snug tracking-[-0.01em] text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
