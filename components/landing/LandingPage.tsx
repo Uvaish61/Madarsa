@@ -451,8 +451,122 @@ export default function LandingPage() {
               </a>
             </div>
 
+            {/* ── Search + filters ── */}
+            <div className="mb-8 rounded-2xl border border-line bg-white p-4 shadow-soft-sm md:p-5">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+                {/* Search box */}
+                <div className="relative flex-1">
+                  <Search className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+                  <input
+                    type="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder={locale === "en" ? "Search courses or skills…" : "کورس یا مہارت تلاش کریں…"}
+                    aria-label={locale === "en" ? "Search courses" : "کورس تلاش کریں"}
+                    className="w-full rounded-xl border border-line bg-paper-2 py-2.5 ps-10 pe-4 text-[14px] font-medium text-ink outline-none transition focus:border-green-400 focus:bg-white focus:ring-2 focus:ring-green-100"
+                  />
+                </div>
+
+                {/* Filter chip groups */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <SlidersHorizontal className="hidden h-4 w-4 text-muted sm:block" />
+
+                  {/* Price */}
+                  {([
+                    { key: "all", label: { en: "All", ur: "تمام" } },
+                    { key: "free", label: { en: "Free", ur: "مفت" } },
+                    { key: "paid", label: { en: "Paid", ur: "ادائیگی" } },
+                  ] as const).map((opt) => (
+                    <button
+                      key={opt.key}
+                      type="button"
+                      onClick={() => setPriceFilter(opt.key)}
+                      className={`rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
+                        priceFilter === opt.key
+                          ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
+                          : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
+                      }`}
+                    >
+                      {text(opt.label, locale)}
+                    </button>
+                  ))}
+
+                  <span className="hidden h-5 w-px bg-line sm:block" />
+
+                  {/* Level */}
+                  <button
+                    type="button"
+                    onClick={() => setLevel("all")}
+                    className={`rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
+                      level === "all"
+                        ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
+                        : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
+                    }`}
+                  >
+                    {locale === "en" ? "All levels" : "تمام درجے"}
+                  </button>
+                  {levels.map((lvl) => (
+                    <button
+                      key={lvl}
+                      type="button"
+                      onClick={() => setLevel(lvl)}
+                      className={`rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
+                        level === lvl
+                          ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
+                          : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
+                      }`}
+                    >
+                      {lvl}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Result count + clear */}
+              <div className="mt-3.5 flex items-center justify-between border-t border-line pt-3 text-[12.5px]">
+                <span className="font-semibold text-muted">
+                  {filteredCourses.length}{" "}
+                  {locale === "en"
+                    ? `course${filteredCourses.length === 1 ? "" : "s"} found`
+                    : "کورس ملے"}
+                </span>
+                {filtersActive && (
+                  <button
+                    type="button"
+                    onClick={clearFilters}
+                    className="inline-flex items-center gap-1 font-bold text-green-700 hover:text-green-800"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                    {locale === "en" ? "Clear filters" : "فلٹر صاف کریں"}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {filteredCourses.length === 0 ? (
+              <div className="flex flex-col items-center rounded-2xl border border-dashed border-line bg-white py-16 text-center">
+                <span className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-green-50 text-green-600">
+                  <Search className="h-6 w-6" />
+                </span>
+                <h3 className="mb-1 text-[17px] font-extrabold text-ink">
+                  {locale === "en" ? "No courses match your filters" : "کوئی کورس آپ کے فلٹر سے میل نہیں کھاتا"}
+                </h3>
+                <p className="mb-5 max-w-sm text-[13.5px] text-muted">
+                  {locale === "en"
+                    ? "Try a different search term or clear the filters to see everything."
+                    : "مختلف لفظ آزمائیں یا سب کچھ دیکھنے کے لیے فلٹر صاف کریں۔"}
+                </p>
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="rounded-xl bg-green-600 px-5 py-2.5 text-[13.5px] font-bold text-white transition hover:bg-green-700"
+                >
+                  {locale === "en" ? "Clear filters" : "فلٹر صاف کریں"}
+                </button>
+              </div>
+            ) : (
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {courses.map((course) => (
+              {filteredCourses.map((course) => (
                 <article
                   key={course.title}
                   data-course-card
@@ -546,6 +660,7 @@ export default function LandingPage() {
                 </article>
               ))}
             </div>
+            )}
           </div>
         </section>
 
