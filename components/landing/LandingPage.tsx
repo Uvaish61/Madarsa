@@ -5,8 +5,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight, BadgeCheck, BarChart2, Check, Cloud, Code2,
   Globe, GraduationCap, Hammer, Languages, Link2, Menu,
-  Paintbrush, Server, Smartphone, Sparkles, Star, UserCheck,
-  Wifi, X,
+  Paintbrush, Search, Server, SlidersHorizontal, Smartphone,
+  Sparkles, Star, UserCheck, Wifi, X,
   type LucideIcon,
 } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -68,6 +68,42 @@ function SectionHeading({ eyebrow, title, description, locale }: { eyebrow: Copy
 export default function LandingPage() {
   const [locale, setLocale] = useState<Locale>("en");
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // ── Course search & filters ──
+  const [query, setQuery] = useState("");
+  const [level, setLevel] = useState<"all" | string>("all");
+  const [priceFilter, setPriceFilter] = useState<"all" | "free" | "paid">("all");
+
+  // Distinct levels present in the catalogue, ordered Beginner → Intermediate → Advanced.
+  const levels = useMemo(() => {
+    const order = ["Beginner", "Intermediate", "Advanced"];
+    const present = Array.from(new Set(courses.map((c) => c.level.en)));
+    return present.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  }, []);
+
+  const filteredCourses = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return courses.filter((course) => {
+      const matchesQuery =
+        !q ||
+        course.title.toLowerCase().includes(q) ||
+        course.tags.some((t) => t.toLowerCase().includes(q));
+      const matchesLevel = level === "all" || course.level.en === level;
+      const isFree = course.price === "Free";
+      const matchesPrice =
+        priceFilter === "all" ||
+        (priceFilter === "free" && isFree) ||
+        (priceFilter === "paid" && !isFree);
+      return matchesQuery && matchesLevel && matchesPrice;
+    });
+  }, [query, level, priceFilter]);
+
+  const filtersActive = query.trim() !== "" || level !== "all" || priceFilter !== "all";
+  const clearFilters = () => {
+    setQuery("");
+    setLevel("all");
+    setPriceFilter("all");
+  };
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
