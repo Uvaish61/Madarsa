@@ -528,6 +528,32 @@ export default function LandingPage() {
                       {lvl}
                     </button>
                   ))}
+
+                  <span className="hidden h-5 w-px bg-line sm:block" />
+
+                  {/* Saved-only toggle */}
+                  <button
+                    type="button"
+                    onClick={() => setSavedOnly((v) => !v)}
+                    aria-pressed={savedOnly}
+                    className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
+                      savedOnly
+                        ? "bg-rose-500 text-white shadow-[0_5px_14px_-6px_#f43f5e]"
+                        : "border border-line bg-white text-muted hover:border-rose-200 hover:text-rose-600"
+                    }`}
+                  >
+                    <Heart className={`h-3.5 w-3.5 ${savedOnly ? "fill-current" : ""}`} />
+                    {locale === "en" ? "Saved" : "محفوظ"}
+                    {savedSet.size > 0 && (
+                      <span
+                        className={`ml-0.5 rounded-full px-1.5 text-[10.5px] ${
+                          savedOnly ? "bg-white/25" : "bg-rose-50 text-rose-600"
+                        }`}
+                      >
+                        {savedSet.size}
+                      </span>
+                    )}
+                  </button>
                 </div>
               </div>
 
