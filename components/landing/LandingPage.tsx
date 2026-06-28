@@ -580,16 +580,22 @@ export default function LandingPage() {
 
             {filteredCourses.length === 0 ? (
               <div className="flex flex-col items-center rounded-2xl border border-dashed border-line bg-white py-16 text-center">
-                <span className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-green-50 text-green-600">
-                  <Search className="h-6 w-6" />
+                <span className={`mb-4 grid h-14 w-14 place-items-center rounded-full ${savedOnly && savedSet.size === 0 ? "bg-rose-50 text-rose-500" : "bg-green-50 text-green-600"}`}>
+                  {savedOnly && savedSet.size === 0 ? <Heart className="h-6 w-6" /> : <Search className="h-6 w-6" />}
                 </span>
                 <h3 className="mb-1 text-[17px] font-extrabold text-ink">
-                  {locale === "en" ? "No courses match your filters" : "کوئی کورس آپ کے فلٹر سے میل نہیں کھاتا"}
+                  {savedOnly && savedSet.size === 0
+                    ? locale === "en" ? "No saved courses yet" : "ابھی کوئی کورس محفوظ نہیں"
+                    : locale === "en" ? "No courses match your filters" : "کوئی کورس آپ کے فلٹر سے میل نہیں کھاتا"}
                 </h3>
                 <p className="mb-5 max-w-sm text-[13.5px] text-muted">
-                  {locale === "en"
-                    ? "Try a different search term or clear the filters to see everything."
-                    : "مختلف لفظ آزمائیں یا سب کچھ دیکھنے کے لیے فلٹر صاف کریں۔"}
+                  {savedOnly && savedSet.size === 0
+                    ? locale === "en"
+                      ? "Tap the heart on any course to save it for later."
+                      : "کسی بھی کورس پر دل کے نشان کو دبا کر اسے محفوظ کریں۔"
+                    : locale === "en"
+                      ? "Try a different search term or clear the filters to see everything."
+                      : "مختلف لفظ آزمائیں یا سب کچھ دیکھنے کے لیے فلٹر صاف کریں۔"}
                 </p>
                 <button
                   type="button"
