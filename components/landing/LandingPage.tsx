@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight, BadgeCheck, BarChart2, Check, Cloud, Code2,
-  Globe, GraduationCap, Hammer, Languages, Link2, Menu,
+  Globe, GraduationCap, Hammer, Heart, Languages, Link2, Menu,
   Paintbrush, Search, Server, SlidersHorizontal, Smartphone,
   Sparkles, Star, UserCheck, Wifi, X,
   type LucideIcon,
@@ -16,6 +16,7 @@ import { useEffect, useMemo, useState } from "react";
 import heroStudentGreen from "../../assets/images/hero-student-green.png";
 import CourseLogo from "@/components/CourseLogo";
 import { floatDots, pulseOrb } from "@/lib/animations";
+import { toggleWishlist, useWishlist } from "@/lib/wishlist";
 
 const LottieWidget = dynamic(() => import("@/components/LottieWidget"), { ssr: false });
 import {
@@ -73,6 +74,11 @@ export default function LandingPage() {
   const [query, setQuery] = useState("");
   const [level, setLevel] = useState<"all" | string>("all");
   const [priceFilter, setPriceFilter] = useState<"all" | "free" | "paid">("all");
+  const [savedOnly, setSavedOnly] = useState(false);
+
+  // ── Wishlist ──
+  const savedSlugs = useWishlist();
+  const savedSet = useMemo(() => new Set(savedSlugs), [savedSlugs]);
 
   // Distinct levels present in the catalogue, ordered Beginner → Intermediate → Advanced.
   const levels = useMemo(() => {
@@ -94,15 +100,18 @@ export default function LandingPage() {
         priceFilter === "all" ||
         (priceFilter === "free" && isFree) ||
         (priceFilter === "paid" && !isFree);
-      return matchesQuery && matchesLevel && matchesPrice;
+      const matchesSaved = !savedOnly || savedSet.has(course.slug);
+      return matchesQuery && matchesLevel && matchesPrice && matchesSaved;
     });
-  }, [query, level, priceFilter]);
+  }, [query, level, priceFilter, savedOnly, savedSet]);
 
-  const filtersActive = query.trim() !== "" || level !== "all" || priceFilter !== "all";
+  const filtersActive =
+    query.trim() !== "" || level !== "all" || priceFilter !== "all" || savedOnly;
   const clearFilters = () => {
     setQuery("");
     setLevel("all");
     setPriceFilter("all");
+    setSavedOnly(false);
   };
 
   useEffect(() => {
