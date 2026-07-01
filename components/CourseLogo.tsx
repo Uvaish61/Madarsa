@@ -180,11 +180,11 @@ export default function CourseLogo({ title }: { title: string }) {
             opacity="0.9"
           />
           <g stroke="#FF9900" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.7">
-            <line x1="150" y1="74" x2="90" y2="132" />
-            <line x1="160" y1="74" x2="160" y2="132" />
-            <line x1="172" y1="74" x2="240" y2="132" />
+            <line x1="150" y1="74" x2="88" y2="132" />
+            <line x1="160" y1="74" x2="200" y2="132" />
+            <line x1="172" y1="74" x2="312" y2="132" />
           </g>
-          {[{ x: 40, label: "EC2" }, { x: 116, label: "S3" }, { x: 192, label: "Lambda" }].map((n) => (
+          {[{ x: 42, label: "EC2" }, { x: 154, label: "S3" }, { x: 266, label: "Lambda" }].map((n) => (
             <g key={n.label} transform={`translate(${n.x},132)`}>
               <rect width="92" height="46" rx="8" fill="#241206" stroke="#7c4a12" />
               <text x="46" y="28" textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ffbf5c">
