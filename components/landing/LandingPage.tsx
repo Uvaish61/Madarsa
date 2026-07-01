@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight, BadgeCheck, BarChart2, Check, Cloud, Code2,
   Globe, GraduationCap, Hammer, Heart, Languages, Link2, Menu,
-  Paintbrush, Search, Server, SlidersHorizontal, Smartphone,
+  Paintbrush, Search, Server, Smartphone,
   Sparkles, Star, UserCheck, Wifi, X,
   type LucideIcon,
 } from "lucide-react";
@@ -460,122 +460,93 @@ export default function LandingPage() {
               </a>
             </div>
 
-            {/* ── Search + filters ── */}
-            <div className="mb-8 rounded-2xl border border-line bg-white p-4 shadow-soft-sm md:p-5">
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-                {/* Search box */}
-                <div className="relative flex-1">
-                  <Search className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-                  <input
-                    type="search"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder={locale === "en" ? "Search courses or skills…" : "کورس یا مہارت تلاش کریں…"}
-                    aria-label={locale === "en" ? "Search courses" : "کورس تلاش کریں"}
-                    className="w-full rounded-xl border border-line bg-paper-2 py-2.5 ps-10 pe-4 text-[14px] font-medium text-ink outline-none transition focus:border-green-400 focus:bg-white focus:ring-2 focus:ring-green-100"
-                  />
-                </div>
-
-                {/* Filter chip groups */}
-                <div className="flex flex-wrap items-center gap-2">
-                  <SlidersHorizontal className="hidden h-4 w-4 text-muted sm:block" />
-
-                  {/* Price */}
-                  {([
-                    { key: "all", label: { en: "All", ur: "تمام" } },
-                    { key: "free", label: { en: "Free", ur: "مفت" } },
-                    { key: "paid", label: { en: "Paid", ur: "ادائیگی" } },
-                  ] as const).map((opt) => (
-                    <button
-                      key={opt.key}
-                      type="button"
-                      onClick={() => setPriceFilter(opt.key)}
-                      className={`rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
-                        priceFilter === opt.key
-                          ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
-                          : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
-                      }`}
-                    >
-                      {text(opt.label, locale)}
-                    </button>
-                  ))}
-
-                  <span className="hidden h-5 w-px bg-line sm:block" />
-
-                  {/* Level */}
-                  <button
-                    type="button"
-                    onClick={() => setLevel("all")}
-                    className={`rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
-                      level === "all"
-                        ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
-                        : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
-                    }`}
-                  >
-                    {locale === "en" ? "All levels" : "تمام درجے"}
-                  </button>
-                  {levels.map((lvl) => (
-                    <button
-                      key={lvl}
-                      type="button"
-                      onClick={() => setLevel(lvl)}
-                      className={`rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
-                        level === lvl
-                          ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
-                          : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
-                      }`}
-                    >
-                      {lvl}
-                    </button>
-                  ))}
-
-                  <span className="hidden h-5 w-px bg-line sm:block" />
-
-                  {/* Saved-only toggle */}
-                  <button
-                    type="button"
-                    onClick={() => setSavedOnly((v) => !v)}
-                    aria-pressed={savedOnly}
-                    className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
-                      savedOnly
-                        ? "bg-rose-500 text-white shadow-[0_5px_14px_-6px_#f43f5e]"
-                        : "border border-line bg-white text-muted hover:border-rose-200 hover:text-rose-600"
-                    }`}
-                  >
-                    <Heart className={`h-3.5 w-3.5 ${savedOnly ? "fill-current" : ""}`} />
-                    {locale === "en" ? "Saved" : "محفوظ"}
-                    {savedSet.size > 0 && (
-                      <span
-                        className={`ml-0.5 rounded-full px-1.5 text-[10.5px] ${
-                          savedOnly ? "bg-white/25" : "bg-rose-50 text-rose-600"
-                        }`}
-                      >
-                        {savedSet.size}
-                      </span>
-                    )}
-                  </button>
-                </div>
+            {/* ── Filters, woven into the header instead of a boxed toolbar ── */}
+            <div className="mb-10 flex flex-wrap items-center gap-2.5">
+              <div className="relative">
+                <Search className="pointer-events-none absolute start-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted" />
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder={locale === "en" ? "Search courses or skills…" : "کورس یا مہارت تلاش کریں…"}
+                  aria-label={locale === "en" ? "Search courses" : "کورس تلاش کریں"}
+                  className="w-48 rounded-full border border-line bg-white py-2 ps-9 pe-4 text-[13px] font-semibold text-ink shadow-soft-sm outline-none transition placeholder:font-medium placeholder:text-muted focus:border-green-300 focus:ring-2 focus:ring-green-100 sm:w-60"
+                />
               </div>
 
-              {/* Result count + clear */}
-              <div className="mt-3.5 flex items-center justify-between border-t border-line pt-3 text-[12.5px]">
-                <span className="font-semibold text-muted">
-                  {filteredCourses.length}{" "}
-                  {locale === "en"
-                    ? `course${filteredCourses.length === 1 ? "" : "s"} found`
-                    : "کورس ملے"}
-                </span>
-                {filtersActive && (
-                  <button
-                    type="button"
-                    onClick={clearFilters}
-                    className="inline-flex items-center gap-1 font-bold text-green-700 hover:text-green-800"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                    {locale === "en" ? "Clear filters" : "فلٹر صاف کریں"}
-                  </button>
+              {([
+                { key: "all", label: { en: "All", ur: "تمام" } },
+                { key: "free", label: { en: "Free", ur: "مفت" } },
+                { key: "paid", label: { en: "Paid", ur: "ادائیگی" } },
+              ] as const).map((opt) => (
+                <button
+                  key={opt.key}
+                  type="button"
+                  onClick={() => setPriceFilter(opt.key)}
+                  className={`rounded-full px-4 py-2 text-[12.5px] font-bold shadow-soft-sm transition ${
+                    priceFilter === opt.key
+                      ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
+                      : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
+                  }`}
+                >
+                  {text(opt.label, locale)}
+                </button>
+              ))}
+
+              <button
+                type="button"
+                onClick={() => setLevel("all")}
+                className={`rounded-full px-4 py-2 text-[12.5px] font-bold shadow-soft-sm transition ${
+                  level === "all"
+                    ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
+                    : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
+                }`}
+              >
+                {locale === "en" ? "All levels" : "تمام درجے"}
+              </button>
+              {levels.map((lvl) => (
+                <button
+                  key={lvl}
+                  type="button"
+                  onClick={() => setLevel(lvl)}
+                  className={`rounded-full px-4 py-2 text-[12.5px] font-bold shadow-soft-sm transition ${
+                    level === lvl
+                      ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
+                      : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
+                  }`}
+                >
+                  {lvl}
+                </button>
+              ))}
+
+              <button
+                type="button"
+                onClick={() => setSavedOnly((v) => !v)}
+                aria-pressed={savedOnly}
+                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12.5px] font-bold shadow-soft-sm transition ${
+                  savedOnly
+                    ? "bg-rose-500 text-white shadow-[0_5px_14px_-6px_#f43f5e]"
+                    : "border border-line bg-white text-muted hover:border-rose-200 hover:text-rose-600"
+                }`}
+              >
+                <Heart className={`h-3.5 w-3.5 ${savedOnly ? "fill-current" : ""}`} />
+                {locale === "en" ? "Saved" : "محفوظ"}
+                {savedSet.size > 0 && (
+                  <span className={`rounded-full px-1.5 text-[10.5px] ${savedOnly ? "bg-white/25" : "bg-rose-50 text-rose-600"}`}>
+                    {savedSet.size}
+                  </span>
                 )}
-              </div>
+              </button>
+
+              {filtersActive && (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="text-[12.5px] font-bold text-green-700 underline-offset-2 hover:text-green-800 hover:underline"
+                >
+                  {locale === "en" ? "Clear filters" : "فلٹر صاف کریں"}
+                </button>
+              )}
             </div>
 
             {filteredCourses.length === 0 ? (
