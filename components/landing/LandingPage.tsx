@@ -573,7 +573,6 @@ export default function LandingPage() {
                 </article>
               ))}
             </div>
-            )}
           </div>
         </section>
 
