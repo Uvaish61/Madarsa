@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight, BadgeCheck, BarChart2, Check, Cloud, Code2,
-  Globe, GraduationCap, Hammer, Heart, Languages, Link2, Menu,
+  Globe, GraduationCap, Hammer, Languages, Link2, Menu,
   Paintbrush, Server, Smartphone,
   Sparkles, Star, UserCheck, Wifi, X,
   type LucideIcon,
@@ -16,7 +16,6 @@ import { useEffect, useMemo, useState } from "react";
 import heroStudentGreen from "../../assets/images/hero-student-green.png";
 import CourseLogo from "@/components/CourseLogo";
 import { floatDots, pulseOrb } from "@/lib/animations";
-import { toggleWishlist, useWishlist } from "@/lib/wishlist";
 
 const LottieWidget = dynamic(() => import("@/components/LottieWidget"), { ssr: false });
 import {
@@ -72,10 +71,6 @@ export default function LandingPage() {
 
   // ── Course price filter ──
   const [priceFilter, setPriceFilter] = useState<"all" | "free" | "paid">("all");
-
-  // ── Wishlist ──
-  const savedSlugs = useWishlist();
-  const savedSet = useMemo(() => new Set(savedSlugs), [savedSlugs]);
 
   const filteredCourses = useMemo(() => {
     return courses.filter((course) => {
@@ -474,28 +469,6 @@ export default function LandingPage() {
                     <span className="absolute left-3.5 top-3.5 rounded-full border border-white/25 bg-black/35 px-3 py-1 text-[11px] font-bold text-white backdrop-blur-sm">
                       {course.badge[locale]}
                     </span>
-
-                    {/* save / wishlist heart — top right */}
-                    {(() => {
-                      const saved = savedSet.has(course.slug);
-                      return (
-                        <button
-                          type="button"
-                          onClick={() => toggleWishlist(course.slug)}
-                          aria-pressed={saved}
-                          aria-label={
-                            saved
-                              ? locale === "en" ? "Remove from saved" : "محفوظ سے ہٹائیں"
-                              : locale === "en" ? "Save course" : "کورس محفوظ کریں"
-                          }
-                          className="absolute right-3.5 top-3.5 grid h-9 w-9 place-items-center rounded-full border border-white/25 bg-black/35 text-white backdrop-blur-sm transition hover:scale-110 hover:bg-black/50"
-                        >
-                          <Heart
-                            className={`h-4 w-4 transition ${saved ? "fill-rose-500 text-rose-500" : "text-white"}`}
-                          />
-                        </button>
-                      );
-                    })()}
 
                     {/* course title on the dark bg — premium feel */}
                     <div className="absolute inset-x-0 bottom-0 px-4 pb-3.5">
