@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight, BadgeCheck, BarChart2, Check, Cloud, Code2,
   Globe, GraduationCap, Hammer, Heart, Languages, Link2, Menu,
-  Paintbrush, Search, Server, Smartphone,
+  Paintbrush, Server, Smartphone,
   Sparkles, Star, UserCheck, Wifi, X,
   type LucideIcon,
 } from "lucide-react";
@@ -70,49 +70,23 @@ export default function LandingPage() {
   const [locale, setLocale] = useState<Locale>("en");
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // ── Course search & filters ──
-  const [query, setQuery] = useState("");
-  const [level, setLevel] = useState<"all" | string>("all");
+  // ── Course price filter ──
   const [priceFilter, setPriceFilter] = useState<"all" | "free" | "paid">("all");
-  const [savedOnly, setSavedOnly] = useState(false);
 
   // ── Wishlist ──
   const savedSlugs = useWishlist();
   const savedSet = useMemo(() => new Set(savedSlugs), [savedSlugs]);
 
-  // Distinct levels present in the catalogue, ordered Beginner → Intermediate → Advanced.
-  const levels = useMemo(() => {
-    const order = ["Beginner", "Intermediate", "Advanced"];
-    const present = Array.from(new Set(courses.map((c) => c.level.en)));
-    return present.sort((a, b) => order.indexOf(a) - order.indexOf(b));
-  }, []);
-
   const filteredCourses = useMemo(() => {
-    const q = query.trim().toLowerCase();
     return courses.filter((course) => {
-      const matchesQuery =
-        !q ||
-        course.title.toLowerCase().includes(q) ||
-        course.tags.some((t) => t.toLowerCase().includes(q));
-      const matchesLevel = level === "all" || course.level.en === level;
       const isFree = course.price === "Free";
-      const matchesPrice =
+      return (
         priceFilter === "all" ||
         (priceFilter === "free" && isFree) ||
-        (priceFilter === "paid" && !isFree);
-      const matchesSaved = !savedOnly || savedSet.has(course.slug);
-      return matchesQuery && matchesLevel && matchesPrice && matchesSaved;
+        (priceFilter === "paid" && !isFree)
+      );
     });
-  }, [query, level, priceFilter, savedOnly, savedSet]);
-
-  const filtersActive =
-    query.trim() !== "" || level !== "all" || priceFilter !== "all" || savedOnly;
-  const clearFilters = () => {
-    setQuery("");
-    setLevel("all");
-    setPriceFilter("all");
-    setSavedOnly(false);
-  };
+  }, [priceFilter]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -460,20 +434,8 @@ export default function LandingPage() {
               </a>
             </div>
 
-            {/* ── Filters, woven into the header instead of a boxed toolbar ── */}
-            <div className="mb-10 flex flex-wrap items-center gap-2.5">
-              <div className="relative">
-                <Search className="pointer-events-none absolute start-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted" />
-                <input
-                  type="search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder={locale === "en" ? "Search courses or skills…" : "کورس یا مہارت تلاش کریں…"}
-                  aria-label={locale === "en" ? "Search courses" : "کورس تلاش کریں"}
-                  className="w-48 rounded-full border border-line bg-white py-2 ps-9 pe-4 text-[13px] font-semibold text-ink shadow-soft-sm outline-none transition placeholder:font-medium placeholder:text-muted focus:border-green-300 focus:ring-2 focus:ring-green-100 sm:w-60"
-                />
-              </div>
-
+            {/* ── Price tabs, woven into the header instead of a boxed toolbar ── */}
+            <div className="mb-10 flex items-center gap-2.5">
               {([
                 { key: "all", label: { en: "All", ur: "تمام" } },
                 { key: "free", label: { en: "Free", ur: "مفت" } },
@@ -492,91 +454,8 @@ export default function LandingPage() {
                   {text(opt.label, locale)}
                 </button>
               ))}
-
-              <button
-                type="button"
-                onClick={() => setLevel("all")}
-                className={`rounded-full px-4 py-2 text-[12.5px] font-bold shadow-soft-sm transition ${
-                  level === "all"
-                    ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
-                    : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
-                }`}
-              >
-                {locale === "en" ? "All levels" : "تمام درجے"}
-              </button>
-              {levels.map((lvl) => (
-                <button
-                  key={lvl}
-                  type="button"
-                  onClick={() => setLevel(lvl)}
-                  className={`rounded-full px-4 py-2 text-[12.5px] font-bold shadow-soft-sm transition ${
-                    level === lvl
-                      ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
-                      : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
-                  }`}
-                >
-                  {lvl}
-                </button>
-              ))}
-
-              <button
-                type="button"
-                onClick={() => setSavedOnly((v) => !v)}
-                aria-pressed={savedOnly}
-                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12.5px] font-bold shadow-soft-sm transition ${
-                  savedOnly
-                    ? "bg-rose-500 text-white shadow-[0_5px_14px_-6px_#f43f5e]"
-                    : "border border-line bg-white text-muted hover:border-rose-200 hover:text-rose-600"
-                }`}
-              >
-                <Heart className={`h-3.5 w-3.5 ${savedOnly ? "fill-current" : ""}`} />
-                {locale === "en" ? "Saved" : "محفوظ"}
-                {savedSet.size > 0 && (
-                  <span className={`rounded-full px-1.5 text-[10.5px] ${savedOnly ? "bg-white/25" : "bg-rose-50 text-rose-600"}`}>
-                    {savedSet.size}
-                  </span>
-                )}
-              </button>
-
-              {filtersActive && (
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="text-[12.5px] font-bold text-green-700 underline-offset-2 hover:text-green-800 hover:underline"
-                >
-                  {locale === "en" ? "Clear filters" : "فلٹر صاف کریں"}
-                </button>
-              )}
             </div>
 
-            {filteredCourses.length === 0 ? (
-              <div className="flex flex-col items-center rounded-2xl border border-dashed border-line bg-white py-16 text-center">
-                <span className={`mb-4 grid h-14 w-14 place-items-center rounded-full ${savedOnly && savedSet.size === 0 ? "bg-rose-50 text-rose-500" : "bg-green-50 text-green-600"}`}>
-                  {savedOnly && savedSet.size === 0 ? <Heart className="h-6 w-6" /> : <Search className="h-6 w-6" />}
-                </span>
-                <h3 className="mb-1 text-[17px] font-extrabold text-ink">
-                  {savedOnly && savedSet.size === 0
-                    ? locale === "en" ? "No saved courses yet" : "ابھی کوئی کورس محفوظ نہیں"
-                    : locale === "en" ? "No courses match your filters" : "کوئی کورس آپ کے فلٹر سے میل نہیں کھاتا"}
-                </h3>
-                <p className="mb-5 max-w-sm text-[13.5px] text-muted">
-                  {savedOnly && savedSet.size === 0
-                    ? locale === "en"
-                      ? "Tap the heart on any course to save it for later."
-                      : "کسی بھی کورس پر دل کے نشان کو دبا کر اسے محفوظ کریں۔"
-                    : locale === "en"
-                      ? "Try a different search term or clear the filters to see everything."
-                      : "مختلف لفظ آزمائیں یا سب کچھ دیکھنے کے لیے فلٹر صاف کریں۔"}
-                </p>
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="rounded-xl bg-green-600 px-5 py-2.5 text-[13.5px] font-bold text-white transition hover:bg-green-700"
-                >
-                  {locale === "en" ? "Clear filters" : "فلٹر صاف کریں"}
-                </button>
-              </div>
-            ) : (
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {filteredCourses.map((course) => (
                 <article
