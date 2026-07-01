@@ -4,8 +4,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight, BadgeCheck, BarChart2, Check, Cloud, Code2,
-  Globe, GraduationCap, Hammer, Heart, Languages, Link2, Menu,
-  Paintbrush, Search, Server, SlidersHorizontal, Smartphone,
+  Globe, GraduationCap, Hammer, Languages, Link2, Menu,
+  Paintbrush, Server, Smartphone,
   Sparkles, Star, UserCheck, Wifi, X,
   type LucideIcon,
 } from "lucide-react";
@@ -16,7 +16,6 @@ import { useEffect, useMemo, useState } from "react";
 import heroStudentGreen from "../../assets/images/hero-student-green.png";
 import CourseLogo from "@/components/CourseLogo";
 import { floatDots, pulseOrb } from "@/lib/animations";
-import { toggleWishlist, useWishlist } from "@/lib/wishlist";
 
 const LottieWidget = dynamic(() => import("@/components/LottieWidget"), { ssr: false });
 import {
@@ -70,49 +69,19 @@ export default function LandingPage() {
   const [locale, setLocale] = useState<Locale>("en");
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // ── Course search & filters ──
-  const [query, setQuery] = useState("");
-  const [level, setLevel] = useState<"all" | string>("all");
+  // ── Course price filter ──
   const [priceFilter, setPriceFilter] = useState<"all" | "free" | "paid">("all");
-  const [savedOnly, setSavedOnly] = useState(false);
-
-  // ── Wishlist ──
-  const savedSlugs = useWishlist();
-  const savedSet = useMemo(() => new Set(savedSlugs), [savedSlugs]);
-
-  // Distinct levels present in the catalogue, ordered Beginner → Intermediate → Advanced.
-  const levels = useMemo(() => {
-    const order = ["Beginner", "Intermediate", "Advanced"];
-    const present = Array.from(new Set(courses.map((c) => c.level.en)));
-    return present.sort((a, b) => order.indexOf(a) - order.indexOf(b));
-  }, []);
 
   const filteredCourses = useMemo(() => {
-    const q = query.trim().toLowerCase();
     return courses.filter((course) => {
-      const matchesQuery =
-        !q ||
-        course.title.toLowerCase().includes(q) ||
-        course.tags.some((t) => t.toLowerCase().includes(q));
-      const matchesLevel = level === "all" || course.level.en === level;
       const isFree = course.price === "Free";
-      const matchesPrice =
+      return (
         priceFilter === "all" ||
         (priceFilter === "free" && isFree) ||
-        (priceFilter === "paid" && !isFree);
-      const matchesSaved = !savedOnly || savedSet.has(course.slug);
-      return matchesQuery && matchesLevel && matchesPrice && matchesSaved;
+        (priceFilter === "paid" && !isFree)
+      );
     });
-  }, [query, level, priceFilter, savedOnly, savedSet]);
-
-  const filtersActive =
-    query.trim() !== "" || level !== "all" || priceFilter !== "all" || savedOnly;
-  const clearFilters = () => {
-    setQuery("");
-    setLevel("all");
-    setPriceFilter("all");
-    setSavedOnly(false);
-  };
+  }, [priceFilter]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -460,152 +429,28 @@ export default function LandingPage() {
               </a>
             </div>
 
-            {/* ── Search + filters ── */}
-            <div className="mb-8 rounded-2xl border border-line bg-white p-4 shadow-soft-sm md:p-5">
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-                {/* Search box */}
-                <div className="relative flex-1">
-                  <Search className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-                  <input
-                    type="search"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder={locale === "en" ? "Search courses or skills…" : "کورس یا مہارت تلاش کریں…"}
-                    aria-label={locale === "en" ? "Search courses" : "کورس تلاش کریں"}
-                    className="w-full rounded-xl border border-line bg-paper-2 py-2.5 ps-10 pe-4 text-[14px] font-medium text-ink outline-none transition focus:border-green-400 focus:bg-white focus:ring-2 focus:ring-green-100"
-                  />
-                </div>
-
-                {/* Filter chip groups */}
-                <div className="flex flex-wrap items-center gap-2">
-                  <SlidersHorizontal className="hidden h-4 w-4 text-muted sm:block" />
-
-                  {/* Price */}
-                  {([
-                    { key: "all", label: { en: "All", ur: "تمام" } },
-                    { key: "free", label: { en: "Free", ur: "مفت" } },
-                    { key: "paid", label: { en: "Paid", ur: "ادائیگی" } },
-                  ] as const).map((opt) => (
-                    <button
-                      key={opt.key}
-                      type="button"
-                      onClick={() => setPriceFilter(opt.key)}
-                      className={`rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
-                        priceFilter === opt.key
-                          ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
-                          : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
-                      }`}
-                    >
-                      {text(opt.label, locale)}
-                    </button>
-                  ))}
-
-                  <span className="hidden h-5 w-px bg-line sm:block" />
-
-                  {/* Level */}
-                  <button
-                    type="button"
-                    onClick={() => setLevel("all")}
-                    className={`rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
-                      level === "all"
-                        ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
-                        : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
-                    }`}
-                  >
-                    {locale === "en" ? "All levels" : "تمام درجے"}
-                  </button>
-                  {levels.map((lvl) => (
-                    <button
-                      key={lvl}
-                      type="button"
-                      onClick={() => setLevel(lvl)}
-                      className={`rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
-                        level === lvl
-                          ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
-                          : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
-                      }`}
-                    >
-                      {lvl}
-                    </button>
-                  ))}
-
-                  <span className="hidden h-5 w-px bg-line sm:block" />
-
-                  {/* Saved-only toggle */}
-                  <button
-                    type="button"
-                    onClick={() => setSavedOnly((v) => !v)}
-                    aria-pressed={savedOnly}
-                    className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12.5px] font-bold transition ${
-                      savedOnly
-                        ? "bg-rose-500 text-white shadow-[0_5px_14px_-6px_#f43f5e]"
-                        : "border border-line bg-white text-muted hover:border-rose-200 hover:text-rose-600"
-                    }`}
-                  >
-                    <Heart className={`h-3.5 w-3.5 ${savedOnly ? "fill-current" : ""}`} />
-                    {locale === "en" ? "Saved" : "محفوظ"}
-                    {savedSet.size > 0 && (
-                      <span
-                        className={`ml-0.5 rounded-full px-1.5 text-[10.5px] ${
-                          savedOnly ? "bg-white/25" : "bg-rose-50 text-rose-600"
-                        }`}
-                      >
-                        {savedSet.size}
-                      </span>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Result count + clear */}
-              <div className="mt-3.5 flex items-center justify-between border-t border-line pt-3 text-[12.5px]">
-                <span className="font-semibold text-muted">
-                  {filteredCourses.length}{" "}
-                  {locale === "en"
-                    ? `course${filteredCourses.length === 1 ? "" : "s"} found`
-                    : "کورس ملے"}
-                </span>
-                {filtersActive && (
-                  <button
-                    type="button"
-                    onClick={clearFilters}
-                    className="inline-flex items-center gap-1 font-bold text-green-700 hover:text-green-800"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                    {locale === "en" ? "Clear filters" : "فلٹر صاف کریں"}
-                  </button>
-                )}
-              </div>
+            {/* ── Price tabs, woven into the header instead of a boxed toolbar ── */}
+            <div className="mb-10 flex items-center gap-2.5">
+              {([
+                { key: "all", label: { en: "All", ur: "تمام" } },
+                { key: "free", label: { en: "Free", ur: "مفت" } },
+                { key: "paid", label: { en: "Paid", ur: "ادائیگی" } },
+              ] as const).map((opt) => (
+                <button
+                  key={opt.key}
+                  type="button"
+                  onClick={() => setPriceFilter(opt.key)}
+                  className={`rounded-full px-4 py-2 text-[12.5px] font-bold shadow-soft-sm transition ${
+                    priceFilter === opt.key
+                      ? "bg-green-600 text-white shadow-[0_5px_14px_-6px_var(--green-600)]"
+                      : "border border-line bg-white text-muted hover:border-green-200 hover:text-green-700"
+                  }`}
+                >
+                  {text(opt.label, locale)}
+                </button>
+              ))}
             </div>
 
-            {filteredCourses.length === 0 ? (
-              <div className="flex flex-col items-center rounded-2xl border border-dashed border-line bg-white py-16 text-center">
-                <span className={`mb-4 grid h-14 w-14 place-items-center rounded-full ${savedOnly && savedSet.size === 0 ? "bg-rose-50 text-rose-500" : "bg-green-50 text-green-600"}`}>
-                  {savedOnly && savedSet.size === 0 ? <Heart className="h-6 w-6" /> : <Search className="h-6 w-6" />}
-                </span>
-                <h3 className="mb-1 text-[17px] font-extrabold text-ink">
-                  {savedOnly && savedSet.size === 0
-                    ? locale === "en" ? "No saved courses yet" : "ابھی کوئی کورس محفوظ نہیں"
-                    : locale === "en" ? "No courses match your filters" : "کوئی کورس آپ کے فلٹر سے میل نہیں کھاتا"}
-                </h3>
-                <p className="mb-5 max-w-sm text-[13.5px] text-muted">
-                  {savedOnly && savedSet.size === 0
-                    ? locale === "en"
-                      ? "Tap the heart on any course to save it for later."
-                      : "کسی بھی کورس پر دل کے نشان کو دبا کر اسے محفوظ کریں۔"
-                    : locale === "en"
-                      ? "Try a different search term or clear the filters to see everything."
-                      : "مختلف لفظ آزمائیں یا سب کچھ دیکھنے کے لیے فلٹر صاف کریں۔"}
-                </p>
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="rounded-xl bg-green-600 px-5 py-2.5 text-[13.5px] font-bold text-white transition hover:bg-green-700"
-                >
-                  {locale === "en" ? "Clear filters" : "فلٹر صاف کریں"}
-                </button>
-              </div>
-            ) : (
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {filteredCourses.map((course) => (
                 <article
@@ -624,28 +469,6 @@ export default function LandingPage() {
                     <span className="absolute left-3.5 top-3.5 rounded-full border border-white/25 bg-black/35 px-3 py-1 text-[11px] font-bold text-white backdrop-blur-sm">
                       {course.badge[locale]}
                     </span>
-
-                    {/* save / wishlist heart — top right */}
-                    {(() => {
-                      const saved = savedSet.has(course.slug);
-                      return (
-                        <button
-                          type="button"
-                          onClick={() => toggleWishlist(course.slug)}
-                          aria-pressed={saved}
-                          aria-label={
-                            saved
-                              ? locale === "en" ? "Remove from saved" : "محفوظ سے ہٹائیں"
-                              : locale === "en" ? "Save course" : "کورس محفوظ کریں"
-                          }
-                          className="absolute right-3.5 top-3.5 grid h-9 w-9 place-items-center rounded-full border border-white/25 bg-black/35 text-white backdrop-blur-sm transition hover:scale-110 hover:bg-black/50"
-                        >
-                          <Heart
-                            className={`h-4 w-4 transition ${saved ? "fill-rose-500 text-rose-500" : "text-white"}`}
-                          />
-                        </button>
-                      );
-                    })()}
 
                     {/* course title on the dark bg — premium feel */}
                     <div className="absolute inset-x-0 bottom-0 px-4 pb-3.5">
@@ -723,7 +546,6 @@ export default function LandingPage() {
                 </article>
               ))}
             </div>
-            )}
           </div>
         </section>
 
