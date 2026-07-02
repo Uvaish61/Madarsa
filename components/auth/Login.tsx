@@ -7,7 +7,7 @@ import { useState } from "react";
 import AuthShell from "@/components/auth/AuthShell";
 import FormField from "@/components/auth/FormField";
 import LoginScene from "@/components/auth/LoginScene";
-import { setLoggedIn } from "@/lib/auth";
+import { getPostAuthRedirectTarget, setLoggedIn } from "@/lib/auth";
 import { isValidEmail } from "@/lib/validators";
 
 type Field = "email" | "password";
