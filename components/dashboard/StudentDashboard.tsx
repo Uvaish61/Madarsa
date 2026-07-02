@@ -11,7 +11,7 @@ import { courses, type CourseItem } from "@/lib/landing-data";
 
 export default function StudentDashboard() {
   const router = useRouter();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const [ready, setReady] = useState(false);
   const [enrolledSlugs, setEnrolledSlugs] = useState<string[]>([]);
   const [pendingCourse, setPendingCourse] = useState<CourseItem | null>(null);
@@ -57,7 +57,10 @@ export default function StudentDashboard() {
             <p className="text-[11px] font-extrabold uppercase tracking-wider text-green-700">
               Dashboard
             </p>
-            <h1 className="text-[20px] font-extrabold text-ink">Welcome back</h1>
+            <h1 className="text-[20px] font-extrabold text-ink">
+              Welcome back{user?.name ? `, ${user.name}` : ""}
+            </h1>
+            {user?.email && <p className="mt-0.5 text-[12.5px] text-muted">{user.email}</p>}
           </div>
           <button
             type="button"
@@ -97,7 +100,7 @@ export default function StudentDashboard() {
         {enrolledCourses.length === 0 ? (
           <div className="rounded-2xl border-2 border-dashed border-line p-10 text-center">
             <p className="mb-4 text-[14px] text-muted">
-              You haven&apos;t enrolled in any courses yet.
+              Start learning by enrolling in a course.
             </p>
             <Link
               href="/#courses"
