@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import type { CourseItem } from "@/lib/landing-data";
 import { isLoggedIn } from "@/lib/auth";
+import { enrollInCourse } from "@/lib/enrollment";
 
 function toAmount(price: string): number {
   return +price.replace(/[^\d]/g, "");
@@ -59,12 +60,13 @@ export default function EnrollBill({
 
   function handleBuy() {
     if (!isLoggedIn()) {
-      // Not signed in yet — send to login and come back to this course after.
-      const redirect = encodeURIComponent(`/courses/${course.slug}`);
-      router.push(`/login?redirect=${redirect}`);
+      // Not signed in yet — send to login, then resume enrolling from the dashboard.
+      const redirect = encodeURIComponent("/dashboard");
+      router.push(`/login?redirect=${redirect}&pending=${course.slug}`);
       return;
     }
     // Logged in — confirm the (mock) purchase.
+    enrollInCourse(course.slug);
     setDone(true);
   }
 
@@ -119,7 +121,7 @@ export default function EnrollBill({
             </p>
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => router.push("/dashboard")}
               className="w-full rounded-xl bg-gradient-to-br from-green-500 to-green-700 py-3.5 text-[14.5px] font-extrabold text-white shadow-md transition hover:-translate-y-0.5"
             >
               Start learning
