@@ -11,20 +11,14 @@ import { courses, type CourseItem } from "@/lib/landing-data";
 
 export default function StudentDashboard() {
   const router = useRouter();
-  const { user, loading: authLoading, logout } = useAuth();
+  const { logout } = useAuth();
   const [ready, setReady] = useState(false);
   const [enrolledSlugs, setEnrolledSlugs] = useState<string[]>([]);
   const [pendingCourse, setPendingCourse] = useState<CourseItem | null>(null);
 
+  // Auth itself is guarded by <ProtectedRoute> in app/dashboard/page.tsx — this
+  // only needs to load this page's own data once mounted.
   useEffect(() => {
-    if (authLoading) return;
-
-    if (!user) {
-      const redirect = encodeURIComponent(`/dashboard${window.location.search}`);
-      router.replace(`/login?redirect=${redirect}`);
-      return;
-    }
-
     const pendingSlug = new URLSearchParams(window.location.search).get("pending");
     const alreadyEnrolled = getEnrolledSlugs();
     if (pendingSlug && !alreadyEnrolled.includes(pendingSlug)) {
@@ -34,7 +28,7 @@ export default function StudentDashboard() {
 
     setEnrolledSlugs(alreadyEnrolled);
     setReady(true);
-  }, [authLoading, user, router]);
+  }, []);
 
   function confirmPendingEnroll() {
     if (!pendingCourse) return;
