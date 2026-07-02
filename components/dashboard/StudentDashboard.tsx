@@ -5,18 +5,21 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import CourseLogo from "@/components/CourseLogo";
-import { isLoggedIn, logout } from "@/lib/auth";
+import { useAuth } from "@/context/AuthContext";
 import { enrollInCourse, getEnrolledSlugs } from "@/lib/enrollment";
 import { courses, type CourseItem } from "@/lib/landing-data";
 
 export default function StudentDashboard() {
   const router = useRouter();
+  const { user, loading: authLoading, logout } = useAuth();
   const [ready, setReady] = useState(false);
   const [enrolledSlugs, setEnrolledSlugs] = useState<string[]>([]);
   const [pendingCourse, setPendingCourse] = useState<CourseItem | null>(null);
 
   useEffect(() => {
-    if (!isLoggedIn()) {
+    if (authLoading) return;
+
+    if (!user) {
       const redirect = encodeURIComponent(`/dashboard${window.location.search}`);
       router.replace(`/login?redirect=${redirect}`);
       return;
@@ -31,7 +34,7 @@ export default function StudentDashboard() {
 
     setEnrolledSlugs(alreadyEnrolled);
     setReady(true);
-  }, [router]);
+  }, [authLoading, user, router]);
 
   function confirmPendingEnroll() {
     if (!pendingCourse) return;

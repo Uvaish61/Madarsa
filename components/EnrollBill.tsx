@@ -10,8 +10,8 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 import type { CourseItem } from "@/lib/landing-data";
-import { isLoggedIn } from "@/lib/auth";
 import { enrollInCourse } from "@/lib/enrollment";
 
 function toAmount(price: string): number {
@@ -32,6 +32,7 @@ export default function EnrollBill({
   onClose: () => void;
 }) {
   const router = useRouter();
+  const { user } = useAuth();
   const [done, setDone] = useState(false);
 
   const isFree = course.price === "Free";
@@ -59,7 +60,7 @@ export default function EnrollBill({
   if (!open) return null;
 
   function handleBuy() {
-    if (!isLoggedIn()) {
+    if (!user) {
       // Not signed in yet — send to login, then resume enrolling from the dashboard.
       const redirect = encodeURIComponent("/dashboard");
       router.push(`/login?redirect=${redirect}&pending=${course.slug}`);

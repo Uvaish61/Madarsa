@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Nastaliq_Urdu, Newsreader, Plus_Jakarta_Sans } from "next/font/google";
+import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -34,7 +35,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className={`${jakarta.variable} ${newsreader.variable} ${urdu.variable} font-sans`}>
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
