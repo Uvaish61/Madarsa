@@ -44,8 +44,7 @@ export default function Login() {
     // TODO: wire to real auth API. For now, mark the session as signed in and
     // return the user wherever they came from (e.g. the course they were buying).
     setLoggedIn();
-    const redirect = new URLSearchParams(window.location.search).get("redirect");
-    router.push(redirect || "/");
+    router.push(getPostAuthRedirectTarget());
   };
 
   return (
