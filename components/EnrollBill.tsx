@@ -121,7 +121,7 @@ export default function EnrollBill({
             </p>
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => router.push("/dashboard")}
               className="w-full rounded-xl bg-gradient-to-br from-green-500 to-green-700 py-3.5 text-[14.5px] font-extrabold text-white shadow-md transition hover:-translate-y-0.5"
             >
               Start learning
