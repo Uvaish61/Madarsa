@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import heroStudentGreen from "../../assets/images/hero-student-green.png";
 import CourseLogo from "@/components/CourseLogo";
+import EnrollButton from "@/components/EnrollButton";
 import { floatDots, pulseOrb } from "@/lib/animations";
 
 const LottieWidget = dynamic(() => import("@/components/LottieWidget"), { ssr: false });
