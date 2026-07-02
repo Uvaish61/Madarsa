@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import StudentDashboard from "@/components/dashboard/StudentDashboard";
 
 export const metadata: Metadata = {
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardPage() {
-  return <StudentDashboard />;
+  return (
+    <ProtectedRoute>
+      <StudentDashboard />
+    </ProtectedRoute>
+  );
 }

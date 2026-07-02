@@ -13,14 +13,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import type { CourseItem } from "@/lib/landing-data";
 import { enrollInCourse } from "@/lib/enrollment";
-
-function toAmount(price: string): number {
-  return +price.replace(/[^\d]/g, "");
-}
-
-function formatINR(n: number): string {
-  return `₹${n.toLocaleString("en-IN")}`;
-}
+import { formatINR, toAmount } from "@/lib/pricing";
 
 export default function EnrollBill({
   course,
