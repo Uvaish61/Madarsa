@@ -534,7 +534,7 @@ export default function LandingPage() {
                         {locale === "en" ? "Curriculum" : "نصاب"}
                       </a>
                       <Link
-                        href={`/login?redirect=${encodeURIComponent(`/courses/${course.slug}`)}`}
+                        href={`/login?redirect=${encodeURIComponent("/dashboard")}&pending=${course.slug}`}
                         className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-br from-green-500 to-green-700 py-2.5 text-[12.5px] font-bold text-white shadow-[0_5px_14px_-5px_var(--green-600)] transition-all duration-200 hover:shadow-[0_8px_20px_-6px_var(--green-600)] hover:opacity-95"
                       >
                         {locale === "en"

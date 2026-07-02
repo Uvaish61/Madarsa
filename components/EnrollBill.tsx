@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import type { CourseItem } from "@/lib/landing-data";
 import { isLoggedIn } from "@/lib/auth";
+import { enrollInCourse } from "@/lib/enrollment";
 
 function toAmount(price: string): number {
   return +price.replace(/[^\d]/g, "");
