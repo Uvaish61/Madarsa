@@ -7,7 +7,8 @@ import { useState } from "react";
 import AuthShell from "@/components/auth/AuthShell";
 import FormField from "@/components/auth/FormField";
 import LoginScene from "@/components/auth/LoginScene";
-import { getPostAuthRedirectTarget, setLoggedIn } from "@/lib/auth";
+import { useAuth } from "@/context/AuthContext";
+import { getPostAuthRedirectTarget } from "@/lib/auth";
 import { isValidEmail } from "@/lib/validators";
 
 type Field = "email" | "password";
@@ -15,6 +16,7 @@ type Errors = Partial<Record<Field, string>>;
 
 export default function Login() {
   const router = useRouter();
+  const { login } = useAuth();
   const [values, setValues] = useState<Record<Field, string>>({ email: "", password: "" });
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -43,7 +45,7 @@ export default function Login() {
     setSubmitting(true);
     // TODO: wire to real auth API. For now, mark the session as signed in and
     // return the user wherever they came from (e.g. the course they were buying).
-    setLoggedIn();
+    login(values.email);
     router.push(getPostAuthRedirectTarget());
   };
 
