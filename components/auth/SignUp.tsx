@@ -58,7 +58,7 @@ export default function SignUp() {
     setSubmitting(true);
     // TODO: wire to real auth API. For now, mark the session as signed in and
     // return the user wherever they came from (e.g. the course they were buying).
-    signup(values.email);
+    signup(values.email, `${values.firstName} ${values.lastName}`.trim());
     router.push(getPostAuthRedirectTarget());
   };
 

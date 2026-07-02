@@ -7,13 +7,13 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-type AuthUser = { email: string };
+type AuthUser = { email: string; name?: string };
 
 type AuthContextValue = {
   user: AuthUser | null;
   loading: boolean;
   login: (email: string) => void;
-  signup: (email: string) => void;
+  signup: (email: string, name?: string) => void;
   logout: () => void;
 };
 
@@ -45,8 +45,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     persistUser({ email });
   }
 
-  function signup(email: string) {
-    persistUser({ email });
+  function signup(email: string, name?: string) {
+    persistUser({ email, name });
   }
 
   function logout() {

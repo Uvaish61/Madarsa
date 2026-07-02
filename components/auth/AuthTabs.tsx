@@ -10,8 +10,16 @@ export default function AuthTabs({ activeTab }: { activeTab: "signup" | "login" 
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    const redirect = new URLSearchParams(window.location.search).get("redirect");
-    setQuery(redirect ? `?redirect=${encodeURIComponent(redirect)}` : "");
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get("redirect");
+    const pending = params.get("pending");
+    if (!redirect) {
+      setQuery("");
+      return;
+    }
+    const next = new URLSearchParams({ redirect });
+    if (pending) next.set("pending", pending);
+    setQuery(`?${next.toString()}`);
   }, []);
 
   return (
