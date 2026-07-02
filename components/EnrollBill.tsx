@@ -60,12 +60,13 @@ export default function EnrollBill({
 
   function handleBuy() {
     if (!isLoggedIn()) {
-      // Not signed in yet — send to login and come back to this course after.
-      const redirect = encodeURIComponent(`/courses/${course.slug}`);
-      router.push(`/login?redirect=${redirect}`);
+      // Not signed in yet — send to login, then resume enrolling from the dashboard.
+      const redirect = encodeURIComponent("/dashboard");
+      router.push(`/login?redirect=${redirect}&pending=${course.slug}`);
       return;
     }
     // Logged in — confirm the (mock) purchase.
+    enrollInCourse(course.slug);
     setDone(true);
   }
 
