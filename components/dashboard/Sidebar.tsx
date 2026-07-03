@@ -68,7 +68,7 @@ function NavGroup({
                   ? { backgroundColor: `${theme.accent}33`, color: theme.accent }
                   : undefined
               }
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[13.5px] font-semibold transition-colors ${
+              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[13.5px] font-semibold transition-colors duration-150 ${
                 isActive ? "" : "text-white/65 hover:bg-white/10"
               } ${collapsed ? "justify-center" : ""}`}
             >
