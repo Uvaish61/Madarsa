@@ -11,7 +11,7 @@ interface CourseCardProps {
 
 function CodeEditorPlaceholder() {
   return (
-    <div className="flex h-36 w-full flex-col justify-center gap-1 bg-[#0d1117] px-5 font-mono text-[12px] leading-relaxed">
+    <div className="flex h-36 w-full flex-col justify-center gap-1 overflow-hidden bg-[#0d1117] px-5 font-mono text-[11px] leading-snug">
       <p>
         <span className="text-blue-400">const</span>{" "}
         <span className="text-purple-400">Course</span> = () =&gt; {"{"}
