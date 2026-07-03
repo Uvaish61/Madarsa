@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ActionCard from "@/components/dashboard/ActionCard";
 import CourseCard from "@/components/dashboard/CourseCard";
 import StatCard from "@/components/dashboard/StatCard";
 import { useAuth } from "@/context/AuthContext";
@@ -138,37 +139,19 @@ export default function StudentDashboard() {
           </div>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <Link
-            href="/#courses"
-            className="group flex items-center justify-between rounded-2xl border border-line bg-white p-5 shadow-soft-sm transition hover:-translate-y-0.5 hover:shadow-soft"
-          >
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50">
-                <GraduationCap className="h-5 w-5 text-green-700" />
-              </div>
-              <div>
-                <p className="text-[13.5px] font-extrabold text-ink">Explore more courses</p>
-                <p className="text-[12px] text-muted">See what else you can learn next</p>
-              </div>
-            </div>
-            <ArrowRight className="h-4 w-4 shrink-0 text-muted transition group-hover:translate-x-1 group-hover:text-green-700" />
-          </Link>
-          <Link
-            href="/#contact"
-            className="group flex items-center justify-between rounded-2xl border border-line bg-white p-5 shadow-soft-sm transition hover:-translate-y-0.5 hover:shadow-soft"
-          >
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50">
-                <MessageCircle className="h-5 w-5 text-green-700" />
-              </div>
-              <div>
-                <p className="text-[13.5px] font-extrabold text-ink">Need help?</p>
-                <p className="text-[12px] text-muted">Talk to our support team</p>
-              </div>
-            </div>
-            <ArrowRight className="h-4 w-4 shrink-0 text-muted transition group-hover:translate-x-1 group-hover:text-green-700" />
-          </Link>
+        <div className="grid grid-cols-2 gap-4">
+          <ActionCard
+            icon={GraduationCap}
+            title="Explore more courses"
+            subtitle="See what else you can learn next"
+            onClick={() => router.push("/#courses")}
+          />
+          <ActionCard
+            icon={MessageCircle}
+            title="Need help?"
+            subtitle="Talk to our support team"
+            onClick={() => router.push("/#contact")}
+          />
         </div>
       </main>
     </div>
