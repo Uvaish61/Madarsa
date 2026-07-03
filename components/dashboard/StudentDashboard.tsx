@@ -63,7 +63,7 @@ export default function StudentDashboard() {
           onLogout={handleLogout}
         />
 
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto p-8 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#e8ebe8] [&::-webkit-scrollbar-thumb]:rounded-full">
           {pendingCourse && (
             <div className="mb-8 flex flex-col gap-4 rounded-2xl border border-[#e8ebe8] bg-[#e8f8f2] p-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-3">
