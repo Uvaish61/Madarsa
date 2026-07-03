@@ -12,7 +12,7 @@ export default function StatCard({ icon: Icon, label, value, badge }: StatCardPr
   return (
     <div
       style={{ borderColor: theme.border }}
-      className="rounded-2xl border bg-white p-6"
+      className="rounded-2xl border bg-white p-6 transition-shadow duration-150 hover:shadow-sm"
     >
       <div className="flex items-center justify-between">
         <div

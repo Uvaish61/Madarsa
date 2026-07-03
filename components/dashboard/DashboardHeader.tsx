@@ -58,7 +58,7 @@ export default function DashboardHeader({
           type="button"
           onClick={onLogout}
           style={{ borderColor: theme.border }}
-          className="flex items-center gap-2 rounded-lg border px-4 py-2 text-[13px] font-semibold text-[#111111]/70 transition-colors hover:bg-[#f3f4f2]"
+          className="flex items-center gap-2 rounded-lg border px-4 py-2 text-[13px] font-semibold text-[#111111]/70 transition-colors duration-150 hover:bg-gray-50"
         >
           <LogOut className="h-[18px] w-[18px]" />
           Logout

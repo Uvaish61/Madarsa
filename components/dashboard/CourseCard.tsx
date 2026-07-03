@@ -68,7 +68,7 @@ export default function CourseCard({ title, progress, enrolled, thumbnail }: Cou
 
         <button
           type="button"
-          className="w-full rounded-lg bg-[#1a4731] py-2.5 font-semibold text-white transition-colors hover:bg-[#14532d]"
+          className="w-full rounded-lg bg-[#1a4731] py-2.5 font-semibold text-white transition-colors duration-150 hover:bg-[#14532d]"
         >
           Continue Learning
         </button>
