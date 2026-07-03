@@ -1,10 +1,21 @@
 "use client";
 
-import { ArrowRight, BookOpen, CheckCircle2, GraduationCap, LogOut, MessageCircle, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Award,
+  BookOpen,
+  CheckCircle,
+  CheckCircle2,
+  GraduationCap,
+  LogOut,
+  MessageCircle,
+  Sparkles,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import CourseLogo from "@/components/CourseLogo";
+import StatCard from "@/components/dashboard/StatCard";
 import { useAuth } from "@/context/AuthContext";
 import { enrollInCourse, getEnrolledSlugs } from "@/lib/enrollment";
 import { courses, type CourseItem } from "@/lib/landing-data";
@@ -109,30 +120,15 @@ export default function StudentDashboard() {
           </div>
         )}
 
-        <div className="mb-8 grid grid-cols-3 gap-3 sm:gap-5">
-          <div className="rounded-2xl border border-line bg-white p-4 shadow-soft-sm sm:p-5">
-            <BookOpen className="mb-2 h-5 w-5 text-green-700" />
-            <p className="text-[22px] font-extrabold text-ink sm:text-[26px]">
-              {enrolledCourses.length}
-            </p>
-            <p className="text-[11.5px] font-semibold text-muted sm:text-[12.5px]">
-              Enrolled Courses
-            </p>
-          </div>
-          <div className="rounded-2xl border border-line bg-white p-4 shadow-soft-sm sm:p-5">
-            <CheckCircle2 className="mb-2 h-5 w-5 text-green-700" />
-            <p className="text-[22px] font-extrabold text-ink sm:text-[26px]">0</p>
-            <p className="text-[11.5px] font-semibold text-muted sm:text-[12.5px]">
-              Completed
-            </p>
-          </div>
-          <div className="rounded-2xl border border-line bg-white p-4 shadow-soft-sm sm:p-5">
-            <GraduationCap className="mb-2 h-5 w-5 text-green-700" />
-            <p className="text-[22px] font-extrabold text-ink sm:text-[26px]">0</p>
-            <p className="text-[11.5px] font-semibold text-muted sm:text-[12.5px]">
-              Certificates
-            </p>
-          </div>
+        <div className="mb-8 grid grid-cols-3 gap-4">
+          <StatCard
+            icon={BookOpen}
+            value="1"
+            label="Enrolled Courses"
+            badge="Active"
+          />
+          <StatCard icon={CheckCircle} value="0" label="Completed" />
+          <StatCard icon={Award} value="0" label="Certificates" />
         </div>
 
         <h2 className="mb-4 text-[16px] font-extrabold text-ink">My Courses</h2>
