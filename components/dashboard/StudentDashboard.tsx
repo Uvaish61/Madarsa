@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, CheckCircle2, LogOut, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle2, GraduationCap, LogOut, MessageCircle, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
