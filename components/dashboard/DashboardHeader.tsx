@@ -7,12 +7,14 @@ interface DashboardHeaderProps {
   activeNav: string;
   onToggleSidebar: () => void;
   sidebarCollapsed: boolean;
+  onLogout?: () => void;
 }
 
 export default function DashboardHeader({
   activeNav,
   onToggleSidebar,
   sidebarCollapsed,
+  onLogout,
 }: DashboardHeaderProps) {
   return (
     <header
@@ -54,6 +56,7 @@ export default function DashboardHeader({
         </button>
         <button
           type="button"
+          onClick={onLogout}
           style={{ borderColor: theme.border }}
           className="flex items-center gap-2 rounded-lg border px-4 py-2 text-[13px] font-semibold text-[#111111]/70 transition-colors hover:bg-[#f3f4f2]"
         >
