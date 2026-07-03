@@ -5,7 +5,6 @@ import {
   Award,
   BookOpen,
   CheckCircle,
-  CheckCircle2,
   GraduationCap,
   LogOut,
   MessageCircle,
@@ -14,7 +13,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import CourseLogo from "@/components/CourseLogo";
+import CourseCard from "@/components/dashboard/CourseCard";
 import StatCard from "@/components/dashboard/StatCard";
 import { useAuth } from "@/context/AuthContext";
 import { enrollInCourse, getEnrolledSlugs } from "@/lib/enrollment";
@@ -55,10 +54,6 @@ export default function StudentDashboard() {
   }
 
   if (!ready) return null;
-
-  const enrolledCourses = enrolledSlugs
-    .map((slug) => courses.find((c) => c.slug === slug))
-    .filter((c): c is CourseItem => Boolean(c));
 
   const initials = (user?.name ?? "S")
     .trim()
@@ -131,61 +126,17 @@ export default function StudentDashboard() {
           <StatCard icon={Award} value="0" label="Certificates" />
         </div>
 
-        <h2 className="mb-4 text-[16px] font-extrabold text-ink">My Courses</h2>
-
-        {enrolledCourses.length === 0 ? (
-          <div className="rounded-2xl border-2 border-dashed border-line bg-white/60 p-10 text-center sm:p-14">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-green-50">
-              <BookOpen className="h-6 w-6 text-green-700" />
-            </div>
-            <p className="mb-1 text-[15px] font-extrabold text-ink">No courses yet</p>
-            <p className="mb-5 text-[13.5px] text-muted">
-              Start learning by enrolling in a course.
-            </p>
-            <Link
-              href="/#courses"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-[13.5px] font-bold text-white shadow-md transition hover:-translate-y-0.5"
-            >
-              Browse Courses
-              <ArrowRight className="h-4 w-4" />
+        <div className="mb-8">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-bold text-[#111111]">My Courses</h2>
+            <Link href="/#courses" className="text-sm font-medium text-[#20c997]">
+              View all →
             </Link>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {enrolledCourses.map((course) => (
-              <div
-                key={course.slug}
-                className="overflow-hidden rounded-2xl border border-line bg-white shadow-soft transition hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div className="h-32 w-full">
-                  <CourseLogo title={course.title} />
-                </div>
-                <div className="p-4">
-                  <h3 className="mb-2 text-[14.5px] font-extrabold text-ink">
-                    {course.title}
-                  </h3>
-                  <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-paper-2">
-                    <div className="h-full w-0 rounded-full bg-green-600" />
-                  </div>
-                  <div className="mb-3 flex items-center justify-between text-[12px] text-muted">
-                    <span>0% complete</span>
-                    <span className="flex items-center gap-1 text-green-700">
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      Enrolled
-                    </span>
-                  </div>
-                  <Link
-                    href={`/courses/${course.slug}`}
-                    className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-br from-green-500 to-green-700 py-2.5 text-[13px] font-bold text-white transition hover:opacity-95"
-                  >
-                    Continue Learning
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <CourseCard title="React & Next.js" progress={0} enrolled />
           </div>
-        )}
+        </div>
 
         <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
           <Link
