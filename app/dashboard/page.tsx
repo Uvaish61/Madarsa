@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import DashboardShell from "@/components/dashboard/DashboardShell";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import StudentDashboard from "@/components/dashboard/StudentDashboard";
 
 export const metadata: Metadata = {
   title: "Dashboard · Madarsa Tech Academy",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function DashboardPage() {
   return (
     <ProtectedRoute>
-      <StudentDashboard />
+      <DashboardShell />
     </ProtectedRoute>
   );
 }
