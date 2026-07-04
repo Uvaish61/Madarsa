@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
+import DashboardCourses from "@/components/dashboard/DashboardCourses";
 import DashboardShell from "@/components/dashboard/DashboardShell";
+import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
+import DashboardStats from "@/components/dashboard/DashboardStats";
+import DashboardTopbar from "@/components/dashboard/DashboardTopbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export const metadata: Metadata = {
@@ -10,7 +14,15 @@ export const metadata: Metadata = {
 export default function DashboardPage() {
   return (
     <ProtectedRoute>
-      <DashboardShell />
+      <DashboardShell
+        sidebar={<DashboardSidebar />}
+        header={<DashboardTopbar />}
+      >
+        <div className="space-y-8 p-6">
+          <DashboardStats />
+          <DashboardCourses />
+        </div>
+      </DashboardShell>
     </ProtectedRoute>
   );
 }

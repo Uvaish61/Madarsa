@@ -1,0 +1,103 @@
+import { Bell, LogOut, Search } from "lucide-react";
+
+export default function DashboardTopbar() {
+  return (
+    <div
+      className="sticky top-0 z-10 flex items-center justify-between px-7"
+      style={{
+        height: 66,
+        background: "rgba(237,241,237,0.92)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        borderBottom: "1px solid rgba(0,0,0,0.07)",
+        boxShadow:
+          "0 4px 24px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.6) inset",
+      }}
+    >
+      {/* Left: label + welcome */}
+      <div>
+        <p
+          className="uppercase"
+          style={{
+            fontSize: "10px",
+            fontWeight: 700,
+            letterSpacing: "0.14em",
+            color: "#16c564",
+          }}
+        >
+          Dashboard
+        </p>
+        <h1
+          style={{
+            fontSize: "21px",
+            fontWeight: 800,
+            color: "#0d1f13",
+            letterSpacing: "-0.4px",
+          }}
+        >
+          Welcome back, Uvaish Khan 👋
+        </h1>
+      </div>
+
+      {/* Right: search + bell + logout */}
+      <div className="flex items-center" style={{ gap: 10 }}>
+        {/* Search pill */}
+        <div
+          className="flex items-center gap-2"
+          style={{
+            padding: "8px 14px",
+            background: "#fff",
+            border: "1px solid rgba(0,0,0,0.08)",
+            borderRadius: 10,
+            boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
+          }}
+        >
+          <Search className="h-4 w-4 shrink-0" style={{ color: "#9aa59f" }} />
+          <input
+            type="text"
+            placeholder="Search courses…"
+            className="w-40 border-0 bg-transparent p-0 outline-none placeholder:text-[#9aa59f]"
+            style={{ fontSize: "13px", fontWeight: 500, color: "#0d1f13" }}
+          />
+        </div>
+
+        {/* Bell */}
+        <button
+          type="button"
+          aria-label="Notifications"
+          className="dash-ctrl relative flex items-center justify-center"
+          style={{ width: 38, height: 38, borderRadius: 10 }}
+        >
+          <Bell className="h-[18px] w-[18px]" style={{ color: "#444" }} />
+          <span
+            className="absolute rounded-full"
+            style={{
+              top: 8,
+              right: 8,
+              width: 7,
+              height: 7,
+              background: "#16c564",
+              border: "2px solid #edf1ed",
+            }}
+          />
+        </button>
+
+        {/* Logout */}
+        <button
+          type="button"
+          className="dash-ctrl flex items-center gap-2"
+          style={{
+            padding: "8px 15px",
+            borderRadius: 10,
+            fontSize: "13px",
+            fontWeight: 600,
+            color: "#444",
+          }}
+        >
+          <LogOut className="h-4 w-4" style={{ color: "#444" }} />
+          Logout
+        </button>
+      </div>
+    </div>
+  );
+}
