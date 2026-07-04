@@ -3,6 +3,7 @@
 import { BadgeCheck, Lock, ShieldCheck, Sparkles, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { enrollInCourse } from "@/lib/enrollment";
 import type { CourseItem } from "@/lib/landing-data";
 import { clearPendingEnrollment } from "@/lib/pendingEnrollment";
@@ -19,6 +20,10 @@ export default function CheckoutModal({
 }) {
   const router = useRouter();
   const [processing, setProcessing] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Portal target is only available in the browser.
+  useEffect(() => setMounted(true), []);
 
   // Close on Escape + lock body scroll while the modal is open.
   useEffect(() => {
@@ -32,7 +37,7 @@ export default function CheckoutModal({
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
   const isFree = course.price === "Free";
   const total = isFree ? 0 : toAmount(course.price);
@@ -49,7 +54,7 @@ export default function CheckoutModal({
     }, 900);
   }
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[100] flex items-end justify-center p-0 sm:items-center sm:p-4"
       role="dialog"
@@ -146,6 +151,7 @@ export default function CheckoutModal({
           </p>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
