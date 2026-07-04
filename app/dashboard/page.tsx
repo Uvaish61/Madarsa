@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import DashboardCourses from "@/components/dashboard/DashboardCourses";
+import DashboardQuickLinks from "@/components/dashboard/DashboardQuickLinks";
+import DashboardRightPanel from "@/components/dashboard/DashboardRightPanel";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardStats from "@/components/dashboard/DashboardStats";
@@ -17,10 +19,12 @@ export default function DashboardPage() {
       <DashboardShell
         sidebar={<DashboardSidebar />}
         header={<DashboardTopbar />}
+        rightPanel={<DashboardRightPanel />}
       >
         <div className="space-y-8 p-6">
           <DashboardStats />
           <DashboardCourses />
+          <DashboardQuickLinks />
         </div>
       </DashboardShell>
     </ProtectedRoute>
