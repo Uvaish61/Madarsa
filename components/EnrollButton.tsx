@@ -2,8 +2,10 @@
 
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import CheckoutModal from "@/components/checkout/CheckoutModal";
 import { useAuth } from "@/context/AuthContext";
-import type { Locale } from "@/lib/landing-data";
+import { courses, type Locale } from "@/lib/landing-data";
 import { setPendingEnrollment } from "@/lib/pendingEnrollment";
 
 const DEFAULT_CLASSES =
@@ -22,12 +24,15 @@ export default function EnrollButton({
 }) {
   const router = useRouter();
   const { user } = useAuth();
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const isFree = price === "Free";
   const label =
     locale === "en"
       ? isFree ? "Enroll Free" : "Enroll Now"
       : isFree ? "مفت داخلہ" : "ابھی داخلہ";
+
+  const course = courses.find((c) => c.slug === courseId);
 
   function handleClick() {
     if (!user) {
@@ -36,13 +41,25 @@ export default function EnrollButton({
       router.push("/login?redirect=checkout");
       return;
     }
-    router.push(`/checkout?course=${courseId}`);
+    // Signed in — open the checkout as a popup over the blurred page instead of
+    // navigating away to a separate /checkout screen.
+    setCheckoutOpen(true);
   }
 
   return (
-    <button type="button" onClick={handleClick} className={className ?? DEFAULT_CLASSES}>
-      {label}
-      <ArrowRight className="h-3.5 w-3.5" />
-    </button>
+    <>
+      <button type="button" onClick={handleClick} className={className ?? DEFAULT_CLASSES}>
+        {label}
+        <ArrowRight className="h-3.5 w-3.5" />
+      </button>
+
+      {course && (
+        <CheckoutModal
+          course={course}
+          open={checkoutOpen}
+          onClose={() => setCheckoutOpen(false)}
+        />
+      )}
+    </>
   );
 }
