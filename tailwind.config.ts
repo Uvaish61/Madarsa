@@ -25,6 +25,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-sans)", "sans-serif"],
         serif: ["var(--font-serif)", "serif"],
+        mono: ["var(--font-mono)", "monospace"],
         urdu: ["var(--font-urdu)", "serif"],
       },
       boxShadow: {
