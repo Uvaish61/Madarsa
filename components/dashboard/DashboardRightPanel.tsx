@@ -1,5 +1,6 @@
 import CalendarWidget from "@/components/dashboard/CalendarWidget";
 import DailyGoalWidget from "@/components/dashboard/DailyGoalWidget";
+import LeaderboardWidget from "@/components/dashboard/LeaderboardWidget";
 import RankWidget from "@/components/dashboard/RankWidget";
 import StreakWidget from "@/components/dashboard/StreakWidget";
 
@@ -18,6 +19,7 @@ export default function DashboardRightPanel() {
       <StreakWidget />
       <RankWidget />
       <DailyGoalWidget />
+      <LeaderboardWidget />
     </div>
   );
 }

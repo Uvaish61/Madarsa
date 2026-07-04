@@ -1,7 +1,7 @@
 export default function RankWidget() {
   return (
     <div
-      style={{ animation: "widgetSlideRight 0.5s ease-out both", animationDelay: "300ms" }}
+      style={{ animation: "slideRight 0.5s ease-out both", animationDelay: "300ms" }}
     >
       <div
         className="relative overflow-hidden"
@@ -73,13 +73,15 @@ export default function RankWidget() {
             style={{ height: 5, background: "rgba(255,255,255,0.1)" }}
           >
             <div
-              className="h-full origin-left rounded-full"
-              style={{
-                width: "64%",
-                background: "linear-gradient(90deg, #ca8a04, #eab308)",
-                animation: "xpFill 0.9s cubic-bezier(0.34,1.56,0.64,1) both",
-                animationDelay: "400ms",
-              }}
+              className="h-full rounded-full"
+              style={
+                {
+                  "--pct": "64%",
+                  background: "linear-gradient(90deg, #ca8a04, #eab308)",
+                  animation: "progressFill 0.9s cubic-bezier(0.34,1.56,0.64,1) both",
+                  animationDelay: "400ms",
+                } as React.CSSProperties
+              }
             />
           </div>
           <p className="mt-2" style={{ fontSize: "10.5px", color: "rgba(255,255,255,0.3)" }}>

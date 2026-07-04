@@ -36,7 +36,7 @@ export default function DashboardQuickLinks() {
       {LINKS.map(({ icon: Icon, title, subtitle, rgb, color }) => (
         <div
           key={title}
-          style={{ animation: "statFadeUp 0.5s ease-out both", animationDelay: "400ms" }}
+          style={{ animation: "fadeUp 0.5s ease-out both", animationDelay: "400ms" }}
         >
           <button
             type="button"
