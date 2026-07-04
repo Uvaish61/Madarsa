@@ -1,11 +1,11 @@
 "use client";
 
 import { ArrowRight, Award, BookOpen, CheckCircle, GraduationCap, MessageCircle, Sparkles } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ActionCard from "@/components/dashboard/ActionCard";
 import CourseCard from "@/components/dashboard/CourseCard";
+import CourseCatalog from "@/components/dashboard/CourseCatalog";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import Sidebar from "@/components/dashboard/Sidebar";
 import StatCard from "@/components/dashboard/StatCard";
@@ -90,32 +90,42 @@ export default function StudentDashboard() {
             <StatCard icon={Award} value="0" label="Certificates" />
           </div>
 
-          <div className="mb-8">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-[#111111]">My Courses</h2>
-              <Link href="/#courses" className="text-sm font-medium text-[#20c997]">
-                View all →
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <CourseCard title="React & Next.js" progress={0} enrolled />
-            </div>
-          </div>
+          {activeNav === "courses" ? (
+            <CourseCatalog enrolledSlugs={enrolledSlugs} />
+          ) : (
+            <>
+              <div className="mb-8">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-lg font-bold text-[#111111]">My Courses</h2>
+                  <button
+                    type="button"
+                    onClick={() => setActiveNav("courses")}
+                    className="text-sm font-medium text-[#20c997]"
+                  >
+                    View all →
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <CourseCard title="React & Next.js" progress={0} enrolled />
+                </div>
+              </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <ActionCard
-              icon={GraduationCap}
-              title="Explore more courses"
-              subtitle="See what else you can learn next"
-              onClick={() => router.push("/#courses")}
-            />
-            <ActionCard
-              icon={MessageCircle}
-              title="Need help?"
-              subtitle="Talk to our support team"
-              onClick={() => router.push("/#contact")}
-            />
-          </div>
+              <div className="grid grid-cols-2 gap-4">
+                <ActionCard
+                  icon={GraduationCap}
+                  title="Explore more courses"
+                  subtitle="See what else you can learn next"
+                  onClick={() => setActiveNav("courses")}
+                />
+                <ActionCard
+                  icon={MessageCircle}
+                  title="Need help?"
+                  subtitle="Talk to our support team"
+                  onClick={() => router.push("/#contact")}
+                />
+              </div>
+            </>
+          )}
         </main>
       </div>
     </div>
