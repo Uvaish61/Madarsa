@@ -51,7 +51,7 @@ function ChevronButton({
 export default function CalendarWidget() {
   return (
     <div
-      style={{ animation: "widgetSlideRight 0.5s ease-out both", animationDelay: "100ms" }}
+      style={{ animation: "slideRight 0.5s ease-out both", animationDelay: "100ms" }}
     >
       <div
         className="bg-white"

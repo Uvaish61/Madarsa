@@ -54,7 +54,7 @@ export default function DashboardCourses() {
 
       {/* Course card */}
       <div
-        style={{ animation: "statFadeUp 0.5s ease-out both", animationDelay: "300ms" }}
+        style={{ animation: "fadeUp 0.5s ease-out both", animationDelay: "300ms" }}
       >
         <div
           className="course-card overflow-hidden bg-white"

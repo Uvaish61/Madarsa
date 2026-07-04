@@ -75,37 +75,91 @@ samp {
   will-change: transform;
 }
 
-/* ── Dashboard sidebar animations ─────────────────────────────────────────── */
-@keyframes sidebarOrbA {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLOBAL DASHBOARD KEYFRAMES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Entrance: element slides up from 18px and fades in */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Entrance: element slides in from the right side (right panel widgets) */
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Entrance: element slides in from the left (sidebar nav items) */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Number pop: scale 0.65 → 1 with fade */
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.65); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Progress bar fill from 0 to --pct (set as inline CSS var on the element) */
+@keyframes progressFill {
+  from { width: 0; }
+  to   { width: var(--pct, 100%); }
+}
+
+/* Flame icon: scale + drop-shadow glow pulse */
+@keyframes flamePulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 4px rgba(249, 115, 22, 0.4));
   }
   50% {
-    transform: translate(14px, 18px) scale(1.15);
-  }
-}
-@keyframes sidebarOrbB {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(-16px, -14px) scale(1.18);
-  }
-}
-@keyframes sidebarNavSlideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.75));
   }
 }
 
-/* ── Dashboard header controls (bell, logout) ─────────────────────────────── */
+/* Rank badge: box-shadow gold pulse */
+@keyframes rankGlow {
+  0%, 100% { box-shadow: 0 0 0 0px rgba(234, 179, 8, 0); }
+  50%       { box-shadow: 0 0 0 8px rgba(234, 179, 8, 0.5); }
+}
+
+/* Floating orb — primary direction (sidebar top-left, etc.) */
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%       { transform: translate(14px, 18px) scale(1.15); }
+}
+
+/* Floating orb — reverse direction (sidebar bottom-right, etc.) */
+@keyframes orbFloatReverse {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%       { transform: translate(-16px, -14px) scale(1.18); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DASHBOARD COMPONENT CLASSES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Stat card enter wrapper — uses fadeUp, delay is set inline per card */
+.stat-card-enter {
+  animation: fadeUp 0.5s ease-out both;
+}
+
+/* Stat card itself — hover handled by --stat-glow CSS var per card */
+.stat-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 8px 32px rgba(0, 0, 0, 0.04);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.stat-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: var(--stat-glow);
+}
+
+/* Header action buttons (bell, logout) */
 .dash-ctrl {
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -117,49 +171,7 @@ samp {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
-/* ── Dashboard stat cards ─────────────────────────────────────────────────── */
-@keyframes statFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes statCountUp {
-  from {
-    opacity: 0;
-    transform: scale(0.65);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-@keyframes statProgress {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-.stat-card-enter {
-  animation: statFadeUp 0.5s ease-out both;
-}
-.stat-card {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 8px 32px rgba(0, 0, 0, 0.04);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.stat-card:hover {
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: var(--stat-glow);
-}
-
-/* ── Dashboard course card ────────────────────────────────────────────────── */
+/* Course card */
 .course-card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -169,6 +181,8 @@ samp {
   transform: translateY(-6px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
 }
+
+/* Continue Learning button */
 .continue-btn {
   box-shadow: 0 4px 16px rgba(22, 197, 100, 0.35);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -178,7 +192,7 @@ samp {
   box-shadow: 0 8px 26px rgba(22, 197, 100, 0.5);
 }
 
-/* ── Dashboard quick-link cards ───────────────────────────────────────────── */
+/* Quick-link cards — glow via --ql-glow CSS var */
 .quick-link {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -189,17 +203,7 @@ samp {
   box-shadow: var(--ql-glow);
 }
 
-/* ── Right-panel widgets ──────────────────────────────────────────────────── */
-@keyframes widgetSlideRight {
-  from {
-    opacity: 0;
-    transform: translateX(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
+/* Calendar day cells */
 .cal-day {
   color: #5a6b5f;
   transition: background-color 0.15s ease, color 0.15s ease;
@@ -210,22 +214,4 @@ samp {
 }
 .cal-day--muted {
   color: #c5d0c7;
-}
-
-/* ── Streak / Rank / Goal widgets ─────────────────────────────────────────── */
-@keyframes flamePulse {
-  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 4px rgba(249,115,22,.4)); }
-  50%       { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(249,115,22,.75)); }
-}
-@keyframes rankGlow {
-  0%, 100% { box-shadow: 0 0 0   0px rgba(234,179,8,.0); }
-  50%       { box-shadow: 0 0 0   8px rgba(234,179,8,.5); }
-}
-@keyframes xpFill {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
-}
-@keyframes goalFill {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
 }

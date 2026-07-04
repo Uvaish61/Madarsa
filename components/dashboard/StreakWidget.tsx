@@ -1,30 +1,4 @@
-function FlameIcon() {
-  return (
-    <svg
-      viewBox="0 0 38 38"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{
-        width: 38,
-        height: 38,
-        animation: "flamePulse 1.5s ease-in-out infinite",
-        willChange: "transform, filter",
-      }}
-    >
-      <path
-        d="M19 4c0 0-1.5 4-4 6-2.5 2-4 5-3.5 8.5C12 22 13.5 24 16 25.5c-.5-2 0-4 1.5-5.5 .5 3 2 5.5 4.5 7 1.5-2 1.5-4.5 .5-6.5 2 1.5 3.5 4.5 3 7.5 1.5-1.5 2.5-3.8 2.5-6.5 0-4-2.5-7-5.5-9C22 13.5 20.5 10 19 4Z"
-        fill="url(#flameG)"
-      />
-      <defs>
-        <linearGradient id="flameG" x1="19" y1="4" x2="19" y2="34" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#fbbf24" />
-          <stop offset="60%" stopColor="#f97316" />
-          <stop offset="100%" stopColor="#ea580c" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-}
+import { Flame } from "lucide-react";
 
 const STREAK_LENGTH = 7;
 const ACTIVE = 3;
@@ -32,7 +6,7 @@ const ACTIVE = 3;
 export default function StreakWidget() {
   return (
     <div
-      style={{ animation: "widgetSlideRight 0.5s ease-out both", animationDelay: "200ms" }}
+      style={{ animation: "slideRight 0.5s ease-out both", animationDelay: "200ms" }}
     >
       <div
         className="relative overflow-hidden bg-white"
@@ -59,18 +33,23 @@ export default function StreakWidget() {
           <div>
             <p
               className="uppercase"
-              style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", color: "#b0bdb4" }}
+              style={{
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+                color: "#b0bdb4",
+              }}
             >
               Current Streak
             </p>
-            <div className="flex items-baseline gap-1.5 mt-1">
+            <div className="mt-1 flex items-baseline gap-1.5">
               <span
                 style={{
                   fontSize: "32px",
                   fontWeight: 800,
                   color: "#0d1f13",
                   lineHeight: 1,
-                  animation: "statCountUp 0.55s cubic-bezier(0.34,1.56,0.64,1) both",
+                  animation: "countUp 0.55s cubic-bezier(0.34,1.56,0.64,1) both",
                   animationDelay: "250ms",
                   display: "inline-block",
                 }}
@@ -80,7 +59,17 @@ export default function StreakWidget() {
               <span style={{ fontSize: "13px", color: "#7a8c81" }}>days</span>
             </div>
           </div>
-          <FlameIcon />
+
+          {/* Animated flame icon from lucide-react */}
+          <Flame
+            style={{
+              width: 38,
+              height: 38,
+              color: "#f97316",
+              animation: "flamePulse 1.5s ease-in-out infinite",
+              willChange: "transform, filter",
+            }}
+          />
         </div>
 
         {/* Dots */}

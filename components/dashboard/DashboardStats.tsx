@@ -116,7 +116,7 @@ function StatCard({
           <span
             className="inline-block origin-left"
             style={{
-              animation: "statCountUp 0.55s cubic-bezier(0.34,1.56,0.64,1) both",
+              animation: "countUp 0.55s cubic-bezier(0.34,1.56,0.64,1) both",
               animationDelay: `${enterDelay + 120}ms`,
             }}
           >
@@ -138,13 +138,15 @@ function StatCard({
           style={{ height: 3, background: "rgba(0,0,0,0.05)" }}
         >
           <div
-            className="h-full origin-left"
-            style={{
-              width: `${progress}%`,
-              background: `linear-gradient(90deg, rgba(${t.rgb},0.7), ${t.color})`,
-              animation: "statProgress 0.8s cubic-bezier(0.34,1.56,0.64,1) both",
-              animationDelay: `${enterDelay + 250}ms`,
-            }}
+            className="h-full"
+            style={
+              {
+                "--pct": `${progress}%`,
+                background: `linear-gradient(90deg, rgba(${t.rgb},0.7), ${t.color})`,
+                animation: "progressFill 0.8s cubic-bezier(0.34,1.56,0.64,1) both",
+                animationDelay: `${enterDelay + 250}ms`,
+              } as React.CSSProperties
+            }
           />
         </div>
       </div>

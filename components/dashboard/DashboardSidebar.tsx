@@ -34,7 +34,7 @@ function NavButton({ item, index }: { item: NavItem; index: number }) {
       style={{
         padding: "10px 12px",
         borderRadius: 10,
-        animation: "sidebarNavSlideIn 0.4s ease-out both",
+        animation: "slideIn 0.4s ease-out both",
         animationDelay: `${index * 60}ms`,
         ...(active
           ? {
@@ -100,7 +100,7 @@ export default function DashboardSidebar() {
           height: 200,
           background:
             "radial-gradient(circle, rgba(22,197,100,0.2), transparent 70%)",
-          animation: "sidebarOrbA 8s ease-in-out infinite",
+          animation: "orbFloat 8s ease-in-out infinite",
           willChange: "transform",
         }}
       />
@@ -113,7 +113,7 @@ export default function DashboardSidebar() {
           height: 220,
           background:
             "radial-gradient(circle, rgba(22,197,100,0.1), transparent 70%)",
-          animation: "sidebarOrbB 11s ease-in-out infinite",
+          animation: "orbFloatReverse 11s ease-in-out infinite",
           willChange: "transform",
         }}
       />

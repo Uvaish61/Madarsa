@@ -3,7 +3,7 @@ import { Clock } from "lucide-react";
 export default function DailyGoalWidget() {
   return (
     <div
-      style={{ animation: "widgetSlideRight 0.5s ease-out both", animationDelay: "350ms" }}
+      style={{ animation: "slideRight 0.5s ease-out both", animationDelay: "400ms" }}
     >
       <div
         className="relative overflow-hidden bg-white"
@@ -80,13 +80,15 @@ export default function DailyGoalWidget() {
           style={{ height: 3, background: "rgba(0,0,0,0.06)" }}
         >
           <div
-            className="h-full origin-left rounded-full"
-            style={{
-              width: "20%",
-              background: "linear-gradient(90deg, rgba(22,197,100,0.7), #16c564)",
-              animation: "goalFill 0.8s cubic-bezier(0.34,1.56,0.64,1) both",
-              animationDelay: "450ms",
-            }}
+            className="h-full rounded-full"
+            style={
+              {
+                "--pct": "20%",
+                background: "linear-gradient(90deg, rgba(22,197,100,0.7), #16c564)",
+                animation: "progressFill 0.8s cubic-bezier(0.34,1.56,0.64,1) both",
+                animationDelay: "550ms",
+              } as React.CSSProperties
+            }
           />
         </div>
       </div>
