@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
+import DashboardTopbar from "@/components/dashboard/DashboardTopbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export const metadata: Metadata = {
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 export default function DashboardPage() {
   return (
     <ProtectedRoute>
-      <DashboardShell sidebar={<DashboardSidebar />} />
+      <DashboardShell
+        sidebar={<DashboardSidebar />}
+        header={<DashboardTopbar />}
+      />
     </ProtectedRoute>
   );
 }

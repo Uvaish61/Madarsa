@@ -104,3 +104,15 @@ samp {
     transform: translateX(0);
   }
 }
+
+/* ── Dashboard header controls (bell, logout) ─────────────────────────────── */
+.dash-ctrl {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.dash-ctrl:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
