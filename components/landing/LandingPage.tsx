@@ -12,6 +12,7 @@ import {
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import heroStudentGreen from "../../assets/images/hero-student-green.png";
 import CourseLogo from "@/components/CourseLogo";
@@ -68,8 +69,14 @@ function SectionHeading({ eyebrow, title, description, locale }: { eyebrow: Copy
 }
 
 export default function LandingPage() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const router = useRouter();
   const [locale, setLocale] = useState<Locale>("en");
+
+  // Logged-in users have no business on the landing page — send them to the dashboard.
+  useEffect(() => {
+    if (!loading && user) router.replace("/dashboard");
+  }, [loading, user, router]);
   const [menuOpen, setMenuOpen] = useState(false);
 
   // ── Course price filter ──
