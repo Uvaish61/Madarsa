@@ -3,16 +3,7 @@ import { Bell, LogOut, Search } from "lucide-react";
 export default function DashboardTopbar() {
   return (
     <div
-      className="sticky top-0 z-10 flex items-center justify-between px-7"
-      style={{
-        height: 66,
-        background: "rgba(237,241,237,0.92)",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
-        borderBottom: "1px solid rgba(0,0,0,0.07)",
-        boxShadow:
-          "0 4px 24px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.6) inset",
-      }}
+      className="flex h-full flex-1 items-center justify-between px-7"
     >
       {/* Left: label + welcome */}
       <div>
