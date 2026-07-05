@@ -87,7 +87,8 @@ export default function DashboardSidebar() {
       className="relative flex h-full w-full flex-col overflow-hidden"
       style={{
         background: "linear-gradient(180deg, #0b1f13, #0e2c1a, #0a1e10)",
-        boxShadow: "6px 0 40px rgba(0,0,0,0.4), 2px 0 8px rgba(0,0,0,0.2)",
+        borderRadius: "0 22px 22px 0",
+        borderRight: "1px solid rgba(22,197,100,0.18)",
       }}
     >
       {/* Animated orbs */}
