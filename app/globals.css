@@ -215,3 +215,61 @@ samp {
 .cal-day--muted {
   color: #c5d0c7;
 }
+
+/* ── Progress page ─────────────────────────────────────────────────────────── */
+
+@keyframes barGrow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* Dark overall-progress card needs a heavier base shadow */
+.stat-card-dark {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18), 0 8px 32px rgba(0, 0, 0, 0.22);
+}
+
+.progress-activity-bar {
+  transition: filter 0.15s ease;
+}
+.progress-activity-bar:hover {
+  filter: brightness(1.15);
+  cursor: pointer;
+}
+
+.progress-course-row {
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.progress-course-row:hover {
+  background: rgba(22, 197, 100, 0.06) !important;
+  transform: translateX(3px);
+}
+
+.progress-add-course {
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.progress-add-course:hover {
+  border-color: rgba(22, 197, 100, 0.5) !important;
+  background: rgba(22, 197, 100, 0.04) !important;
+}
+
+.progress-badge-unlocked {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.progress-badge-unlocked:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--badge-glow, none);
+}
+
+.period-pill-inactive:hover {
+  background: rgba(22, 197, 100, 0.08) !important;
+  color: #0d1f13 !important;
+}
+
+/* Hide scrollbar track while keeping content scrollable */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

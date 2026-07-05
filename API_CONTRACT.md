@@ -9,6 +9,30 @@
 
 ---
 
+## ⭐ Scope — what you actually need NOW (MVP) vs later
+
+The frontend today renders **all dashboard data hardcoded**. So the *core value loop*
+(signup → browse → pay → enrolled → see my courses) needs only **8 endpoints**.
+Everything else can stay static and be added later without reworking the frontend.
+
+**BUILD NOW (8) — unblocks the real product:**
+- `POST /auth/signup`, `POST /auth/login`, `GET /auth/me`, `POST /auth/logout`  *(session core)*
+- `GET /enrollments`  *(makes "My Courses" + stat cards real)*
+- `POST /orders`, `POST /orders/{id}/confirm`, `POST /webhooks/payment`  *(the revenue path)*
+
+**KEEP STATIC for launch — no endpoint needed yet:**
+- Courses (`/courses`, `/courses/{slug}`) → stays in `lib/landing-data.ts` / `lib/course-data.ts`. Course content isn't changing yet.
+- Dashboard widgets (`/me/stats`, `/me/streak`, `/me/rank`, `/me/daily-goal`, `/leaderboard`, `/me/calendar`) → currently hardcoded; wire when gamification is real.
+- Password reset (`/auth/forgot-password`, `/auth/reset-password`) → no reset UI exists yet.
+
+**NOT in this doc — because the feature doesn't exist yet (add when you build it):**
+- **Course progress write** (e.g. `POST /lessons/{id}/complete`) — needed only once a lesson/video player exists. The "Continue Learning" button + progress bar are static for now.
+- Search, notifications, profile/settings update — UI is decorative/absent today.
+
+**Recommended small add (security):** email verification (`/auth/verify-email`, resend) if you gate the dashboard behind a verified email.
+
+---
+
 ## 0. Conventions
 
 | Item | Decision |
