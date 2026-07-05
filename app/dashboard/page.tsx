@@ -3,7 +3,6 @@ import DashboardCourses from "@/components/dashboard/DashboardCourses";
 import DashboardQuickLinks from "@/components/dashboard/DashboardQuickLinks";
 import DashboardRightPanel from "@/components/dashboard/DashboardRightPanel";
 import DashboardShell from "@/components/dashboard/DashboardShell";
-import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import DashboardTopbar from "@/components/dashboard/DashboardTopbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -17,7 +16,6 @@ export default function DashboardPage() {
   return (
     <ProtectedRoute>
       <DashboardShell
-        sidebar={<DashboardSidebar />}
         header={<DashboardTopbar />}
         rightPanel={<DashboardRightPanel />}
       >

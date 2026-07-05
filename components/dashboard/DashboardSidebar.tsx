@@ -26,14 +26,35 @@ const ACCOUNT_NAV: NavItem[] = [
 
 const ACCENT = "#16c564";
 
-function NavButton({ item, index }: { item: NavItem; index: number }) {
+/* ─── Shared transition timing ─── */
+const LABEL_TRANSITION = "max-width 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.22s ease";
+const PAD_TRANSITION = "padding 0.32s cubic-bezier(0.4,0,0.2,1)";
+
+function NavButton({
+  item,
+  index,
+  collapsed,
+}: {
+  item: NavItem;
+  index: number;
+  collapsed: boolean;
+}) {
   const { label, icon: Icon, active } = item;
+
   return (
     <button
       type="button"
+      title={collapsed ? label : undefined}
       style={{
-        padding: "10px 12px",
+        /* center icon in 64px strip; restore left-aligned layout when expanded */
+        padding: collapsed ? "10px 0" : "10px 12px",
         borderRadius: 10,
+        display: "flex",
+        alignItems: "center",
+        width: "100%",
+        justifyContent: collapsed ? "center" : "flex-start",
+        gap: collapsed ? 0 : 10,
+        transition: `${PAD_TRANSITION}, gap 0.32s cubic-bezier(0.4,0,0.2,1)`,
         animation: "slideIn 0.4s ease-out both",
         animationDelay: `${index * 60}ms`,
         ...(active
@@ -44,36 +65,89 @@ function NavButton({ item, index }: { item: NavItem; index: number }) {
             }
           : { border: "1px solid transparent" }),
       }}
-      className={`relative flex w-full items-center gap-3 text-left text-[13.5px] transition-colors duration-150 ${
+      className={`relative text-left text-[13.5px] transition-colors duration-150 ${
         active
           ? "font-bold text-white"
-          : "font-semibold text-white/55 hover:bg-white/[0.06]"
+          : "font-semibold text-white/55 hover:bg-white/6"
       }`}
     >
+      {/* Left active bar — hides when collapsed, replaced by bottom dot */}
       {active && (
         <span
           className="absolute left-0 top-1/2 -translate-y-1/2 rounded-r"
-          style={{ width: 3, height: 17, backgroundColor: ACCENT }}
+          style={{
+            width: 3,
+            height: 17,
+            backgroundColor: ACCENT,
+            opacity: collapsed ? 0 : 1,
+            transition: "opacity 0.2s ease",
+          }}
         />
       )}
+
+      {/* Active dot indicator for collapsed state */}
+      {active && (
+        <span
+          className="absolute rounded-full"
+          style={{
+            bottom: 5,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 4,
+            height: 4,
+            background: ACCENT,
+            opacity: collapsed ? 1 : 0,
+            transition: "opacity 0.2s ease",
+          }}
+        />
+      )}
+
       <Icon
-        className="h-[18px] w-[18px] shrink-0"
-        style={{ color: active ? ACCENT : "rgba(255,255,255,0.45)" }}
+        className="shrink-0"
+        style={{
+          width: 18,
+          height: 18,
+          color: active ? ACCENT : "rgba(255,255,255,0.45)",
+        }}
       />
-      <span className="truncate">{label}</span>
+
+      {/* Label slides + fades out */}
+      <span
+        style={{
+          overflow: "hidden",
+          maxWidth: collapsed ? 0 : 160,
+          opacity: collapsed ? 0 : 1,
+          whiteSpace: "nowrap",
+          transition: LABEL_TRANSITION,
+          fontSize: "13.5px",
+        }}
+      >
+        {label}
+      </span>
     </button>
   );
 }
 
-function GroupLabel({ children }: { children: React.ReactNode }) {
+function GroupLabel({
+  children,
+  collapsed,
+}: {
+  children: React.ReactNode;
+  collapsed: boolean;
+}) {
   return (
     <p
-      className="mb-2 px-3 uppercase"
+      className="overflow-hidden px-3 uppercase"
       style={{
         fontSize: "9.5px",
         fontWeight: 700,
         letterSpacing: "0.13em",
         color: "rgba(255,255,255,0.22)",
+        maxHeight: collapsed ? 0 : 24,
+        marginBottom: collapsed ? 0 : 8,
+        opacity: collapsed ? 0 : 1,
+        transition:
+          "max-height 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.2s ease, margin-bottom 0.3s ease",
       }}
     >
       {children}
@@ -81,7 +155,11 @@ function GroupLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function DashboardSidebar() {
+export default function DashboardSidebar({
+  collapsed = false,
+}: {
+  collapsed?: boolean;
+}) {
   return (
     <div
       className="relative flex h-full w-full flex-col overflow-hidden"
@@ -99,8 +177,7 @@ export default function DashboardSidebar() {
           left: -40,
           width: 200,
           height: 200,
-          background:
-            "radial-gradient(circle, rgba(22,197,100,0.2), transparent 70%)",
+          background: "radial-gradient(circle, rgba(22,197,100,0.2), transparent 70%)",
           animation: "orbFloat 8s ease-in-out infinite",
           willChange: "transform",
         }}
@@ -112,15 +189,22 @@ export default function DashboardSidebar() {
           right: -50,
           width: 220,
           height: 220,
-          background:
-            "radial-gradient(circle, rgba(22,197,100,0.1), transparent 70%)",
+          background: "radial-gradient(circle, rgba(22,197,100,0.1), transparent 70%)",
           animation: "orbFloatReverse 11s ease-in-out infinite",
           willChange: "transform",
         }}
       />
 
-      {/* Logo */}
-      <div className="relative flex items-center gap-2.5 px-4 py-5">
+      {/* ── Logo ── */}
+      <div
+        className="relative flex items-center overflow-hidden"
+        style={{
+          gap: collapsed ? 0 : 10,
+          padding: collapsed ? "20px 0" : "20px 16px",
+          justifyContent: collapsed ? "center" : "flex-start",
+          transition: `${PAD_TRANSITION}, gap 0.32s cubic-bezier(0.4,0,0.2,1)`,
+        }}
+      >
         <div
           className="flex shrink-0 items-center justify-center rounded-xl"
           style={{
@@ -132,43 +216,60 @@ export default function DashboardSidebar() {
         >
           <GraduationCap className="h-5 w-5 text-white" />
         </div>
+
+        {/* Brand name slides out */}
         <span
           className="text-white"
-          style={{ fontWeight: 800, fontSize: "17px" }}
+          style={{
+            fontWeight: 800,
+            fontSize: "17px",
+            overflow: "hidden",
+            maxWidth: collapsed ? 0 : 120,
+            opacity: collapsed ? 0 : 1,
+            whiteSpace: "nowrap",
+            transition: LABEL_TRANSITION,
+          }}
         >
           EduLearn
         </span>
       </div>
 
-      {/* Nav */}
+      {/* ── Nav ── */}
       <nav className="relative flex-1 overflow-y-auto px-3 py-2">
-        <GroupLabel>Main</GroupLabel>
+        <GroupLabel collapsed={collapsed}>Main</GroupLabel>
         <div className="space-y-1">
           {MAIN_NAV.map((item, i) => (
-            <NavButton key={item.label} item={item} index={i} />
+            <NavButton key={item.label} item={item} index={i} collapsed={collapsed} />
           ))}
         </div>
 
-        {/* Divider */}
         <div className="my-4 h-px bg-white/10" />
 
-        <GroupLabel>Account</GroupLabel>
+        <GroupLabel collapsed={collapsed}>Account</GroupLabel>
         <div className="space-y-1">
           {ACCOUNT_NAV.map((item, i) => (
-            <NavButton key={item.label} item={item} index={MAIN_NAV.length + i} />
+            <NavButton
+              key={item.label}
+              item={item}
+              index={MAIN_NAV.length + i}
+              collapsed={collapsed}
+            />
           ))}
         </div>
       </nav>
 
-      {/* User card */}
+      {/* ── User card ── */}
       <div
-        className="relative flex items-center gap-2.5"
+        className="relative flex items-center overflow-hidden"
         style={{
           margin: 12,
-          padding: "12px 13px",
+          padding: collapsed ? "12px 0" : "12px 13px",
+          justifyContent: collapsed ? "center" : "flex-start",
+          gap: collapsed ? 0 : 10,
           borderRadius: 12,
           background: "rgba(255,255,255,0.05)",
           border: "1px solid rgba(255,255,255,0.08)",
+          transition: `${PAD_TRANSITION}, gap 0.32s cubic-bezier(0.4,0,0.2,1)`,
         }}
       >
         <div
@@ -183,7 +284,18 @@ export default function DashboardSidebar() {
         >
           UK
         </div>
-        <div className="min-w-0 flex-1">
+
+        {/* Name + email slide out */}
+        <div
+          className="overflow-hidden"
+          style={{
+            minWidth: 0,
+            maxWidth: collapsed ? 0 : 140,
+            opacity: collapsed ? 0 : 1,
+            flex: collapsed ? "0 0 auto" : "1 1 auto",
+            transition: LABEL_TRANSITION,
+          }}
+        >
           <p
             className="truncate text-white"
             style={{ fontSize: "12.5px", fontWeight: 700 }}
@@ -197,9 +309,18 @@ export default function DashboardSidebar() {
             uvaishkhan@gmail.com
           </p>
         </div>
+
         <MoreVertical
-          className="h-4 w-4 shrink-0"
-          style={{ color: "rgba(255,255,255,0.38)" }}
+          className="shrink-0"
+          style={{
+            width: 16,
+            height: 16,
+            color: "rgba(255,255,255,0.38)",
+            maxWidth: collapsed ? 0 : 16,
+            opacity: collapsed ? 0 : 1,
+            overflow: "hidden",
+            transition: LABEL_TRANSITION,
+          }}
         />
       </div>
     </div>
