@@ -98,7 +98,7 @@ export default function DashboardShell({
       </div>
 
       {/* ── Right panel ── */}
-      <aside className="w-68 shrink-0">{rightPanel}</aside>
+      {rightPanel && <aside className="w-68 shrink-0">{rightPanel}</aside>}
     </div>
   );
 }
