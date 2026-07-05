@@ -7,6 +7,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import RouteLoader from "@/components/RouteLoader";
 import { useAuth } from "@/context/AuthContext";
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -19,7 +20,8 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     router.replace(`/login?redirect=${redirect}`);
   }, [loading, user, router]);
 
-  if (loading || !user) return null;
+  // Spinner instead of a blank flash while auth resolves or the redirect fires.
+  if (loading || !user) return <RouteLoader />;
 
   return <>{children}</>;
 }

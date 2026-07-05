@@ -3,10 +3,11 @@
 import { ArrowRight, Lock, Mail, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthShell from "@/components/auth/AuthShell";
 import FormField from "@/components/auth/FormField";
 import SignupScene from "@/components/auth/SignupScene";
+import RouteLoader from "@/components/RouteLoader";
 import { useAuth } from "@/context/AuthContext";
 import { getPostAuthRedirectTarget } from "@/lib/auth";
 import { isValidEmail, MIN_PASSWORD_LENGTH } from "@/lib/validators";
@@ -16,7 +17,7 @@ type Errors = Partial<Record<Field, string>>;
 
 export default function SignUp() {
   const router = useRouter();
-  const { signup } = useAuth();
+  const { signup, user, loading } = useAuth();
   const [values, setValues] = useState<Record<Field, string>>({
     firstName: "",
     lastName: "",
@@ -26,6 +27,11 @@ export default function SignUp() {
   });
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
+
+  // Guest-guard: a signed-in user shouldn't see the signup page.
+  useEffect(() => {
+    if (!loading && user) router.replace(getPostAuthRedirectTarget());
+  }, [loading, user, router]);
 
   const setField = (field: Field) => (value: string) =>
     setValues((prev) => ({ ...prev, [field]: value }));
@@ -61,6 +67,8 @@ export default function SignUp() {
     signup(values.email, `${values.firstName} ${values.lastName}`.trim());
     router.push(getPostAuthRedirectTarget());
   };
+
+  if (loading || user) return <RouteLoader />;
 
   return (
     <AuthShell

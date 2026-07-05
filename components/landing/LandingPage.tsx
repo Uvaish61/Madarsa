@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight, BadgeCheck, BarChart2, Check, Cloud, Code2,
-  Globe, GraduationCap, Hammer, Languages, Link2, Menu,
+  Globe, GraduationCap, Hammer, Languages, LayoutDashboard, Link2, Menu,
   Paintbrush, Server, Smartphone,
   Sparkles, Star, UserCheck, Wifi, X,
   type LucideIcon,
@@ -16,6 +16,7 @@ import { useEffect, useMemo, useState } from "react";
 import heroStudentGreen from "../../assets/images/hero-student-green.png";
 import CourseLogo from "@/components/CourseLogo";
 import EnrollButton from "@/components/EnrollButton";
+import { useAuth } from "@/context/AuthContext";
 import { floatDots, pulseOrb } from "@/lib/animations";
 
 const LottieWidget = dynamic(() => import("@/components/LottieWidget"), { ssr: false });
@@ -67,6 +68,7 @@ function SectionHeading({ eyebrow, title, description, locale }: { eyebrow: Copy
 }
 
 export default function LandingPage() {
+  const { user } = useAuth();
   const [locale, setLocale] = useState<Locale>("en");
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -208,12 +210,21 @@ export default function LandingPage() {
               <Globe className="h-3.5 w-3.5" />
               {locale === "en" ? "اردو" : "English"}
             </button>
-            <Link href="/login" className="text-sm font-semibold text-muted transition hover:text-ink">
-              {pageText.signIn}
-            </Link>
-            <Link href="/signup" className="rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-2 text-sm font-bold text-white shadow-[0_8px_18px_-9px_var(--green-600)] transition hover:translate-y-[-1px]">
-              {pageText.navCta}
-            </Link>
+            {user ? (
+              <Link href="/dashboard" className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-2 text-sm font-bold text-white shadow-[0_8px_18px_-9px_var(--green-600)] transition hover:translate-y-[-1px]">
+                <LayoutDashboard className="h-4 w-4" />
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link href="/login" className="text-sm font-semibold text-muted transition hover:text-ink">
+                  {pageText.signIn}
+                </Link>
+                <Link href="/signup" className="rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-2 text-sm font-bold text-white shadow-[0_8px_18px_-9px_var(--green-600)] transition hover:translate-y-[-1px]">
+                  {pageText.navCta}
+                </Link>
+              </>
+            )}
           </div>
 
           <button
@@ -245,13 +256,21 @@ export default function LandingPage() {
               >
                 {locale === "en" ? "اردو" : "English"}
               </button>
-              <Link href="/login" onClick={() => setMenuOpen(false)} className="flex-1 rounded-lg border border-line bg-white px-4 py-3 text-center text-sm font-bold text-green-700">
-                {pageText.signIn}
-              </Link>
+              {user ? (
+                <Link href="/dashboard" onClick={() => setMenuOpen(false)} className="flex-1 rounded-lg bg-green-600 px-4 py-3 text-center text-sm font-bold text-white">
+                  Dashboard
+                </Link>
+              ) : (
+                <Link href="/login" onClick={() => setMenuOpen(false)} className="flex-1 rounded-lg border border-line bg-white px-4 py-3 text-center text-sm font-bold text-green-700">
+                  {pageText.signIn}
+                </Link>
+              )}
             </div>
-            <Link href="/signup" onClick={() => setMenuOpen(false)} className="mt-3 block rounded-lg bg-green-600 px-4 py-3 text-center text-sm font-bold text-white">
-              {pageText.navCta}
-            </Link>
+            {!user && (
+              <Link href="/signup" onClick={() => setMenuOpen(false)} className="mt-3 block rounded-lg bg-green-600 px-4 py-3 text-center text-sm font-bold text-white">
+                {pageText.navCta}
+              </Link>
+            )}
           </div>
         ) : null}
       </header>
