@@ -264,3 +264,12 @@ samp {
   background: rgba(22, 197, 100, 0.08) !important;
   color: #0d1f13 !important;
 }
+
+/* Hide scrollbar track while keeping content scrollable */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

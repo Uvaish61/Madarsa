@@ -94,7 +94,7 @@ export default function DashboardShell({
           <div className="flex min-w-0 flex-1">{header}</div>
         </div>
 
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        <main className="hide-scrollbar flex-1 overflow-y-auto">{children}</main>
       </div>
 
       {/* ── Right panel ── */}
