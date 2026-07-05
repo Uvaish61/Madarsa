@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Award,
   BarChart2,
@@ -9,19 +11,21 @@ import {
   User,
   type LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-type NavItem = { label: string; icon: LucideIcon; active?: boolean };
+type NavItem = { label: string; icon: LucideIcon; href: string };
 
 const MAIN_NAV: NavItem[] = [
-  { label: "Dashboard", icon: LayoutGrid, active: true },
-  { label: "My Courses", icon: BookOpen },
-  { label: "Certificates", icon: Award },
-  { label: "Progress", icon: BarChart2 },
+  { label: "Dashboard",    icon: LayoutGrid, href: "/dashboard" },
+  { label: "My Courses",   icon: BookOpen,   href: "/dashboard/courses" },
+  { label: "Certificates", icon: Award,      href: "/dashboard/certificates" },
+  { label: "Progress",     icon: BarChart2,  href: "/dashboard/progress" },
 ];
 
 const ACCOUNT_NAV: NavItem[] = [
-  { label: "Settings", icon: Settings },
-  { label: "Profile", icon: User },
+  { label: "Settings", icon: Settings, href: "/dashboard/settings" },
+  { label: "Profile",  icon: User,     href: "/dashboard/profile" },
 ];
 
 const ACCENT = "#16c564";
@@ -34,16 +38,20 @@ function NavButton({
   item,
   index,
   collapsed,
+  pathname,
 }: {
   item: NavItem;
   index: number;
   collapsed: boolean;
+  pathname: string;
 }) {
-  const { label, icon: Icon, active } = item;
+  const { label, icon: Icon, href } = item;
+  const active =
+    href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
 
   return (
-    <button
-      type="button"
+    <Link
+      href={href}
       title={collapsed ? label : undefined}
       style={{
         padding: collapsed ? "10px 0" : "10px 12px",
@@ -53,6 +61,7 @@ function NavButton({
         width: "100%",
         justifyContent: collapsed ? "center" : "flex-start",
         gap: collapsed ? 0 : 10,
+        textDecoration: "none",
         transition: `${PAD_T}, ${GAP_T}`,
         animation: "slideIn 0.4s ease-out both",
         animationDelay: `${index * 60}ms`,
@@ -61,7 +70,6 @@ function NavButton({
               background:
                 "linear-gradient(135deg, rgba(22,197,100,0.22), rgba(22,197,100,0.08))",
               border: "1px solid rgba(22,197,100,0.22)",
-              /* glow behind active item */
               boxShadow:
                 "0 0 18px rgba(22,197,100,0.14), inset 0 1px 0 rgba(255,255,255,0.07)",
             }
@@ -136,7 +144,7 @@ function NavButton({
       >
         {label}
       </span>
-    </button>
+    </Link>
   );
 }
 
@@ -174,6 +182,7 @@ export default function DashboardSidebar({
 }: {
   collapsed?: boolean;
 }) {
+  const pathname = usePathname();
   return (
     <div
       className="relative flex h-full w-full flex-col overflow-hidden"
@@ -291,7 +300,7 @@ export default function DashboardSidebar({
         <GroupLabel collapsed={collapsed}>Main</GroupLabel>
         <div className="space-y-1">
           {MAIN_NAV.map((item, i) => (
-            <NavButton key={item.label} item={item} index={i} collapsed={collapsed} />
+            <NavButton key={item.label} item={item} index={i} collapsed={collapsed} pathname={pathname} />
           ))}
         </div>
 
@@ -313,6 +322,7 @@ export default function DashboardSidebar({
               item={item}
               index={MAIN_NAV.length + i}
               collapsed={collapsed}
+              pathname={pathname}
             />
           ))}
         </div>
