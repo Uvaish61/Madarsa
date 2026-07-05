@@ -1,6 +1,18 @@
+"use client";
+
 import { Bell, LogOut, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function DashboardTopbar() {
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  function handleLogout() {
+    logout();
+    router.push("/");
+  }
+
   return (
     <div
       className="flex h-full flex-1 items-center justify-between px-7"
@@ -76,6 +88,7 @@ export default function DashboardTopbar() {
         {/* Logout */}
         <button
           type="button"
+          onClick={handleLogout}
           className="dash-ctrl flex items-center gap-2"
           style={{
             padding: "8px 15px",

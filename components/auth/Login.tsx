@@ -3,10 +3,11 @@
 import { ArrowRight, Lock, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthShell from "@/components/auth/AuthShell";
 import FormField from "@/components/auth/FormField";
 import LoginScene from "@/components/auth/LoginScene";
+import RouteLoader from "@/components/RouteLoader";
 import { useAuth } from "@/context/AuthContext";
 import { getPostAuthRedirectTarget } from "@/lib/auth";
 import { isValidEmail } from "@/lib/validators";
@@ -16,10 +17,16 @@ type Errors = Partial<Record<Field, string>>;
 
 export default function Login() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user, loading } = useAuth();
   const [values, setValues] = useState<Record<Field, string>>({ email: "", password: "" });
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
+
+  // Guest-guard: a signed-in user has no business on the login page — send them
+  // wherever they were headed (or the dashboard).
+  useEffect(() => {
+    if (!loading && user) router.replace(getPostAuthRedirectTarget());
+  }, [loading, user, router]);
 
   const setField = (field: Field) => (value: string) =>
     setValues((prev) => ({ ...prev, [field]: value }));
@@ -48,6 +55,10 @@ export default function Login() {
     login(values.email);
     router.push(getPostAuthRedirectTarget());
   };
+
+  // While auth resolves, or if already signed in (redirect in flight), avoid
+  // flashing the form.
+  if (loading || user) return <RouteLoader />;
 
   return (
     <AuthShell

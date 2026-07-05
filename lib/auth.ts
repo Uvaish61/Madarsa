@@ -7,16 +7,16 @@ export function getPostAuthRedirectTarget(): string {
   const params = new URLSearchParams(window.location.search);
   const redirect = params.get("redirect");
 
-  // EnrollButton sends guests to /login?redirect=checkout and stashes what
-  // they were trying to buy in localStorage — resume straight into checkout.
+  // "Resume my purchase": EnrollButton (landing) and the course-detail Enroll
+  // stash the course in localStorage and send ?redirect=checkout. Resume the
+  // user straight into checkout for whatever they were buying.
   if (redirect === "checkout") {
-    const pendingEnrollment = getPendingEnrollment();
-    return pendingEnrollment ? `/checkout?course=${pendingEnrollment.courseId}` : "/dashboard";
+    const pending = getPendingEnrollment();
+    return pending ? `/checkout?course=${pending.courseId}` : "/dashboard";
   }
 
-  // Older callers (EnrollBill, course-detail Enroll) still use redirect=/dashboard
-  // plus a `pending` course slug forwarded from the login/signup URL.
-  const target = redirect || "/dashboard";
-  const pending = params.get("pending");
-  return pending ? `${target}?pending=${pending}` : target;
+  // Deep-link guard: ProtectedRoute captures the full path a guest tried to
+  // reach (e.g. /checkout?course=X or /dashboard) before bouncing to login —
+  // send them back there. Everything else defaults to the dashboard.
+  return redirect || "/dashboard";
 }
