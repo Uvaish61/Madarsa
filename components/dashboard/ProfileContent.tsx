@@ -572,7 +572,7 @@ const SOCIALS: {
 }[] = [
   {
     key: "linkedin",
-    icon: Linkedin,
+    icon: Briefcase,
     label: "LinkedIn",
     value: "linkedin.com/in/uvaishkhan",
     color: "#6366f1",
@@ -582,7 +582,7 @@ const SOCIALS: {
   },
   {
     key: "github",
-    icon: Github,
+    icon: Terminal,
     label: "GitHub",
     value: "github.com/uvaishkhan",
     color: "#333",
