@@ -504,3 +504,89 @@ samp {
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
+
+/* ── Profile page ──────────────────────────────────────────────────────────── */
+
+@keyframes heroPop {
+  from {
+    opacity: 0;
+    transform: perspective(900px) rotateX(8deg) translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(900px) rotateX(0deg) translateY(0) scale(1);
+  }
+}
+
+@keyframes avatarRingPulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(22, 197, 100, 0.35); }
+  50%       { box-shadow: 0 0 0 6px rgba(22, 197, 100, 0.15); }
+}
+
+@keyframes statusDotPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(22, 197, 100, 0.5); }
+  50%       { box-shadow: 0 0 0 4px rgba(22, 197, 100, 0); }
+}
+
+@keyframes waveBar1 { 0%, 100% { height: 4px; }  50% { height: 12px; } }
+@keyframes waveBar2 { 0%, 100% { height: 10px; } 50% { height: 4px; } }
+@keyframes waveBar3 { 0%, 100% { height: 6px; }  50% { height: 13px; } }
+
+.profile-hero-card {
+  animation: heroPop 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.profile-hero-card:hover {
+  transform: perspective(900px) rotateX(-1.5deg) rotateY(1deg) translateY(-5px);
+}
+
+.profile-avatar-ring {
+  animation: avatarRingPulse 3s ease-in-out infinite;
+}
+
+.profile-status-dot {
+  animation: statusDotPulse 2s ease-in-out infinite;
+}
+
+.profile-wave-bar-1 { animation: waveBar1 1.2s ease-in-out infinite; animation-delay: 0ms; }
+.profile-wave-bar-2 { animation: waveBar2 1.2s ease-in-out infinite; animation-delay: 150ms; }
+.profile-wave-bar-3 { animation: waveBar3 1.2s ease-in-out infinite; animation-delay: 300ms; }
+
+.profile-edit-btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.profile-edit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(22, 197, 100, 0.45);
+}
+
+.profile-camera-btn {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.profile-camera-btn:hover {
+  transform: scale(1.12);
+}
+
+.profile-edit-info-btn {
+  transition: background 0.15s ease;
+}
+.profile-edit-info-btn:hover {
+  background: #eef3ee !important;
+}
+
+.profile-social-row {
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.profile-social-row:hover {
+  transform: translateX(3px);
+  background: var(--social-hover-bg) !important;
+}
+
+.profile-heat-cell {
+  transition: transform 0.15s ease, filter 0.15s ease;
+  cursor: pointer;
+}
+.profile-heat-cell:hover {
+  transform: scale(1.4);
+  filter: brightness(1.15);
+}
