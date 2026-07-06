@@ -902,23 +902,18 @@ function SkillsCard() {
 const DAY_LABELS = ["M", "T", "W", "T", "F", "S", "S"];
 
 // level 0-4 maps to the color scale; "future" cells render an empty dashed cell
-type HeatCell = { level: 0 | 1 | 2 | 3 | 4; future?: boolean };
+type HeatCell = { level: number; future?: boolean };
+
+function week(levels: number[]): HeatCell[] {
+  return levels.map((level) => ({ level }));
+}
 
 const HEATMAP: { week: string; days: HeatCell[] }[] = [
-  { week: "W1", days: [0, 0, 1, 0, 0, 0, 0].map((level) => ({ level: level as 0 })) },
-  { week: "W2", days: [0, 1, 0, 0, 1, 0, 0].map((level) => ({ level: level as 0 | 1 })) },
-  {
-    week: "W3",
-    days: [0, 1, 2, 1, 1, 0, 0].map((level) => ({ level: level as 0 | 1 | 2 })),
-  },
-  {
-    week: "W4",
-    days: [1, 1, 4, 3, 1, 0, 0].map((level) => ({ level: level as 0 | 1 | 3 | 4 })),
-  },
-  {
-    week: "W5",
-    days: [2, 3, 4, 4, 3, 0, 0].map((level) => ({ level: level as 0 | 2 | 3 | 4 })),
-  },
+  { week: "W1", days: week([0, 0, 1, 0, 0, 0, 0]) },
+  { week: "W2", days: week([0, 1, 0, 0, 1, 0, 0]) },
+  { week: "W3", days: week([0, 1, 2, 1, 1, 0, 0]) },
+  { week: "W4", days: week([1, 1, 4, 3, 1, 0, 0]) },
+  { week: "W5", days: week([2, 3, 4, 4, 3, 0, 0]) },
   {
     week: "W6",
     days: [
@@ -933,7 +928,7 @@ const HEATMAP: { week: string; days: HeatCell[] }[] = [
   },
 ];
 
-const HEAT_COLORS: Record<0 | 1 | 2 | 3 | 4, string> = {
+const HEAT_COLORS: Record<number, string> = {
   0: "rgba(22,197,100,0.08)",
   1: "rgba(22,197,100,0.35)",
   2: "rgba(22,197,100,0.6)",
@@ -1026,7 +1021,7 @@ function ActivityCard() {
               width: 10,
               height: 10,
               borderRadius: 3,
-              background: HEAT_COLORS[level as 0 | 1 | 2 | 4],
+              background: HEAT_COLORS[level],
             }}
           />
         ))}
