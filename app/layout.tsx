@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Mono, Noto_Nastaliq_Urdu, Newsreader, Plus_Jakarta_Sans } from "next/font/google";
+import { Cinzel, DM_Mono, Lora, Noto_Nastaliq_Urdu, Newsreader, Plus_Jakarta_Sans } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
@@ -8,6 +8,23 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
   variable: "--font-sans",
   weight: ["400", "500", "600", "700", "800"],
+  adjustFontFallback: false,
+});
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-cinzel",
+  weight: ["600"],
+  adjustFontFallback: false,
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-lora",
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
   adjustFontFallback: false,
 });
 
@@ -43,7 +60,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${jakarta.variable} ${dmMono.variable} ${newsreader.variable} ${urdu.variable} font-sans`}>
+      <body className={`${jakarta.variable} ${dmMono.variable} ${newsreader.variable} ${urdu.variable} ${cinzel.variable} ${lora.variable} font-sans`}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

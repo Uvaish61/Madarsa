@@ -27,6 +27,8 @@ const config: Config = {
         serif: ["var(--font-serif)", "serif"],
         mono: ["var(--font-mono)", "monospace"],
         urdu: ["var(--font-urdu)", "serif"],
+        cinzel: ["var(--font-cinzel)", "serif"],
+        lora: ["var(--font-lora)", "serif"],
       },
       boxShadow: {
         soft: "var(--shadow)",
