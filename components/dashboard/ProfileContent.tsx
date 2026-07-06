@@ -1,23 +1,21 @@
 "use client";
 
 import {
-  Award,
+  Briefcase,
   Calendar,
   Camera,
   Check,
-  Clock,
   Code2,
   ExternalLink,
   FileText,
   Flame,
-  Github,
   Globe,
-  Linkedin,
   Mail,
   MapPin,
   Pencil,
   Phone,
   Star,
+  Terminal,
   User,
   type LucideIcon,
 } from "lucide-react";
