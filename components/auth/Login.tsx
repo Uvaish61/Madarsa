@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AuthShell from "@/components/auth/AuthShell";
 import FormField from "@/components/auth/FormField";
-import LoginScene from "@/components/auth/LoginScene";
 import RouteLoader from "@/components/RouteLoader";
+import SignupScene from "@/components/auth/SignupScene";
 import { useAuth } from "@/context/AuthContext";
 import { getPostAuthRedirectTarget } from "@/lib/auth";
 import { isValidEmail } from "@/lib/validators";
@@ -65,7 +65,7 @@ export default function Login() {
       activeTab="login"
       title="Welcome back"
       subtitle="Sign in to pick up where you left off and keep building."
-      scene={<LoginScene />}
+      scene={<SignupScene />}
     >
       <form onSubmit={handleSubmit} noValidate className="space-y-3.5">
         <FormField
