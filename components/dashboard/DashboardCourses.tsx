@@ -1,4 +1,9 @@
+ "use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
+import { getEnrolledCourses, STORE_EVENT } from "@/lib/app-store";
 
 function CodeThumbnail() {
   return (
@@ -35,6 +40,16 @@ function CodeThumbnail() {
 }
 
 export default function DashboardCourses() {
+  const [items, setItems] = useState(() => getEnrolledCourses());
+  const first = items[0];
+
+  useEffect(() => {
+    const refresh = () => setItems(getEnrolledCourses());
+    refresh();
+    window.addEventListener(STORE_EVENT, refresh);
+    return () => window.removeEventListener(STORE_EVENT, refresh);
+  }, []);
+
   return (
     <div>
       {/* Section header */}
@@ -42,18 +57,52 @@ export default function DashboardCourses() {
         <h2 style={{ fontSize: "16px", fontWeight: 800, color: "#0d1f13" }}>
           My Courses
         </h2>
-        <a
-          href="#"
+        <Link
+          href="/dashboard/courses"
           className="flex items-center gap-1"
           style={{ fontSize: "12.5px", fontWeight: 600, color: "#16c564" }}
         >
           View all
           <ArrowRight className="h-3.5 w-3.5" />
-        </a>
+        </Link>
       </div>
 
+      {!first && (
+        <div
+          className="course-card overflow-hidden bg-white"
+          style={{
+            maxWidth: 320,
+            borderRadius: 18,
+            border: "1px dashed rgba(22,197,100,0.28)",
+            padding: "22px 20px",
+          }}
+        >
+          <h3 style={{ fontSize: "15px", fontWeight: 800, color: "#0d1f13" }}>
+            No courses yet
+          </h3>
+          <p className="mt-2" style={{ fontSize: "12.5px", color: "#7a8c81", lineHeight: 1.5 }}>
+            Enroll in a course to see it here.
+          </p>
+          <Link
+            href="/#courses"
+            className="continue-btn mt-4 flex w-full items-center justify-center gap-1.5 text-white"
+            style={{
+              padding: "10px 14px",
+              borderRadius: 11,
+              fontWeight: 700,
+              fontSize: "13.5px",
+              background: "linear-gradient(135deg, #16c564, #0d9444)",
+              textDecoration: "none",
+            }}
+          >
+            Browse Courses
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      )}
+
       {/* Course card */}
-      <div
+      {first && <div
         style={{ animation: "fadeUp 0.5s ease-out both", animationDelay: "300ms" }}
       >
         <div
@@ -70,7 +119,7 @@ export default function DashboardCourses() {
           <div style={{ padding: "16px 18px" }}>
             <div className="flex items-center justify-between gap-2">
               <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#0d1f13" }}>
-                React &amp; Next.js
+                {first.course.title}
               </h3>
               <span
                 className="flex items-center gap-1"
@@ -97,13 +146,13 @@ export default function DashboardCourses() {
                 <div
                   className="h-full rounded-full"
                   style={{
-                    width: "0%",
+                    width: `${first.progress.percent}%`,
                     background: "linear-gradient(90deg, rgba(22,197,100,0.7), #16c564)",
                   }}
                 />
               </div>
               <span style={{ fontSize: "11.5px", fontWeight: 600, color: "#7a8c81" }}>
-                0%
+                {first.progress.percent}%
               </span>
             </div>
 
@@ -124,7 +173,7 @@ export default function DashboardCourses() {
             </button>
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

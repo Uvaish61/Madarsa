@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AlertTriangle,
   BarChart2,
@@ -16,6 +16,9 @@ import {
   User,
   type LucideIcon,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { createProfileFromUser, getInitials, getUserProfile, STORE_EVENT } from "@/lib/app-store";
+import type { UserProfile } from "@/lib/domain";
 
 // ─── Shared white card base ───────────────────────────────────────────────────
 const CARD: React.CSSProperties = {
@@ -172,7 +175,7 @@ function ToggleRow({
 
 // ─── Section 1: Profile Hero ──────────────────────────────────────────────────
 
-function ProfileHeroCard() {
+function ProfileHeroCard({ profile }: { profile: UserProfile }) {
   return (
     <div
       className="stat-card-enter"
@@ -241,7 +244,7 @@ function ProfileHeroCard() {
                 animation: "avatarPulse 3s ease-in-out infinite",
               }}
             >
-              UK
+              {getInitials(profile.name || profile.email)}
             </div>
             {/* Edit button */}
             <button
@@ -291,10 +294,10 @@ function ProfileHeroCard() {
                 marginBottom: 4,
               }}
             >
-              Uvaish Khan
+              {profile.name}
             </p>
             <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.4)", marginBottom: 10 }}>
-              uvaishkhan@gmail.com
+              {profile.email}
             </p>
             {/* Badges */}
             <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
@@ -460,7 +463,27 @@ function ProfileHeroCard() {
 
 // ─── Section 2: Personal Information ─────────────────────────────────────────
 
-function PersonalInfoCard() {
+function PersonalInfoCard({
+  profile,
+  onChange,
+  onSave,
+  saved,
+}: {
+  profile: UserProfile;
+  onChange: (profile: UserProfile) => void;
+  onSave: () => void;
+  saved: boolean;
+}) {
+  const update = (field: keyof UserProfile) => (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const next = { ...profile, [field]: event.target.value };
+    if (field === "firstName" || field === "lastName") {
+      next.name = `${next.firstName} ${next.lastName}`.trim() || next.name;
+    }
+    onChange(next);
+  };
+
   return (
     <div
       className="settings-card stat-card-enter"
@@ -488,7 +511,7 @@ function PersonalInfoCard() {
           >
             First Name
           </label>
-          <input type="text" className="settings-input" defaultValue="Uvaish" />
+          <input type="text" className="settings-input" value={profile.firstName} onChange={update("firstName")} />
         </div>
         <div>
           <label
@@ -502,7 +525,7 @@ function PersonalInfoCard() {
           >
             Last Name
           </label>
-          <input type="text" className="settings-input" defaultValue="Khan" />
+          <input type="text" className="settings-input" value={profile.lastName} onChange={update("lastName")} />
         </div>
         <div>
           <label
@@ -519,7 +542,8 @@ function PersonalInfoCard() {
           <input
             type="email"
             className="settings-input"
-            defaultValue="uvaishkhan@gmail.com"
+            value={profile.email}
+            onChange={update("email")}
           />
         </div>
         <div>
@@ -537,7 +561,8 @@ function PersonalInfoCard() {
           <input
             type="tel"
             className="settings-input"
-            defaultValue="+91 98765 43210"
+            value={profile.phone}
+            onChange={update("phone")}
           />
         </div>
       </div>
@@ -558,8 +583,30 @@ function PersonalInfoCard() {
           className="settings-input"
           rows={2}
           style={{ resize: "none" }}
-          defaultValue="Passionate web developer learning React & Next.js on EduLearn."
+          value={profile.bio}
+          onChange={update("bio")}
         />
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 14 }}>
+        <button
+          type="button"
+          onClick={onSave}
+          style={{
+            padding: "10px 18px",
+            borderRadius: 11,
+            border: "none",
+            background: "linear-gradient(135deg, #16c564, #0d9444)",
+            color: "#fff",
+            fontSize: 12.5,
+            fontWeight: 800,
+            cursor: "pointer",
+            fontFamily: "inherit",
+            boxShadow: "0 5px 18px rgba(22,197,100,0.28)",
+          }}
+        >
+          {saved ? "Saved" : "Save Changes"}
+        </button>
       </div>
     </div>
   );
@@ -1168,6 +1215,28 @@ function DangerZoneCard() {
 // ─── Main export ──────────────────────────────────────────────────────────────
 
 export default function SettingsContent() {
+  const { user, updateProfile } = useAuth();
+  const [profile, setProfile] = useState<UserProfile | null>(() =>
+    user ? getUserProfile() ?? createProfileFromUser(user) : null,
+  );
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    const refresh = () => setProfile(user ? getUserProfile() ?? createProfileFromUser(user) : null);
+    refresh();
+    window.addEventListener(STORE_EVENT, refresh);
+    return () => window.removeEventListener(STORE_EVENT, refresh);
+  }, [user]);
+
+  if (!user || !profile) return null;
+
+  function handleSave() {
+    if (!profile) return;
+    updateProfile(profile);
+    setSaved(true);
+    window.setTimeout(() => setSaved(false), 1400);
+  }
+
   return (
     <div
       style={{
@@ -1177,8 +1246,16 @@ export default function SettingsContent() {
         gap: 18,
       }}
     >
-      <ProfileHeroCard />
-      <PersonalInfoCard />
+      <ProfileHeroCard profile={profile} />
+      <PersonalInfoCard
+        profile={profile}
+        onChange={(next) => {
+          setSaved(false);
+          setProfile(next);
+        }}
+        onSave={handleSave}
+        saved={saved}
+      />
 
       {/* Row: Notifications + Appearance */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>

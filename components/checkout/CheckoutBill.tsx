@@ -8,7 +8,7 @@
 import { BadgeCheck, Lock, ShieldCheck, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { enrollInCourse } from "@/lib/enrollment";
+import { addEnrollment } from "@/lib/app-store";
 import type { CourseItem } from "@/lib/landing-data";
 import { clearPendingEnrollment } from "@/lib/pendingEnrollment";
 import { formatINR, toAmount } from "@/lib/pricing";
@@ -26,7 +26,7 @@ export default function CheckoutBill({ course }: { course: CourseItem }) {
     setProcessing(true);
     // Simulate a payment round-trip — no real payment gateway wired up yet.
     setTimeout(() => {
-      enrollInCourse(course.slug);
+      addEnrollment(course.slug);
       clearPendingEnrollment();
       router.push("/dashboard");
     }, 900);

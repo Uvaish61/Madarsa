@@ -6,18 +6,24 @@
 // their bodies for real API calls once a backend exists.
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-
-type AuthUser = { email: string; name?: string };
+import {
+  clearCurrentUser,
+  createMockUser,
+  getCurrentUser,
+  getUserProfile,
+  saveCurrentUser,
+  saveUserProfile,
+} from "@/lib/app-store";
+import type { AuthUser, UserProfile } from "@/lib/domain";
 
 type AuthContextValue = {
   user: AuthUser | null;
   loading: boolean;
   login: (email: string) => void;
   signup: (email: string, name?: string) => void;
+  updateProfile: (profile: UserProfile) => void;
   logout: () => void;
 };
-
-const USER_KEY = "madarsa_user";
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -27,35 +33,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Restore the session from localStorage on first mount (client-only).
   useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(USER_KEY);
-      if (raw) setUser(JSON.parse(raw) as AuthUser);
-    } catch {
-      window.localStorage.removeItem(USER_KEY);
-    }
+    setUser(getCurrentUser());
     setLoading(false);
   }, []);
 
   function persistUser(nextUser: AuthUser) {
     setUser(nextUser);
-    window.localStorage.setItem(USER_KEY, JSON.stringify(nextUser));
+    saveCurrentUser(nextUser);
   }
 
   function login(email: string) {
-    persistUser({ email });
+    const normalizedEmail = email.trim().toLowerCase();
+    const profile = getUserProfile();
+    persistUser(createMockUser(normalizedEmail, profile?.email === normalizedEmail ? profile.name : undefined));
   }
 
   function signup(email: string, name?: string) {
-    persistUser({ email, name });
+    persistUser(createMockUser(email, name));
+  }
+
+  function updateProfile(profile: UserProfile) {
+    saveUserProfile(profile);
+    setUser(getCurrentUser());
   }
 
   function logout() {
     setUser(null);
-    window.localStorage.removeItem(USER_KEY);
+    clearCurrentUser();
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, updateProfile, logout }}>
       {children}
     </AuthContext.Provider>
   );
