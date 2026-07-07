@@ -918,11 +918,10 @@ export default function CoursesContent() {
       ══════════════════════════════════════════════════════════════ */}
       <section>
         <div
-          className="stat-card-enter flex flex-col items-start gap-5 lg:flex-row lg:items-center lg:gap-6"
+          className="stat-card-enter flex flex-col items-start gap-5 p-5 lg:flex-row lg:items-center lg:gap-6 lg:p-[26px_30px]"
           style={{
             background: "linear-gradient(135deg, #0b1f13, #16321e)",
             borderRadius: 22,
-            padding: "20px",
             border: "1px solid rgba(22,197,100,0.15)",
             boxShadow: "0 10px 40px rgba(0,0,0,0.18)",
             justifyContent: "space-between",
@@ -1028,7 +1027,7 @@ export default function CoursesContent() {
             </p>
 
             {/* Path steps */}
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", rowGap: 8 }}>
               {PATH_STEPS.map((step, i) => (
                 <div
                   key={step.label}
