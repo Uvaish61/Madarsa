@@ -311,7 +311,7 @@ export default function DashboardSidebar({
         <GroupLabel collapsed={collapsed}>Main</GroupLabel>
         <div className="space-y-1">
           {MAIN_NAV.map((item, i) => (
-            <NavButton key={item.label} item={item} index={i} collapsed={collapsed} pathname={pathname} />
+            <NavButton key={item.label} item={item} index={i} collapsed={collapsed} pathname={pathname} onNavigate={onNavigate} />
           ))}
         </div>
 
@@ -334,6 +334,7 @@ export default function DashboardSidebar({
               index={MAIN_NAV.length + i}
               collapsed={collapsed}
               pathname={pathname}
+              onNavigate={onNavigate}
             />
           ))}
         </div>
