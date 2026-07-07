@@ -61,6 +61,7 @@ function Laurel({ mirrored = false }: { mirrored?: boolean }) {
       height="26"
       viewBox="0 0 26 26"
       fill="none"
+      className="h-4.5 w-4.5 shrink-0 sm:h-6.5 sm:w-6.5"
       style={mirrored ? { transform: "scaleX(-1)" } : undefined}
     >
       <path d="M13 24C11 18 11 10 15 2" stroke={GOLD} strokeWidth="1.3" strokeLinecap="round" />
@@ -99,7 +100,7 @@ function GoldSeal() {
   ];
 
   return (
-    <svg width="72" height="72" viewBox="0 0 72 72" className="cert-seal">
+    <svg width="72" height="72" viewBox="0 0 72 72" className="cert-seal h-13 w-13 sm:h-18 sm:w-18">
       <defs>
         <radialGradient id="sealOuter" cx="35%" cy="30%" r="75%">
           <stop offset="0%" stopColor="#FFE066" />
@@ -247,14 +248,13 @@ export default function CertificateCard() {
 
         {/* content */}
         <div
-          className="relative z-[4] flex flex-col items-center"
-          style={{ padding: "30px 56px 26px" }}
+          className="relative z-[4] flex flex-col items-center p-[22px_18px_20px] sm:p-[30px_56px_26px]"
         >
           {/* logo + institution */}
-          <BrandLogo className="h-14 w-14" />
+          <BrandLogo className="h-11 w-11 sm:h-14 sm:w-14" />
           <p
-            className="mt-2 text-center font-sans"
-            style={{ fontSize: 20, fontWeight: 800, color: DARK_GREEN }}
+            className="mt-2 text-center font-sans text-[16px] sm:text-[20px]"
+            style={{ fontWeight: 800, color: DARK_GREEN }}
           >
             Madarsa Tech Academy
           </p>
@@ -267,8 +267,8 @@ export default function CertificateCard() {
 
           {/* certificate title */}
           <p
-            className="cert-gold-text mt-6 font-cinzel text-center"
-            style={{ fontSize: 13.5, fontWeight: 600, letterSpacing: "0.3em" }}
+            className="cert-gold-text mt-6 font-cinzel text-center text-[10.5px] tracking-[0.16em] sm:text-[13.5px] sm:tracking-[0.3em]"
+            style={{ fontWeight: 600 }}
           >
             CERTIFICATE OF COMPLETION
           </p>
@@ -300,8 +300,8 @@ export default function CertificateCard() {
             />
           </div>
           <p
-            className="mt-2 text-center font-sans"
-            style={{ fontSize: 22, fontWeight: 800, color: "#0d1a0d" }}
+            className="mt-2 text-center font-sans text-[18px] sm:text-[22px]"
+            style={{ fontWeight: 800, color: "#0d1a0d" }}
           >
             {CERT.name}
           </p>
@@ -310,9 +310,9 @@ export default function CertificateCard() {
           </p>
 
           {/* course name with laurels */}
-          <div className="mt-3 flex items-center justify-center gap-3">
+          <div className="mt-3 flex w-full items-center justify-center gap-2 sm:gap-3">
             <Laurel />
-            <p className="text-center font-sans" style={{ fontSize: 19, fontWeight: 800, color: DARK_GREEN }}>
+            <p className="min-w-0 text-center font-sans text-[15px] sm:text-[19px]" style={{ fontWeight: 800, color: DARK_GREEN }}>
               {CERT.course}
             </p>
             <Laurel mirrored />
@@ -337,33 +337,31 @@ export default function CertificateCard() {
             style={{ gridTemplateColumns: "1fr 2px 1fr 2px 1fr" }}
           >
             {/* Certificate ID */}
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex min-w-0 flex-col items-center gap-1.5 sm:gap-2">
               <div
-                className="flex items-center justify-center rounded-full"
+                className="flex h-8 w-8 items-center justify-center rounded-full sm:h-10 sm:w-10"
                 style={{
-                  width: 40,
-                  height: 40,
                   background: "rgba(13,79,32,0.07)",
                   border: "1px solid rgba(13,79,32,0.15)",
                 }}
               >
-                <Award style={{ width: 18, height: 18, color: DARK_GREEN }} />
+                <Award className="h-3.5 w-3.5 sm:h-[18px] sm:w-[18px]" style={{ color: DARK_GREEN }} />
               </div>
               <p
-                className="uppercase"
-                style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.12em", color: "#a0aea4" }}
+                className="text-center uppercase text-[6.5px] sm:text-[8px]"
+                style={{ fontWeight: 700, letterSpacing: "0.1em", color: "#a0aea4" }}
               >
                 Certificate ID
               </p>
-              <p style={{ fontSize: 12, fontWeight: 700, color: "#0d1a0d" }}>{CERT.id}</p>
+              <p className="text-center text-[10px] sm:text-[12px]" style={{ fontWeight: 700, color: "#0d1a0d" }}>{CERT.id}</p>
               <Ornament icon="diamond" />
             </div>
 
             {/* Vertical divider */}
             <div
+              className="h-14 sm:h-[72px]"
               style={{
                 width: 1,
-                height: 72,
                 justifySelf: "center",
                 background: "linear-gradient(180deg, transparent, rgba(180,140,28,0.3), transparent)",
               }}
@@ -376,35 +374,33 @@ export default function CertificateCard() {
 
             {/* Vertical divider */}
             <div
+              className="h-14 sm:h-[72px]"
               style={{
                 width: 1,
-                height: 72,
                 justifySelf: "center",
                 background: "linear-gradient(180deg, transparent, rgba(180,140,28,0.3), transparent)",
               }}
             />
 
             {/* Signature */}
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex min-w-0 flex-col items-center gap-1.5 sm:gap-2">
               <div
-                className="flex items-center justify-center rounded-full"
+                className="flex h-8 w-8 items-center justify-center rounded-full sm:h-10 sm:w-10"
                 style={{
-                  width: 40,
-                  height: 40,
                   background: "rgba(13,79,32,0.07)",
                   border: "1px solid rgba(13,79,32,0.15)",
                 }}
               >
-                <Pencil style={{ width: 18, height: 18, color: DARK_GREEN }} />
+                <Pencil className="h-3.5 w-3.5 sm:h-[18px] sm:w-[18px]" style={{ color: DARK_GREEN }} />
               </div>
-              <span style={{ width: 78, height: 1, background: "rgba(180,140,28,0.3)" }} />
+              <span className="w-12 sm:w-[78px]" style={{ height: 1, background: "rgba(180,140,28,0.3)" }} />
               <p
-                className="uppercase"
-                style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.12em", color: "#a0aea4" }}
+                className="text-center uppercase text-[6.5px] sm:text-[8px]"
+                style={{ fontWeight: 700, letterSpacing: "0.1em", color: "#a0aea4" }}
               >
                 Signature
               </p>
-              <p className="font-lora italic" style={{ fontSize: 10.5, color: "#7a8c81" }}>
+              <p className="font-lora text-center italic text-[9px] sm:text-[10.5px]" style={{ color: "#7a8c81" }}>
                 (Authorized Signatory)
               </p>
               <Ornament icon="diamond" />
@@ -413,10 +409,10 @@ export default function CertificateCard() {
 
           {/* verify bar */}
           <div
-            className="mt-5 flex w-full items-center"
+            className="mt-5 flex w-full min-w-0 items-center"
             style={{
               gap: 10,
-              padding: "9px 16px",
+              padding: "9px 12px",
               borderRadius: 10,
               background: "rgba(13,79,32,0.05)",
               border: "1px solid rgba(13,79,32,0.1)",
@@ -428,7 +424,7 @@ export default function CertificateCard() {
             >
               <LinkIcon style={{ width: 13, height: 13, color: DARK_GREEN }} />
             </div>
-            <span style={{ fontSize: 12, fontWeight: 600, color: "#3a6b50" }}>{CERT.verifyUrl}</span>
+            <span className="min-w-0 truncate text-[11px] sm:text-[12px]" style={{ fontWeight: 600, color: "#3a6b50" }}>{CERT.verifyUrl}</span>
           </div>
         </div>
       </div>

@@ -4,9 +4,9 @@ import { Bell, Download, Star } from "lucide-react";
 
 export default function CertificatesTopbar() {
   return (
-    <div className="flex h-full flex-1 items-center justify-between px-7">
+    <div className="flex h-full flex-1 items-center justify-between px-4 sm:px-7">
       {/* Left: page label + title */}
-      <div>
+      <div className="min-w-0">
         <p
           className="uppercase"
           style={{
@@ -19,8 +19,8 @@ export default function CertificatesTopbar() {
           Achievements
         </p>
         <h1
+          className="truncate text-[16px] sm:text-[20px]"
           style={{
-            fontSize: "20px",
             fontWeight: 800,
             color: "#0d1f13",
             letterSpacing: "-0.4px",
@@ -31,13 +31,13 @@ export default function CertificatesTopbar() {
       </div>
 
       {/* Right: earned pill + bell + download */}
-      <div className="flex items-center" style={{ gap: 10 }}>
+      <div className="flex shrink-0 items-center" style={{ gap: 10 }}>
         {/* Earned pill */}
         <div
-          className="flex items-center"
+          className="flex shrink-0 items-center"
           style={{
             gap: 6,
-            padding: "8px 14px",
+            padding: "8px 12px",
             background: "#fff",
             border: "1px solid rgba(212,175,55,0.25)",
             borderRadius: 10,
@@ -45,14 +45,14 @@ export default function CertificatesTopbar() {
           }}
         >
           <Star style={{ width: 13, height: 13, color: "#daa520" }} className="fill-current" />
-          <span style={{ fontSize: 12.5, fontWeight: 700, color: "#92700a" }}>1 Earned</span>
+          <span className="whitespace-nowrap" style={{ fontSize: 12.5, fontWeight: 700, color: "#92700a" }}>1 Earned</span>
         </div>
 
         {/* Bell */}
         <button
           type="button"
           aria-label="Notifications"
-          className="dash-ctrl cert-bell relative flex items-center justify-center"
+          className="dash-ctrl cert-bell relative hidden shrink-0 items-center justify-center sm:flex"
           style={{ width: 36, height: 36, borderRadius: 9 }}
         >
           <Bell style={{ width: 14, height: 14, color: "#333" }} />
@@ -65,7 +65,7 @@ export default function CertificatesTopbar() {
         {/* Download PDF */}
         <button
           type="button"
-          className="cert-download-btn flex items-center"
+          className="cert-download-btn flex shrink-0 items-center"
           style={{
             gap: 7,
             padding: "8px 16px",
@@ -79,7 +79,7 @@ export default function CertificatesTopbar() {
           }}
         >
           <Download style={{ width: 13, height: 13 }} />
-          Download PDF
+          <span className="hidden sm:inline">Download PDF</span>
         </button>
       </div>
     </div>
