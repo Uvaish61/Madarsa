@@ -374,14 +374,7 @@ export default function CoursesContent() {
   }, []);
 
   return (
-    <div
-      style={{
-        padding: "26px 28px 40px",
-        display: "flex",
-        flexDirection: "column",
-        gap: 30,
-      }}
-    >
+    <div className="flex flex-col gap-5 p-4 lg:gap-7.5 lg:p-[26px_28px_40px]">
       {/* ══════════════════════════════════════════════════════════════
           SECTION 1 — ENROLLED COURSES
       ══════════════════════════════════════════════════════════════ */}

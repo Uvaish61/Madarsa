@@ -4,9 +4,9 @@ import { Bell, Plus, Search } from "lucide-react";
 
 export default function CoursesTopbar() {
   return (
-    <div className="flex h-full flex-1 items-center justify-between px-7">
+    <div className="flex h-full flex-1 items-center justify-between px-4 sm:px-7">
       {/* Left: page label + title */}
-      <div>
+      <div className="min-w-0">
         <p
           className="uppercase"
           style={{
@@ -19,8 +19,8 @@ export default function CoursesTopbar() {
           Learning
         </p>
         <h1
+          className="truncate text-[16px] sm:text-[20px]"
           style={{
-            fontSize: "20px",
             fontWeight: 800,
             color: "#0d1f13",
             letterSpacing: "-0.4px",
@@ -31,11 +31,11 @@ export default function CoursesTopbar() {
       </div>
 
       {/* Right: search + bell + browse */}
-      <div className="flex items-center" style={{ gap: 10 }}>
-        {/* Search bar */}
+      <div className="flex shrink-0 items-center" style={{ gap: 10 }}>
+        {/* Search bar (hidden on small screens) */}
         <div
+          className="hidden md:flex"
           style={{
-            display: "flex",
             alignItems: "center",
             gap: 8,
             padding: "8px 14px",
@@ -62,7 +62,7 @@ export default function CoursesTopbar() {
         <button
           type="button"
           aria-label="Notifications"
-          className="dash-ctrl relative flex items-center justify-center"
+          className="dash-ctrl relative hidden shrink-0 items-center justify-center sm:flex"
           style={{ width: 36, height: 36, borderRadius: 9 }}
         >
           <Bell style={{ width: 14, height: 14, color: "#333" }} />
@@ -81,7 +81,7 @@ export default function CoursesTopbar() {
         {/* Browse All */}
         <button
           type="button"
-          className="continue-btn flex items-center"
+          className="continue-btn flex shrink-0 items-center"
           style={{
             gap: 7,
             padding: "8px 16px",
@@ -95,7 +95,7 @@ export default function CoursesTopbar() {
           }}
         >
           <Plus style={{ width: 13, height: 13 }} />
-          Browse All
+          <span className="hidden sm:inline">Browse All</span>
         </button>
       </div>
     </div>
