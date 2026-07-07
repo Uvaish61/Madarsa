@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Madarsa Tech Academy — API Map by Page</title>
+<style>
+  :root {
+    --green: #16c564;
+    --green-d: #0d9444;
+    --green-dd: #0b1f13;
+    --ink: #0d1f13;
+    --muted: #6b7c71;
+    --line: #e3ebe5;
+    --paper: #edf1ed;
+    --card: #ffffff;
+    --mvp: #16c564;
+    --phase2: #eab308;
+    --feat: #6366f1;
+    --danger: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* ── Cover ── */
+  .cover {
+    background: linear-gradient(145deg, #0a1e10, #0f2c18, #152a0e);
+    border-radius: 24px;
+    padding: 48px 44px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    margin-bottom: 28px;
+  }
+  .cover::before {
+    content: ""; position: absolute; top: -80px; right: -60px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: rgba(22,197,100,0.14); filter: blur(30px);
+  }
+  .cover::after {
+    content: ""; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(22,197,100,0.05) 1px, transparent 1px);
+    background-size: 22px 22px; pointer-events: none;
+  }
+  .cover .eyebrow {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--green);
+    position: relative; margin-bottom: 14px;
+  }
+  .cover h1 {
+    font-size: 38px; font-weight: 800; letter-spacing: -1px;
+    line-height: 1.08; position: relative; margin-bottom: 14px;
+  }
+  .cover p { font-size: 14.5px; color: rgba(255,255,255,0.55); max-width: 620px; position: relative; }
+  .cover .meta {
+    position: relative; margin-top: 24px; display: flex; flex-wrap: wrap; gap: 10px;
+  }
+  .cover .meta span {
+    font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 999px; padding: 6px 14px;
+  }
+  .logo-badge {
+    position: relative; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 26px;
+  }
+  .logo-badge .mark {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: linear-gradient(135deg, #1de070, #0fa04d);
+    display: grid; place-items: center; font-size: 20px;
+    box-shadow: 0 4px 18px rgba(22,197,100,0.5);
+  }
+  .logo-badge .name { font-size: 18px; font-weight: 800; }
+
+  /* ── Toolbar ── */
+  .toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; }
+  .legend .tag { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+  .dot { width: 11px; height: 11px; border-radius: 3px; }
+  .dot.mvp { background: var(--mvp); }
+  .dot.phase2 { background: var(--phase2); }
+  .dot.feat { background: var(--feat); }
+  .print-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, var(--green), var(--green-d));
+    color: #fff; border: none; border-radius: 11px; padding: 10px 18px;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(22,197,100,0.35); font-family: inherit;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .print-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(22,197,100,0.45); }
+
+  /* ── Sections ── */
+  section { margin-bottom: 34px; }
+  .sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .sec-head .num {
+    width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(22,197,100,0.16), rgba(22,197,100,0.05));
+    border: 1px solid rgba(22,197,100,0.25);
+    color: var(--green-d); display: grid; place-items: center;
+    font-size: 13px; font-weight: 800;
+  }
+  .sec-head h2 { font-size: 21px; font-weight: 800; letter-spacing: -0.4px; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 18px; padding: 22px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 10px 34px rgba(20,60,40,0.05);
+  }
+
+  /* ── Flow diagram ── */
+  .flow { display: flex; flex-direction: column; gap: 0; }
+  .flow-step {
+    display: flex; align-items: flex-start; gap: 16px; position: relative; padding-bottom: 22px;
+  }
+  .flow-step:last-child { padding-bottom: 0; }
+  .flow-step::before {
+    content: ""; position: absolute; left: 15px; top: 34px; bottom: -4px;
+    width: 2px; background: linear-gradient(180deg, var(--green), rgba(22,197,100,0.15));
+  }
+  .flow-step:last-child::before { display: none; }
+  .flow-num {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; z-index: 1;
+    background: linear-gradient(135deg, var(--green), var(--green-d));
+    color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 800;
+    box-shadow: 0 3px 10px rgba(22,197,100,0.4);
+  }
+  .flow-body { padding-top: 4px; }
+  .flow-body b { font-size: 14px; font-weight: 700; }
+  .flow-body .apis { margin-top: 5px; display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* ── API chips ── */
+  code, .api {
+    font-family: "SF Mono", "DM Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 12px; font-weight: 600;
+  }
+  .api {
+    display: inline-flex; align-items: center;
+    background: #f1f6f2; border: 1px solid var(--line); border-radius: 7px;
+    padding: 3px 9px; color: var(--green-d); white-space: nowrap;
+  }
+  .api .verb { font-weight: 800; margin-right: 6px; opacity: 0.85; }
+  .api.get .verb { color: #2563eb; }
+  .api.post .verb { color: #d97706; }
+  .api.patch .verb { color: #7c3aed; }
+  .api.del .verb { color: var(--danger); }
+
+  /* ── Tables ── */
+  .tbl-scroll { overflow-x: auto; border-radius: 14px; border: 1px solid var(--line); }
+  table { width: 100%; border-collapse: collapse; background: #fff; font-size: 13px; }
+  thead th {
+    background: #f4f8f4; text-align: left; padding: 11px 14px;
+    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); border-bottom: 1px solid var(--line); white-space: nowrap;
+  }
+  tbody td { padding: 11px 14px; border-bottom: 1px solid #f0f4f1; vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #fafcfa; }
+  td.section-cell { font-weight: 700; color: var(--ink); min-width: 150px; }
+  td.now-cell { color: var(--muted); font-size: 12.5px; }
+  .tag-pill {
+    display: inline-block; font-size: 10.5px; font-weight: 800; padding: 2px 9px;
+    border-radius: 999px; white-space: nowrap;
+  }
+  .tag-pill.mvp { background: rgba(22,197,100,0.13); color: var(--green-d); border: 1px solid rgba(22,197,100,0.25); }
+  .tag-pill.phase2 { background: rgba(234,179,8,0.13); color: #a16207; border: 1px solid rgba(234,179,8,0.28); }
+  .tag-pill.feat { background: rgba(99,102,241,0.12); color: #4f46e5; border: 1px solid rgba(99,102,241,0.25); }
+
+  .page-title {
+    display: flex; align-items: center; gap: 10px; margin: 26px 0 12px;
+  }
+  .page-title .route {
+    font-family: "SF Mono", ui-monospace, monospace; font-size: 13px; font-weight: 700;
+    background: var(--green-dd); color: #7ee7a6; padding: 5px 12px; border-radius: 8px;
+  }
+  .page-title .desc { font-size: 13.5px; color: var(--muted); font-weight: 600; }
+  .warn {
+    background: rgba(234,179,8,0.09); border: 1px solid rgba(234,179,8,0.25);
+    border-left: 3px solid var(--phase2); border-radius: 10px;
+    padding: 10px 14px; font-size: 12.5px; color: #7a5b06; margin-top: 10px;
+  }
+
+  /* ── Master list ── */
+  .master-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 720px) { .master-grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .master-col { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+  .master-col h4 { font-size: 13px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .master-col .chips { display: flex; flex-direction: column; gap: 6px; }
+
+  /* ── Build order ── */
+  .steps-num { counter-reset: bo; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .steps-num li {
+    counter-increment: bo; position: relative; padding-left: 42px; font-size: 13.5px; padding-top: 4px;
+  }
+  .steps-num li::before {
+    content: counter(bo); position: absolute; left: 0; top: 0;
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--green), var(--green-d)); color: #fff;
+    display: grid; place-items: center; font-size: 13px; font-weight: 800;
+  }
+  .steps-num li b { font-weight: 700; }
+
+  .footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--muted); }
+  .footer .brand { font-weight: 700; color: var(--green-d); }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; }
+    .wrap { max-width: none; padding: 0; }
+    .print-btn { display: none; }
+    .cover { box-shadow: none; break-inside: avoid; }
+    .card, .tbl-scroll, section { break-inside: avoid; }
+    .page-title { break-after: avoid; }
+    a { color: inherit; text-decoration: none; }
+    tbody tr:hover { background: transparent; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ══════════ COVER ══════════ -->
+  <div class="cover">
+    <div class="logo-badge">
+      <span class="mark">🎓</span>
+      <span class="name">Madarsa Tech Academy</span>
+    </div>
+    <div class="eyebrow">Backend Handoff · API Requirement Map</div>
+    <h1>API Requirements — Page by Page, Section by Section</h1>
+    <p>For every section of every screen: exactly which API is needed, and which
+       current <code style="color:#7ee7a6;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:4px">lib/app-store.ts</code>
+       (localStorage mock) function it replaces. Frontend stack: Next.js App Router.</p>
+    <div class="meta">
+      <span>📄 Companion to API_CONTRACT.md</span>
+      <span>🗓️ Generated for current codebase</span>
+      <span>🔢 ~30 endpoints (10 MVP)</span>
+    </div>
+  </div>
+
+  <!-- ══════════ TOOLBAR ══════════ -->
+  <div class="toolbar">
+    <div class="legend">
+      <span class="tag"><span class="dot mvp"></span> MVP — needed now</span>
+      <span class="tag"><span class="dot phase2"></span> Phase 2 — gamification / settings</span>
+      <span class="tag"><span class="dot feat"></span> When the feature exists</span>
+    </div>
+    <button class="print-btn" onclick="window.print()">⬇ Download as PDF / Print</button>
+  </div>
+
+  <!-- ══════════ 1. FLOW ══════════ -->
+  <section>
+    <div class="sec-head"><span class="num">1</span><h2>Complete End-to-End Flow</h2></div>
+    <div class="card">
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-body">
+            <b>App load / session restore</b> — every page load checks the session first.
+            <div class="apis"><span class="api get"><span class="verb">GET</span>/auth/me</span></div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-body">
+            <b>Guest browses → clicks Enroll</b> — stash intent (client), then send to login.
+            <div class="apis"><span class="api">setPendingEnrollment() — client only</span></div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-body">
+            <b>Login / Signup</b> — sets an httpOnly session cookie.
+            <div class="apis">
+              <span class="api post"><span class="verb">POST</span>/auth/login</span>
+              <span class="api post"><span class="verb">POST</span>/auth/signup</span>
+            </div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-body">
+            <b>Resume checkout</b> — <code>getPostAuthRedirectTarget()</code> reads the pending intent and routes to <code>/checkout?course=X</code>.
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div class="flow-body">
+            <b>Payment → enrollment grant</b> — server computes the price; enrollment is granted ONLY on payment confirmation (webhook = source of truth).
+            <div class="apis">
+              <span class="api post"><span class="verb">POST</span>/orders</span>
+              <span class="api post"><span class="verb">POST</span>/orders/{id}/confirm</span>
+              <span class="api post"><span class="verb">POST</span>/webhooks/payment</span>
+            </div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">6</div>
+          <div class="flow-body">
+            <b>Dashboard</b> — loads enrolled courses and derived stats.
+            <div class="apis">
+              <span class="api get"><span class="verb">GET</span>/enrollments</span>
+              <span class="api get"><span class="verb">GET</span>/me/stats</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2. PAGE BY PAGE ══════════ -->
+  <section>
+    <div class="sec-head"><span class="num">2</span><h2>Page → Section → API</h2></div>
+
+    <!-- Landing -->
+    <div class="page-title"><span class="route">/</span><span class="desc">Landing</span></div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Section</th><th>Current (data source)</th><th>API</th><th>Tag</th></tr></thead>
+      <tbody>
+        <tr><td class="section-cell">Hero / Tracks / Features / Stories</td><td class="now-cell">landing-data.ts (static)</td><td>— keep static</td><td><span class="tag-pill feat">feature</span></td></tr>
+        <tr><td class="section-cell">Courses grid <code>#courses</code></td><td class="now-cell">courses[] static</td><td><span class="api get"><span class="verb">GET</span>/courses</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Card "Enroll" button</td><td class="now-cell">setPendingEnrollment()</td><td>client intent + <span class="api post"><span class="verb">POST</span>/orders</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- Auth -->
+    <div class="page-title"><span class="route">/login · /signup</span><span class="desc">Authentication</span></div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Section</th><th>Current (replace target)</th><th>API</th><th>Tag</th></tr></thead>
+      <tbody>
+        <tr><td class="section-cell">Login submit</td><td class="now-cell">AuthContext.login() → localStorage</td><td><span class="api post"><span class="verb">POST</span>/auth/login</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Signup submit</td><td class="now-cell">AuthContext.signup()</td><td><span class="api post"><span class="verb">POST</span>/auth/signup</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Guest-guard redirect</td><td class="now-cell">useAuth().user</td><td><span class="api get"><span class="verb">GET</span>/auth/me</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">"Forgot password?" (dead link)</td><td class="now-cell">→ / (does nothing)</td><td><span class="api post"><span class="verb">POST</span>/auth/forgot-password</span> · <span class="api post"><span class="verb">POST</span>/auth/reset-password</span></td><td><span class="tag-pill feat">feature</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- Course detail -->
+    <div class="page-title"><span class="route">/courses/[slug]</span><span class="desc">Course detail</span></div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Section</th><th>Current</th><th>API</th><th>Tag</th></tr></thead>
+      <tbody>
+        <tr><td class="section-cell">Hero · Outcomes · Instructor · Curriculum · Price</td><td class="now-cell">courses + courseConfigs + curricula (static)</td><td><span class="api get"><span class="verb">GET</span>/courses/{slug}</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Enroll / "Go to Course" button state</td><td class="now-cell">isCourseEnrolled() (store)</td><td><span class="api get"><span class="verb">GET</span>/enrollments/{slug}</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Enroll click (logged-in) → CheckoutModal</td><td class="now-cell">—</td><td><span class="api post"><span class="verb">POST</span>/orders</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- Checkout -->
+    <div class="page-title"><span class="route">/checkout</span><span class="desc">Checkout + CheckoutModal</span></div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Section</th><th>Current (replace)</th><th>API</th><th>Tag</th></tr></thead>
+      <tbody>
+        <tr><td class="section-cell">Bill lines / total</td><td class="now-cell">course.price static + pricing.ts</td><td><span class="api post"><span class="verb">POST</span>/orders</span> (server price)</td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">"Complete Purchase"</td><td class="now-cell">setTimeout fake → addEnrollment()</td><td><span class="api post"><span class="verb">POST</span>/orders/{id}/confirm</span> + <span class="api post"><span class="verb">POST</span>/webhooks/payment</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Success → dashboard</td><td class="now-cell">router.push</td><td><span class="api get"><span class="verb">GET</span>/orders/{id}</span> (poll)</td><td><span class="tag-pill mvp">MVP</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="warn">⚠️ <code>addEnrollment()</code> (localStorage write) is <b>deleted</b> here — enrollment is granted only by the server on payment confirmation, never from the client.</div>
+
+    <!-- Dashboard -->
+    <div class="page-title"><span class="route">/dashboard</span><span class="desc">Main dashboard</span></div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Section</th><th>Current</th><th>API</th><th>Tag</th></tr></thead>
+      <tbody>
+        <tr><td class="section-cell">Topbar — "Welcome, {name}"</td><td class="now-cell">useAuth().user</td><td><span class="api get"><span class="verb">GET</span>/auth/me</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Topbar — Logout</td><td class="now-cell">AuthContext.logout()</td><td><span class="api post"><span class="verb">POST</span>/auth/logout</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Topbar — Search</td><td class="now-cell">decorative</td><td><span class="api get"><span class="verb">GET</span>/search?q=</span></td><td><span class="tag-pill feat">feature</span></td></tr>
+        <tr><td class="section-cell">Topbar — Bell / notifications</td><td class="now-cell">decorative</td><td><span class="api get"><span class="verb">GET</span>/me/notifications</span></td><td><span class="tag-pill feat">feature</span></td></tr>
+        <tr><td class="section-cell">Stat cards (Enrolled/Completed/Certs)</td><td class="now-cell">getDashboardStats() (store)</td><td><span class="api get"><span class="verb">GET</span>/me/stats</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">My Courses list</td><td class="now-cell">getEnrolledCourses() (store)</td><td><span class="api get"><span class="verb">GET</span>/enrollments</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">"Continue Learning"</td><td class="now-cell">static</td><td><span class="api post"><span class="verb">POST</span>/lessons/{id}/complete</span></td><td><span class="tag-pill feat">feature</span></td></tr>
+        <tr><td class="section-cell">Right — Calendar widget</td><td class="now-cell">hardcoded</td><td><span class="api get"><span class="verb">GET</span>/me/calendar?month=</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Right — Streak widget</td><td class="now-cell">hardcoded</td><td><span class="api get"><span class="verb">GET</span>/me/streak</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Right — Rank widget</td><td class="now-cell">hardcoded</td><td><span class="api get"><span class="verb">GET</span>/me/rank</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Right — Daily goal</td><td class="now-cell">hardcoded</td><td><span class="api get"><span class="verb">GET</span>/me/daily-goal</span> · <span class="api patch"><span class="verb">PATCH</span>/me/daily-goal</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Right — Leaderboard</td><td class="now-cell">hardcoded</td><td><span class="api get"><span class="verb">GET</span>/leaderboard</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- Dashboard courses -->
+    <div class="page-title"><span class="route">/dashboard/courses</span><span class="desc">My Courses</span></div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Section</th><th>Current</th><th>API</th><th>Tag</th></tr></thead>
+      <tbody>
+        <tr><td class="section-cell">Enrolled course card + progress</td><td class="now-cell">HARDCODED ⚠️ (wiring pending)</td><td><span class="api get"><span class="verb">GET</span>/enrollments</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Filter pills (All/In-Progress/Completed)</td><td class="now-cell">state set, no filtering</td><td>client-side on /enrollments</td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Mini stats</td><td class="now-cell">hardcoded</td><td><span class="api get"><span class="verb">GET</span>/me/stats</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Suggested Courses (4)</td><td class="now-cell">SUGGESTED[] static</td><td><span class="api get"><span class="verb">GET</span>/courses?recommended=true</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Learning Path banner</td><td class="now-cell">static</td><td>— (no feature yet)</td><td><span class="tag-pill feat">feature</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- Certificates -->
+    <div class="page-title"><span class="route">/dashboard/certificates</span><span class="desc">Certificates</span></div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Section</th><th>Current</th><th>API</th><th>Tag</th></tr></thead>
+      <tbody>
+        <tr><td class="section-cell">Earned certificate + details</td><td class="now-cell">static</td><td><span class="api get"><span class="verb">GET</span>/me/certificates</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Action — Download PDF</td><td class="now-cell">—</td><td><span class="api get"><span class="verb">GET</span>/certificates/{id}/download</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Action — Share</td><td class="now-cell">—</td><td><span class="api post"><span class="verb">POST</span>/certificates/{id}/share</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Action — Verify Online (public)</td><td class="now-cell">—</td><td><span class="api get"><span class="verb">GET</span>/verify/{code}</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Upcoming (locked) certificates</td><td class="now-cell">LOCKED[] static</td><td><span class="api get"><span class="verb">GET</span>/me/certificates?status=locked</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- Progress -->
+    <div class="page-title"><span class="route">/dashboard/progress</span><span class="desc">Progress</span></div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Section</th><th>Current</th><th>API</th><th>Tag</th></tr></thead>
+      <tbody>
+        <tr><td class="section-cell">4 stat cards</td><td class="now-cell">static</td><td><span class="api get"><span class="verb">GET</span>/me/stats</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Weekly Activity chart</td><td class="now-cell">BARS[] static</td><td><span class="api get"><span class="verb">GET</span>/me/activity?range=week</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Course Progress rows</td><td class="now-cell">static</td><td><span class="api get"><span class="verb">GET</span>/enrollments</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Skills Breakdown</td><td class="now-cell">SKILLS[] static</td><td><span class="api get"><span class="verb">GET</span>/me/skills</span></td><td><span class="tag-pill feat">feature</span></td></tr>
+        <tr><td class="section-cell">Achievements / Next Unlock</td><td class="now-cell">static</td><td><span class="api get"><span class="verb">GET</span>/me/achievements</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- Profile -->
+    <div class="page-title"><span class="route">/dashboard/profile</span><span class="desc">Profile (already store-wired)</span></div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Section</th><th>Current (store fn)</th><th>API</th><th>Tag</th></tr></thead>
+      <tbody>
+        <tr><td class="section-cell">Hero — name / email / initials / role</td><td class="now-cell">getUserProfile()</td><td><span class="api get"><span class="verb">GET</span>/me/profile</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Hero — Level / XP / tier + chips</td><td class="now-cell">getXpView(getDashboardStats())</td><td><span class="api get"><span class="verb">GET</span>/me/rank</span> · <span class="api get"><span class="verb">GET</span>/me/stats</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Hero — mini stats (XP/Courses/Streak/Certs)</td><td class="now-cell">getDashboardStats()</td><td><span class="api get"><span class="verb">GET</span>/me/stats</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Camera / avatar edit</td><td class="now-cell">decorative</td><td><span class="api post"><span class="verb">POST</span>/me/avatar</span></td><td><span class="tag-pill feat">feature</span></td></tr>
+        <tr><td class="section-cell">About card (5 rows) + Bio</td><td class="now-cell">getUserProfile()</td><td><span class="api get"><span class="verb">GET</span>/me/profile</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Social &amp; Web (LinkedIn/GitHub/site)</td><td class="now-cell">HARDCODED ⚠️</td><td><span class="api get"><span class="verb">GET</span>/me/profile</span> (socials field)</td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Rank+XP card (right)</td><td class="now-cell">getXpView()</td><td><span class="api get"><span class="verb">GET</span>/me/rank</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Learning Stats (4)</td><td class="now-cell">getDashboardStats()</td><td><span class="api get"><span class="verb">GET</span>/me/stats</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Skills</td><td class="now-cell">SKILLS[] static</td><td><span class="api get"><span class="verb">GET</span>/me/skills</span></td><td><span class="tag-pill feat">feature</span></td></tr>
+        <tr><td class="section-cell">Activity heatmap</td><td class="now-cell">HEATMAP[] static</td><td><span class="api get"><span class="verb">GET</span>/me/activity?range=7w</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- Settings -->
+    <div class="page-title"><span class="route">/dashboard/settings</span><span class="desc">Settings</span></div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Section</th><th>Current (store fn)</th><th>API</th><th>Tag</th></tr></thead>
+      <tbody>
+        <tr><td class="section-cell">Personal Info form + "Save Changes"</td><td class="now-cell">updateProfile() → store</td><td><span class="api patch"><span class="verb">PATCH</span>/me/profile</span></td><td><span class="tag-pill mvp">MVP</span></td></tr>
+        <tr><td class="section-cell">Notifications toggles (5)</td><td class="now-cell">local useState</td><td><span class="api get"><span class="verb">GET</span>/me/preferences</span> · <span class="api patch"><span class="verb">PATCH</span>/me/preferences</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Appearance (theme/accent/language)</td><td class="now-cell">local state</td><td><span class="api patch"><span class="verb">PATCH</span>/me/preferences</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Security — Update Password</td><td class="now-cell">decorative</td><td><span class="api post"><span class="verb">POST</span>/auth/change-password</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Security — 2FA / Login Alerts</td><td class="now-cell">local state</td><td><span class="api post"><span class="verb">POST</span>/auth/2fa/enable</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Learning Prefs (autoplay/subs/goal)</td><td class="now-cell">local state</td><td><span class="api patch"><span class="verb">PATCH</span>/me/preferences</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Danger — Reset Progress</td><td class="now-cell">decorative</td><td><span class="api post"><span class="verb">POST</span>/me/progress/reset</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+        <tr><td class="section-cell">Danger — Delete Account</td><td class="now-cell">decorative</td><td><span class="api del"><span class="verb">DELETE</span>/me/account</span></td><td><span class="tag-pill phase2">phase 2</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ══════════ 3. MASTER LIST ══════════ -->
+  <section>
+    <div class="sec-head"><span class="num">3</span><h2>Master API List (~30)</h2></div>
+    <div class="master-grid">
+      <div class="master-col">
+        <h4><span class="dot mvp"></span> MVP — 10 (core loop)</h4>
+        <div class="chips">
+          <span class="api post"><span class="verb">POST</span>/auth/signup</span>
+          <span class="api post"><span class="verb">POST</span>/auth/login</span>
+          <span class="api post"><span class="verb">POST</span>/auth/logout</span>
+          <span class="api get"><span class="verb">GET</span>/auth/me</span>
+          <span class="api get"><span class="verb">GET</span>/me/profile</span>
+          <span class="api patch"><span class="verb">PATCH</span>/me/profile</span>
+          <span class="api get"><span class="verb">GET</span>/enrollments</span>
+          <span class="api get"><span class="verb">GET</span>/me/stats</span>
+          <span class="api post"><span class="verb">POST</span>/orders</span>
+          <span class="api post"><span class="verb">POST</span>/orders/{id}/confirm</span>
+          <span class="api post"><span class="verb">POST</span>/webhooks/payment</span>
+        </div>
+      </div>
+      <div class="master-col">
+        <h4><span class="dot phase2"></span> Phase 2</h4>
+        <div class="chips">
+          <span class="api get"><span class="verb">GET</span>/me/rank</span>
+          <span class="api get"><span class="verb">GET</span>/me/streak</span>
+          <span class="api get"><span class="verb">GET</span>/me/daily-goal</span>
+          <span class="api get"><span class="verb">GET</span>/leaderboard</span>
+          <span class="api get"><span class="verb">GET</span>/me/calendar</span>
+          <span class="api get"><span class="verb">GET</span>/me/activity</span>
+          <span class="api get"><span class="verb">GET</span>/me/achievements</span>
+          <span class="api get"><span class="verb">GET</span>/me/certificates</span>
+          <span class="api get"><span class="verb">GET</span>/verify/{code}</span>
+          <span class="api get"><span class="verb">GET</span>/me/preferences</span>
+          <span class="api post"><span class="verb">POST</span>/auth/change-password</span>
+          <span class="api get"><span class="verb">GET</span>/courses</span>
+          <span class="api get"><span class="verb">GET</span>/courses/{slug}</span>
+        </div>
+      </div>
+      <div class="master-col">
+        <h4><span class="dot feat"></span> When the feature exists</h4>
+        <div class="chips">
+          <span class="api post"><span class="verb">POST</span>/lessons/{id}/complete</span>
+          <span class="api get"><span class="verb">GET</span>/me/skills</span>
+          <span class="api post"><span class="verb">POST</span>/me/avatar</span>
+          <span class="api get"><span class="verb">GET</span>/search</span>
+          <span class="api get"><span class="verb">GET</span>/me/notifications</span>
+          <span class="api post"><span class="verb">POST</span>/auth/forgot-password</span>
+          <span class="api del"><span class="verb">DELETE</span>/me/account</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 4. BUILD ORDER ══════════ -->
+  <section>
+    <div class="sec-head"><span class="num">4</span><h2>Recommended Build Order</h2></div>
+    <div class="card">
+      <ol class="steps-num">
+        <li><b>Session core</b> — <code>/auth/signup · login · me · logout</code> (httpOnly cookie). Unblocks every route guard.</li>
+        <li><b>Profile + Stats read</b> — <code>/me/profile · /me/stats</code>. Sidebar, Profile, and dashboard cards become real. <br><span style="color:var(--muted);font-size:12.5px">Note: <code>/me/stats</code> has the most leverage — it feeds 4 pages (Dashboard, Courses, Progress, Profile).</span></li>
+        <li><b>Enrollment read</b> — <code>/enrollments</code>. "My Courses" becomes real.</li>
+        <li><b>Payments</b> — <code>/orders · /orders/{id}/confirm · /webhooks/payment</code>. The revenue path (never grant enrollment on the client).</li>
+        <li><b>Courses CMS</b> — <code>/courses · /courses/{slug}</code> (once courses become editable).</li>
+        <li><b>Gamification &amp; Settings</b> — <code>/me/rank · streak · leaderboard · activity · preferences · certificates</code>. Last — static is fine to launch.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ══════════ SECURITY NOTE ══════════ -->
+  <section>
+    <div class="card" style="border-left:3px solid var(--danger);">
+      <h4 style="font-size:14px;font-weight:800;margin-bottom:8px;color:#b91c1c;">🔒 Non-negotiable security</h4>
+      <ul style="font-size:13px;color:var(--ink);padding-left:18px;line-height:1.7;">
+        <li>Password hashing (bcrypt/argon2) · login rate-limiting · session cookie <b>httpOnly + Secure + SameSite=Lax</b> (NOT a localStorage token — XSS-safe).</li>
+        <li>Order amount must always be <b>computed server-side</b> — never trust a client-sent price. Money = integer paise.</li>
+        <li>Verify the signature on <code>/orders/{id}/confirm</code> and the webhook · idempotency (double-click / retry safe) · the webhook is the source of truth for enrollment.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span class="brand">Madarsa Tech Academy</span> — API Requirement Map · Companion to <code>API_CONTRACT.md</code><br>
+    To download: click <b>Print / Save as PDF</b> (top-right) and choose "Save as PDF".
+  </div>
+
+</div>
+</body>
+</html>
