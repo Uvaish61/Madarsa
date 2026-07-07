@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import type { ReactNode } from "react";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 
@@ -11,27 +11,87 @@ interface DashboardShellProps {
   rightPanel?: ReactNode;
 }
 
+const SIDEBAR_SHADOW =
+  "drop-shadow(6px 0 20px rgba(0,0,0,0.22)) drop-shadow(2px 0 5px rgba(0,0,0,0.12))";
+
 export default function DashboardShell({
   header,
   children,
   rightPanel,
 }: DashboardShellProps) {
-  const [expanded, setExpanded] = useState(true);
-  const ToggleIcon = expanded ? PanelLeftClose : PanelLeftOpen;
+  const [expanded, setExpanded] = useState(true);   // desktop collapse state
+  const [mobileOpen, setMobileOpen] = useState(false); // mobile drawer state
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Track viewport: below 1024px we switch to the mobile drawer layout.
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const apply = () => setIsMobile(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  // Leaving mobile? make sure the drawer isn't left "open".
+  useEffect(() => {
+    if (!isMobile) setMobileOpen(false);
+  }, [isMobile]);
+
+  // On mobile the sidebar is a full drawer (never the icon-strip).
+  const collapsed = isMobile ? false : !expanded;
+
+  const ToggleIcon = isMobile
+    ? mobileOpen
+      ? X
+      : Menu
+    : expanded
+      ? PanelLeftClose
+      : PanelLeftOpen;
+
+  function handleToggle() {
+    if (isMobile) setMobileOpen((v) => !v);
+    else setExpanded((v) => !v);
+  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#edf1ed]">
-      {/* ── Left sidebar ── collapses to 64 px icon-strip */}
+      {/* ── Mobile backdrop ── */}
+      {isMobile && mobileOpen && (
+        <div
+          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 z-40"
+          style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(2px)" }}
+          aria-hidden
+        />
+      )}
+
+      {/* ── Left sidebar ── icon-strip on desktop, slide-in drawer on mobile */}
       <aside
         className="shrink-0 overflow-hidden"
-        style={{
-          width: expanded ? 236 : 64,
-          transition: "width 0.38s cubic-bezier(0.4,0,0.2,1)",
-          filter:
-            "drop-shadow(6px 0 20px rgba(0,0,0,0.22)) drop-shadow(2px 0 5px rgba(0,0,0,0.12))",
-        }}
+        style={
+          isMobile
+            ? {
+                position: "fixed",
+                top: 0,
+                left: 0,
+                bottom: 0,
+                width: 248,
+                zIndex: 50,
+                transform: mobileOpen ? "translateX(0)" : "translateX(-100%)",
+                transition: "transform 0.34s cubic-bezier(0.4,0,0.2,1)",
+                filter: SIDEBAR_SHADOW,
+              }
+            : {
+                width: expanded ? 236 : 64,
+                transition: "width 0.38s cubic-bezier(0.4,0,0.2,1)",
+                filter: SIDEBAR_SHADOW,
+              }
+        }
       >
-        <DashboardSidebar collapsed={!expanded} />
+        <DashboardSidebar
+          collapsed={collapsed}
+          onNavigate={isMobile ? () => setMobileOpen(false) : undefined}
+        />
       </aside>
 
       {/* ── Center column ── */}
@@ -66,11 +126,19 @@ export default function DashboardShell({
             }}
           />
 
-          {/* ── Toggle button ── */}
+          {/* ── Toggle button ── (collapse on desktop, open drawer on mobile) */}
           <button
             type="button"
-            aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
-            onClick={() => setExpanded((v) => !v)}
+            aria-label={
+              isMobile
+                ? mobileOpen
+                  ? "Close menu"
+                  : "Open menu"
+                : expanded
+                  ? "Collapse sidebar"
+                  : "Expand sidebar"
+            }
+            onClick={handleToggle}
             className="group relative flex shrink-0 items-center justify-center"
             style={{ width: 56, height: "100%" }}
           >
@@ -80,7 +148,15 @@ export default function DashboardShell({
             />
             <ToggleIcon
               className="relative h-4.5 w-4.5 transition-colors duration-200"
-              style={{ color: expanded ? "#16c564" : "#8a9a8e" }}
+              style={{
+                color: isMobile
+                  ? mobileOpen
+                    ? "#16c564"
+                    : "#0d1f13"
+                  : expanded
+                    ? "#16c564"
+                    : "#8a9a8e",
+              }}
             />
           </button>
 
@@ -94,11 +170,20 @@ export default function DashboardShell({
           <div className="flex min-w-0 flex-1">{header}</div>
         </div>
 
-        <main className="hide-scrollbar flex-1 overflow-y-auto">{children}</main>
+        <main className="hide-scrollbar flex-1 overflow-y-auto">
+          {children}
+
+          {/* On mobile/tablet the right panel stacks below the content */}
+          {rightPanel && isMobile && (
+            <div className="border-t border-black/6">{rightPanel}</div>
+          )}
+        </main>
       </div>
 
-      {/* ── Right panel ── */}
-      {rightPanel && <aside className="w-68 shrink-0">{rightPanel}</aside>}
+      {/* ── Right panel ── (desktop only; stacked into <main> on mobile) */}
+      {rightPanel && !isMobile && (
+        <aside className="w-68 shrink-0">{rightPanel}</aside>
+      )}
     </div>
   );
 }

@@ -41,11 +41,13 @@ function NavButton({
   index,
   collapsed,
   pathname,
+  onNavigate,
 }: {
   item: NavItem;
   index: number;
   collapsed: boolean;
   pathname: string;
+  onNavigate?: () => void;
 }) {
   const { label, icon: Icon, href } = item;
   const active =
@@ -54,6 +56,7 @@ function NavButton({
   return (
     <Link
       href={href}
+      onClick={onNavigate}
       title={collapsed ? label : undefined}
       style={{
         padding: collapsed ? "10px 0" : "10px 12px",
@@ -181,8 +184,10 @@ function GroupLabel({
 /* ─────────────────────── Main export ───────────────────── */
 export default function DashboardSidebar({
   collapsed = false,
+  onNavigate,
 }: {
   collapsed?: boolean;
+  onNavigate?: () => void;
 }) {
   const pathname = usePathname();
   const { user } = useAuth();
