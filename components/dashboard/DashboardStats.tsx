@@ -1,4 +1,9 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Award, BookOpen, CheckCircle, type LucideIcon } from "lucide-react";
+import { getDashboardStats, STORE_EVENT } from "@/lib/app-store";
+import type { DashboardStats as DashboardStatsModel } from "@/lib/domain";
 
 type Theme = {
   color: string; // solid accent
@@ -155,31 +160,40 @@ function StatCard({
 }
 
 export default function DashboardStats() {
+  const [stats, setStats] = useState<DashboardStatsModel>(() => getDashboardStats());
+
+  useEffect(() => {
+    const refresh = () => setStats(getDashboardStats());
+    refresh();
+    window.addEventListener(STORE_EVENT, refresh);
+    return () => window.removeEventListener(STORE_EVENT, refresh);
+  }, []);
+
   return (
     <div className="grid grid-cols-3 gap-4">
       <StatCard
           theme="green"
           icon={BookOpen}
-          value="1"
+          value={String(stats.enrolled)}
           label="Enrolled Courses"
-          badge="Active"
-          progress={30}
+          badge={stats.enrolled > 0 ? "Active" : undefined}
+          progress={stats.enrolled > 0 ? 100 : 0}
           enterDelay={50}
         />
         <StatCard
           theme="blue"
           icon={CheckCircle}
-          value="0"
+          value={String(stats.completed)}
           label="Completed"
-          progress={0}
+          progress={stats.enrolled > 0 ? stats.averageProgress : 0}
           enterDelay={150}
         />
         <StatCard
           theme="orange"
           icon={Award}
-          value="0"
+          value={String(stats.certificates)}
           label="Certificates"
-          progress={0}
+          progress={stats.certificates > 0 ? 100 : 0}
           enterDelay={250}
         />
     </div>

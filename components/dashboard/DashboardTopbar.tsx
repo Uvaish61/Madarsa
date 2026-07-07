@@ -6,7 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function DashboardTopbar() {
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   function handleLogout() {
     logout();
@@ -38,7 +38,7 @@ export default function DashboardTopbar() {
             letterSpacing: "-0.4px",
           }}
         >
-          Welcome back, Uvaish Khan 👋
+          Welcome back, {user?.name || "Student"}
         </h1>
       </div>
 

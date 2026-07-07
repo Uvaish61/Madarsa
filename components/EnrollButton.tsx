@@ -2,9 +2,10 @@
 
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CheckoutModal from "@/components/checkout/CheckoutModal";
 import { useAuth } from "@/context/AuthContext";
+import { isCourseEnrolled, STORE_EVENT } from "@/lib/app-store";
 import { courses, type Locale } from "@/lib/landing-data";
 import { setPendingEnrollment } from "@/lib/pendingEnrollment";
 
@@ -25,6 +26,7 @@ export default function EnrollButton({
   const router = useRouter();
   const { user } = useAuth();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [enrolled, setEnrolled] = useState(false);
 
   const isFree = price === "Free";
   const label =
@@ -34,7 +36,19 @@ export default function EnrollButton({
 
   const course = courses.find((c) => c.slug === courseId);
 
+  useEffect(() => {
+    const refresh = () => setEnrolled(isCourseEnrolled(courseId));
+    refresh();
+    window.addEventListener(STORE_EVENT, refresh);
+    return () => window.removeEventListener(STORE_EVENT, refresh);
+  }, [courseId]);
+
   function handleClick() {
+    if (enrolled) {
+      router.push("/dashboard/courses");
+      return;
+    }
+
     if (!user) {
       // Not signed in — remember what they were buying and come back to checkout after.
       setPendingEnrollment({ courseId, price });
@@ -49,7 +63,7 @@ export default function EnrollButton({
   return (
     <>
       <button type="button" onClick={handleClick} className={className ?? DEFAULT_CLASSES}>
-        {label}
+        {enrolled ? "Enrolled" : label}
         <ArrowRight className="h-3.5 w-3.5" />
       </button>
 

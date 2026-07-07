@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Briefcase,
   Calendar,
@@ -19,6 +20,36 @@ import {
   User,
   type LucideIcon,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import {
+  createProfileFromUser,
+  getDashboardStats,
+  getInitials,
+  getUserProfile,
+  STORE_EVENT,
+} from "@/lib/app-store";
+import type { DashboardStats, UserProfile } from "@/lib/domain";
+
+// ─── XP / rank derivation ─────────────────────────────────────────────────────
+// No leaderboard exists, so "rank" is a level derived from earned XP rather than
+// a fabricated global position. Expert unlocks at EXPERT_XP.
+const EXPERT_XP = 500;
+
+type XpView = {
+  totalXp: number;
+  pct: number;
+  remaining: number;
+  tier: string;
+  level: number;
+};
+
+function getXpView(totalXp: number): XpView {
+  const pct = Math.min(100, Math.round((totalXp / EXPERT_XP) * 100));
+  const remaining = Math.max(0, EXPERT_XP - totalXp);
+  const tier = totalXp >= EXPERT_XP ? "Expert" : totalXp >= 200 ? "Rising Star" : "Beginner";
+  const level = Math.floor(totalXp / 100) + 1;
+  return { totalXp, pct, remaining, tier, level };
+}
 
 // ─── Shared white card base ───────────────────────────────────────────────────
 const CARD: React.CSSProperties = {
@@ -86,49 +117,77 @@ function CardHeader({
 
 // ─── Section 1: Hero card ─────────────────────────────────────────────────────
 
-const CHIPS = [
-  {
-    label: "Active Learner",
-    icon: Check,
-    bg: "rgba(22,197,100,0.15)",
-    border: "rgba(22,197,100,0.25)",
-    color: "#4ade80",
-    fill: false,
-  },
-  {
-    label: "Rising Star",
-    icon: Star,
-    bg: "rgba(234,179,8,0.12)",
-    border: "rgba(234,179,8,0.22)",
-    color: "#fbbf24",
-    fill: true,
-  },
-  {
-    label: "3-Day Streak",
-    icon: Flame,
-    bg: "rgba(249,115,22,0.12)",
-    border: "rgba(249,115,22,0.22)",
-    color: "#fb923c",
-    fill: true,
-  },
-  {
+type Chip = {
+  label: string;
+  icon: LucideIcon;
+  bg: string;
+  border: string;
+  color: string;
+  fill: boolean;
+};
+
+// Chips reflect real state: the tier + streak come from the store; the rest are
+// static achievement badges.
+function getChips(stats: DashboardStats, tier: string): Chip[] {
+  const chips: Chip[] = [
+    {
+      label: "Active Learner",
+      icon: Check,
+      bg: "rgba(22,197,100,0.15)",
+      border: "rgba(22,197,100,0.25)",
+      color: "#4ade80",
+      fill: false,
+    },
+    {
+      label: tier,
+      icon: Star,
+      bg: "rgba(234,179,8,0.12)",
+      border: "rgba(234,179,8,0.22)",
+      color: "#fbbf24",
+      fill: true,
+    },
+  ];
+  if (stats.streakDays > 0) {
+    chips.push({
+      label: `${stats.streakDays}-Day Streak`,
+      icon: Flame,
+      bg: "rgba(249,115,22,0.12)",
+      border: "rgba(249,115,22,0.22)",
+      color: "#fb923c",
+      fill: true,
+    });
+  }
+  chips.push({
     label: "React Dev",
     icon: Code2,
     bg: "rgba(99,102,241,0.12)",
     border: "rgba(99,102,241,0.22)",
     color: "#a5b4fc",
     fill: false,
-  },
-];
+  });
+  return chips;
+}
 
-const MINI_STATS = [
-  { value: "320", label: "Total XP", color: "#fff" },
-  { value: "1", label: "Courses", color: "#4ade80" },
-  { value: "3", label: "Streak", color: "#fb923c" },
-  { value: "1", label: "Certs", color: "#fbbf24" },
-];
+function getMiniStats(stats: DashboardStats) {
+  return [
+    { value: String(stats.totalXp), label: "Total XP", color: "#fff" },
+    { value: String(stats.enrolled), label: "Courses", color: "#4ade80" },
+    { value: String(stats.streakDays), label: "Streak", color: "#fb923c" },
+    { value: String(stats.certificates), label: "Certs", color: "#fbbf24" },
+  ];
+}
 
-function HeroCard() {
+function HeroCard({
+  profile,
+  stats,
+  xp,
+}: {
+  profile: UserProfile;
+  stats: DashboardStats;
+  xp: XpView;
+}) {
+  const chips = getChips(stats, xp.tier);
+  const miniStats = getMiniStats(stats);
   return (
     <div
       className="profile-hero-card"
@@ -220,7 +279,7 @@ function HeroCard() {
                   color: "#fff",
                 }}
               >
-                UK
+                {getInitials(profile.name || profile.email)}
               </div>
             </div>
             <button
@@ -259,7 +318,7 @@ function HeroCard() {
                   letterSpacing: "-0.5px",
                 }}
               >
-                Uvaish Khan
+                {profile.name}
               </p>
               <span
                 style={{
@@ -278,13 +337,13 @@ function HeroCard() {
               </span>
             </div>
             <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 6 }}>
-              uvaishkhan@gmail.com
+              {profile.email}
             </p>
             <p style={{ fontSize: 11.5, color: "rgba(255,255,255,0.28)", marginBottom: 12 }}>
-              Full Stack Developer in progress · Mumbai, India · Joined July 2026
+              {profile.role} · {profile.location} · Joined {profile.joinedAt}
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {CHIPS.map((chip) => (
+              {chips.map((chip) => (
                 <span
                   key={chip.label}
                   style={{
@@ -338,7 +397,7 @@ function HeroCard() {
                 marginBottom: 8,
               }}
             >
-              GLOBAL RANK
+              CURRENT LEVEL
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <div
@@ -357,14 +416,14 @@ function HeroCard() {
                   animation: "rankGlow 2.5s ease-in-out infinite",
                 }}
               >
-                #42
+                L{xp.level}
               </div>
               <div>
                 <p style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 2 }}>
-                  Rising Star
+                  {xp.tier}
                 </p>
                 <p style={{ fontSize: 10.5, color: "rgba(255,255,255,0.35)" }}>
-                  Top 15% · July 2026
+                  {xp.totalXp} XP earned
                 </p>
               </div>
             </div>
@@ -384,7 +443,7 @@ function HeroCard() {
                 Progress to Expert
               </span>
               <span style={{ fontSize: 11, fontWeight: 700, color: "#4ade80" }}>
-                320 / 500 XP
+                {xp.totalXp} / {EXPERT_XP} XP
               </span>
             </div>
             <div
@@ -403,7 +462,7 @@ function HeroCard() {
                     height: "100%",
                     background: "linear-gradient(90deg, #16c564, #4ade80)",
                     borderRadius: 999,
-                    ["--pct" as string]: "64%",
+                    ["--pct" as string]: `${xp.pct}%`,
                     animation: "progressFill 0.8s ease-out both",
                     animationDelay: "400ms",
                   } as React.CSSProperties
@@ -411,8 +470,17 @@ function HeroCard() {
               />
             </div>
             <p style={{ fontSize: 10, color: "rgba(255,255,255,0.25)" }}>
-              180 XP remaining to unlock{" "}
-              <span style={{ fontWeight: 700, color: "#fbbf24" }}>Expert</span>
+              {xp.remaining > 0 ? (
+                <>
+                  {xp.remaining} XP remaining to unlock{" "}
+                  <span style={{ fontWeight: 700, color: "#fbbf24" }}>Expert</span>
+                </>
+              ) : (
+                <>
+                  <span style={{ fontWeight: 700, color: "#fbbf24" }}>Expert</span> tier
+                  unlocked
+                </>
+              )}
             </p>
           </div>
         </div>
@@ -428,7 +496,7 @@ function HeroCard() {
             flexShrink: 0,
           }}
         >
-          {MINI_STATS.map((stat, i) => (
+          {miniStats.map((stat, i) => (
             <div
               key={stat.label}
               style={{
@@ -463,15 +531,18 @@ function HeroCard() {
 
 // ─── Section 2 · Left column ──────────────────────────────────────────────────
 
-const INFO_ROWS: { icon: LucideIcon; label: string; value: string }[] = [
-  { icon: User, label: "Full Name", value: "Uvaish Khan" },
-  { icon: Mail, label: "Email Address", value: "uvaishkhan@gmail.com" },
-  { icon: Phone, label: "Phone", value: "+91 98765 43210" },
-  { icon: MapPin, label: "Location", value: "Mumbai, India" },
-  { icon: Calendar, label: "Member Since", value: "July 2026" },
-];
+function getInfoRows(profile: UserProfile): { icon: LucideIcon; label: string; value: string }[] {
+  return [
+    { icon: User, label: "Full Name", value: profile.name },
+    { icon: Mail, label: "Email Address", value: profile.email },
+    { icon: Phone, label: "Phone", value: profile.phone },
+    { icon: MapPin, label: "Location", value: profile.location },
+    { icon: Calendar, label: "Member Since", value: profile.joinedAt },
+  ];
+}
 
-function AboutCard() {
+function AboutCard({ profile }: { profile: UserProfile }) {
+  const infoRows = getInfoRows(profile);
   return (
     <div className="stat-card-enter" style={{ ...CARD, animationDelay: "60ms" }}>
       <CardHeader
@@ -504,7 +575,7 @@ function AboutCard() {
         }
       />
 
-      {INFO_ROWS.map((row, i) => (
+      {infoRows.map((row, i) => (
         <div
           key={row.label}
           style={{
@@ -512,7 +583,7 @@ function AboutCard() {
             alignItems: "center",
             gap: 12,
             padding: "12px 0",
-            borderBottom: i < INFO_ROWS.length - 1 ? "1px solid rgba(0,0,0,0.04)" : "none",
+            borderBottom: i < infoRows.length - 1 ? "1px solid rgba(0,0,0,0.04)" : "none",
           }}
         >
           <div
@@ -539,7 +610,7 @@ function AboutCard() {
   );
 }
 
-function BioCard() {
+function BioCard({ profile }: { profile: UserProfile }) {
   return (
     <div className="stat-card-enter" style={{ ...CARD, animationDelay: "120ms" }}>
       <CardHeader
@@ -551,10 +622,7 @@ function BioCard() {
         subtitle="A short introduction"
       />
       <p style={{ fontSize: 13, color: "#3a4a3f", lineHeight: 1.75 }}>
-        Passionate web developer diving deep into React &amp; Next.js on EduLearn. I
-        love building clean, performant interfaces and learning modern full-stack
-        patterns every day. Currently working toward becoming a complete full-stack
-        JavaScript developer.
+        {profile.bio}
       </p>
     </div>
   );
@@ -670,7 +738,7 @@ function SocialCard() {
 
 // ─── Section 2 · Right column ─────────────────────────────────────────────────
 
-function RankXPCard() {
+function RankXPCard({ xp }: { xp: XpView }) {
   return (
     <div
       className="stat-card-enter"
@@ -721,20 +789,20 @@ function RankXPCard() {
               animation: "rankGlow 2.5s ease-in-out infinite",
             }}
           >
-            #42
+            L{xp.level}
           </div>
           <div>
             <p style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 2 }}>
-              Rising Star
+              {xp.tier}
             </p>
             <p style={{ fontSize: 10.5, color: "rgba(255,255,255,0.35)" }}>
-              Top 15% this month
+              Level {xp.level}
             </p>
           </div>
         </div>
         <div style={{ textAlign: "right", flexShrink: 0 }}>
           <p style={{ fontSize: 20, fontWeight: 800, color: "#4ade80", lineHeight: 1 }}>
-            320
+            {xp.totalXp}
           </p>
           <p style={{ fontSize: 10, color: "rgba(255,255,255,0.32)", marginTop: 2 }}>
             Total XP
@@ -758,7 +826,7 @@ function RankXPCard() {
               height: "100%",
               background: "linear-gradient(90deg, #16c564, #4ade80)",
               borderRadius: 999,
-              ["--pct" as string]: "64%",
+              ["--pct" as string]: `${xp.pct}%`,
               animation: "progressFill 0.8s ease-out both",
               animationDelay: "400ms",
             } as React.CSSProperties
@@ -766,51 +834,63 @@ function RankXPCard() {
         />
       </div>
       <p style={{ fontSize: 10.5, color: "rgba(255,255,255,0.3)", position: "relative" }}>
-        180 XP away from <span style={{ fontWeight: 700, color: "#fbbf24" }}>Expert</span> rank
+        {xp.remaining > 0 ? (
+          <>
+            {xp.remaining} XP away from{" "}
+            <span style={{ fontWeight: 700, color: "#fbbf24" }}>Expert</span> rank
+          </>
+        ) : (
+          <>
+            <span style={{ fontWeight: 700, color: "#fbbf24" }}>Expert</span> rank reached
+          </>
+        )}
       </p>
     </div>
   );
 }
 
-const LEARNING_STATS = [
-  {
-    value: "6h",
-    label: "Study Time",
-    color: "#16c564",
-    bg: "rgba(22,197,100,0.06)",
-    border: "rgba(22,197,100,0.16)",
-  },
-  {
-    value: "12",
-    label: "Lessons Done",
-    color: "#6366f1",
-    bg: "rgba(99,102,241,0.06)",
-    border: "rgba(99,102,241,0.16)",
-  },
-  {
-    value: "3",
-    label: "Day Streak",
-    color: "#f97316",
-    bg: "rgba(249,115,22,0.06)",
-    border: "rgba(249,115,22,0.16)",
-  },
-  {
-    value: "1",
-    label: "Certificates",
-    color: "#eab308",
-    bg: "rgba(234,179,8,0.06)",
-    border: "rgba(234,179,8,0.18)",
-  },
-];
+function getLearningStats(stats: DashboardStats) {
+  return [
+    {
+      value: `${stats.hoursStudied}h`,
+      label: "Study Time",
+      color: "#16c564",
+      bg: "rgba(22,197,100,0.06)",
+      border: "rgba(22,197,100,0.16)",
+    },
+    {
+      value: String(stats.lessonsDone),
+      label: "Lessons Done",
+      color: "#6366f1",
+      bg: "rgba(99,102,241,0.06)",
+      border: "rgba(99,102,241,0.16)",
+    },
+    {
+      value: String(stats.streakDays),
+      label: "Day Streak",
+      color: "#f97316",
+      bg: "rgba(249,115,22,0.06)",
+      border: "rgba(249,115,22,0.16)",
+    },
+    {
+      value: String(stats.certificates),
+      label: "Certificates",
+      color: "#eab308",
+      bg: "rgba(234,179,8,0.06)",
+      border: "rgba(234,179,8,0.18)",
+    },
+  ];
+}
 
-function LearningStatsCard() {
+function LearningStatsCard({ stats }: { stats: DashboardStats }) {
+  const learningStats = getLearningStats(stats);
   return (
     <div className="stat-card-enter" style={{ ...CARD, animationDelay: "120ms" }}>
       <p style={{ fontSize: 14, fontWeight: 700, color: "#0d1f13", marginBottom: 16 }}>
         Learning Stats
       </p>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-        {LEARNING_STATS.map((stat) => (
+        {learningStats.map((stat) => (
           <div
             key={stat.label}
             style={{
@@ -832,6 +912,8 @@ function LearningStatsCard() {
   );
 }
 
+// NOTE: Skills + Activity below are illustrative — there is no skill-level or
+// per-day activity model in the store yet, so these stay static until one exists.
 const SKILLS = [
   { label: "JSX & Components", pct: 65, c1: "#16c564", c2: "#4ade80" },
   { label: "React Hooks", pct: 40, c1: "#6366f1", c2: "#a5b4fc" },
@@ -1032,6 +1114,26 @@ function ActivityCard() {
 // ─── Main export ──────────────────────────────────────────────────────────────
 
 export default function ProfileContent() {
+  const { user } = useAuth();
+  const [profile, setProfile] = useState<UserProfile | null>(
+    user ? getUserProfile() ?? createProfileFromUser(user) : null,
+  );
+  const [stats, setStats] = useState<DashboardStats>(() => getDashboardStats());
+
+  useEffect(() => {
+    const refresh = () => {
+      setProfile(user ? getUserProfile() ?? createProfileFromUser(user) : null);
+      setStats(getDashboardStats());
+    };
+    refresh();
+    window.addEventListener(STORE_EVENT, refresh);
+    return () => window.removeEventListener(STORE_EVENT, refresh);
+  }, [user]);
+
+  if (!profile) return null;
+
+  const xp = getXpView(stats.totalXp);
+
   return (
     <div
       style={{
@@ -1041,20 +1143,20 @@ export default function ProfileContent() {
         gap: 18,
       }}
     >
-      <HeroCard />
+      <HeroCard profile={profile} stats={stats} xp={xp} />
 
       <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 16 }}>
         {/* Left column */}
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <AboutCard />
-          <BioCard />
+          <AboutCard profile={profile} />
+          <BioCard profile={profile} />
           <SocialCard />
         </div>
 
         {/* Right column */}
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <RankXPCard />
-          <LearningStatsCard />
+          <RankXPCard xp={xp} />
+          <LearningStatsCard stats={stats} />
           <SkillsCard />
           <ActivityCard />
         </div>

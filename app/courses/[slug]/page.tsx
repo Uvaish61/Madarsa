@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import CourseLogo from "@/components/CourseLogo";
 import CheckoutModal from "@/components/checkout/CheckoutModal";
 import { useAuth } from "@/context/AuthContext";
+import { isCourseEnrolled, STORE_EVENT } from "@/lib/app-store";
 import { courses } from "@/lib/landing-data";
 import { curricula, courseConfigs } from "@/lib/course-data";
 import { setPendingEnrollment } from "@/lib/pendingEnrollment";
@@ -52,6 +53,7 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
   const config = courseConfigs[slug];
   const [openSections, setOpenSections] = useState<Set<number>>(new Set([0]));
   const [billOpen, setBillOpen] = useState(false);
+  const [enrolled, setEnrolled] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
 
   // Same enroll contract as the landing card's EnrollButton: guests stash their
@@ -59,6 +61,10 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
   // in-context checkout popup.
   function handleEnroll() {
     if (!course) return;
+    if (enrolled) {
+      router.push("/dashboard/courses");
+      return;
+    }
     if (!user) {
       setPendingEnrollment({ courseId: course.slug, price: course.price });
       router.push("/login?redirect=checkout");
@@ -66,6 +72,14 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
     }
     setBillOpen(true);
   }
+
+  useEffect(() => {
+    if (!course) return;
+    const refresh = () => setEnrolled(isCourseEnrolled(course.slug));
+    refresh();
+    window.addEventListener(STORE_EVENT, refresh);
+    return () => window.removeEventListener(STORE_EVENT, refresh);
+  }, [course]);
 
   useEffect(() => {
     let cleanup: (() => void) | null = null;
@@ -194,7 +208,7 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
             onClick={handleEnroll}
             className="ml-auto hidden shrink-0 items-center gap-1.5 rounded-xl bg-gradient-to-br from-green-500 to-green-700 px-4 py-2 text-sm font-bold text-white shadow-md transition hover:-translate-y-0.5 md:flex"
           >
-            {course.price === "Free" ? "Enroll Free" : `Enroll — ${course.price}`}
+            {enrolled ? "Go to Course" : course.price === "Free" ? "Enroll Free" : `Enroll — ${course.price}`}
             <ArrowRight className="h-3.5 w-3.5" />
           </button>
         </div>
@@ -549,7 +563,7 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
                 onClick={handleEnroll}
                 className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-green-500 to-green-700 py-3.5 text-[14.5px] font-extrabold text-white shadow-[0_6px_18px_-6px_var(--green-600)] transition hover:-translate-y-0.5"
               >
-                {course.price === "Free" ? "Enroll Free — Start Now" : `Enroll — ${course.price}`}
+                {enrolled ? "Go to Course" : course.price === "Free" ? "Enroll Free — Start Now" : `Enroll — ${course.price}`}
                 <ArrowRight className="h-4 w-4" />
               </button>
               <p className="mb-5 text-center text-[11.5px] text-muted">
@@ -584,7 +598,7 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
           onClick={() => setBillOpen(true)}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-green-500 to-green-700 py-3.5 text-[14px] font-extrabold text-white shadow-md"
         >
-          {course.price === "Free" ? "Enroll Free — Start Now" : `Enroll — ${course.price}`}
+          {enrolled ? "Go to Course" : course.price === "Free" ? "Enroll Free — Start Now" : `Enroll — ${course.price}`}
           <ArrowRight className="h-4 w-4" />
         </button>
       </div>
@@ -643,7 +657,7 @@ export default function CurriculumPage({ params }: { params: { slug: string } })
               onClick={handleEnroll}
               className="inline-flex items-center gap-2.5 rounded-xl bg-white px-8 py-4 text-[15px] font-extrabold text-green-700 shadow-[0_10px_28px_-8px_rgba(0,0,0,0.3)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-8px_rgba(0,0,0,0.35)]"
             >
-              {course.price === "Free" ? "Enroll Free — Start Today" : `Enroll Now — ${course.price}`}
+              {enrolled ? "Go to Course" : course.price === "Free" ? "Enroll Free — Start Today" : `Enroll Now — ${course.price}`}
               <ArrowRight className="h-4 w-4" />
             </button>
             <p className="mt-3.5 text-[12px] text-white/45">

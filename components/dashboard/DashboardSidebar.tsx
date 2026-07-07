@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { getInitials } from "@/lib/app-store";
 
 type NavItem = { label: string; icon: LucideIcon; href: string };
 
@@ -183,6 +185,10 @@ export default function DashboardSidebar({
   collapsed?: boolean;
 }) {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const displayName = user?.name || "Student";
+  const email = user?.email || "student@example.com";
+  const initials = getInitials(displayName || email);
   return (
     <div
       className="relative flex h-full w-full flex-col overflow-hidden"
@@ -280,7 +286,7 @@ export default function DashboardSidebar({
             transition: LABEL_T,
           }}
         >
-          EduLearn
+          Madarsa
         </span>
       </div>
 
@@ -365,7 +371,7 @@ export default function DashboardSidebar({
               fontWeight: 800,
             }}
           >
-            UK
+            {initials}
           </div>
         </div>
 
@@ -384,13 +390,13 @@ export default function DashboardSidebar({
             className="truncate text-white"
             style={{ fontSize: "12.5px", fontWeight: 700 }}
           >
-            Uvaish Khan
+            {displayName}
           </p>
           <p
             className="truncate"
             style={{ fontSize: "10px", color: "rgba(255,255,255,0.36)" }}
           >
-            uvaishkhan@gmail.com
+            {email}
           </p>
         </div>
 
