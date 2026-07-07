@@ -259,10 +259,10 @@ function LockedCard({ course }: { course: LockedCourse }) {
 
 export default function CertificatesContent() {
   return (
-    <div style={{ padding: "24px 28px 60px", display: "flex", flexDirection: "column", gap: 26 }}>
+    <div className="flex flex-col gap-6.5 p-4 lg:p-[24px_28px_60px]">
       {/* Section 1 — Earned certificates */}
       <section>
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
           <p style={{ fontSize: 16, fontWeight: 700, color: "#0d1f13" }}>Earned Certificates</p>
           <span
             className="rounded-full"
@@ -279,10 +279,10 @@ export default function CertificatesContent() {
           </span>
         </div>
 
-        <div className="grid items-start" style={{ gridTemplateColumns: "1fr 268px", gap: 20 }}>
+        <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[1fr_268px] lg:gap-5">
           <CertificateCard />
 
-          <div className="sticky flex flex-col" style={{ top: 20, gap: 12 }}>
+          <div className="flex flex-col gap-3 lg:sticky lg:top-5">
             <ActionsCard />
             <DetailsCard />
             <XPCard />
@@ -292,7 +292,7 @@ export default function CertificatesContent() {
 
       {/* Section 2 — Upcoming (locked) certificates */}
       <section>
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
           <p style={{ fontSize: 16, fontWeight: 700, color: "#0d1f13" }}>Upcoming Certificates</p>
           <span
             className="rounded-full"
@@ -308,7 +308,7 @@ export default function CertificatesContent() {
           </span>
         </div>
 
-        <div className="grid" style={{ gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
           {LOCKED.map((course) => (
             <LockedCard key={course.title} course={course} />
           ))}
