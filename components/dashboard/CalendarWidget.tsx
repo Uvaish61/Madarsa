@@ -86,7 +86,7 @@ export default function CalendarWidget() {
         </div>
 
         {/* Date grid */}
-        <div className="mt-1.5 grid grid-cols-7" style={{ gap: 2 }}>
+        <div className="mt-1.5 grid grid-cols-7" style={{ gap: 2, justifyItems: "center" }}>
           {CELLS.map((cell, i) => (
             <div
               key={i}

@@ -19,7 +19,7 @@ export default function DashboardPage() {
         header={<DashboardTopbar />}
         rightPanel={<DashboardRightPanel />}
       >
-        <div className="space-y-8 p-6">
+        <div className="space-y-5 p-4 sm:space-y-8 sm:p-6">
           <DashboardStats />
           <DashboardCourses />
           <DashboardQuickLinks />
