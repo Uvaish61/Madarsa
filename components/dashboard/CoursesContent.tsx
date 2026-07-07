@@ -374,27 +374,13 @@ export default function CoursesContent() {
   }, []);
 
   return (
-    <div
-      style={{
-        padding: "26px 28px 40px",
-        display: "flex",
-        flexDirection: "column",
-        gap: 30,
-      }}
-    >
+    <div className="flex flex-col gap-5 p-4 lg:gap-7.5 lg:p-[26px_28px_40px]">
       {/* ══════════════════════════════════════════════════════════════
           SECTION 1 — ENROLLED COURSES
       ══════════════════════════════════════════════════════════════ */}
       <section>
         {/* Section header */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 18,
-          }}
-        >
+        <div className="mb-4.5 flex flex-wrap items-center justify-between gap-3">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span
               style={{ fontSize: 16, fontWeight: 700, color: "#0d1f13" }}
@@ -452,15 +438,8 @@ export default function CoursesContent() {
           </div>
         </div>
 
-        {/* 2-column grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "340px 1fr",
-            gap: 18,
-            alignItems: "start",
-          }}
-        >
+        {/* 2-column grid on desktop; stacks on mobile/tablet */}
+        <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[340px_1fr] lg:gap-4.5">
           {/* ── LEFT: Enrolled course card ── */}
           <div
             className="course-card stat-card-enter"
@@ -926,14 +905,8 @@ export default function CoursesContent() {
           </button>
         </div>
 
-        {/* 4-column grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 16,
-          }}
-        >
+        {/* 1 col mobile → 2 col tablet → 4 col desktop (unchanged) */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
           {SUGGESTED.map((course) => (
             <SuggestedCard key={course.title} course={course} />
           ))}
@@ -945,17 +918,13 @@ export default function CoursesContent() {
       ══════════════════════════════════════════════════════════════ */}
       <section>
         <div
-          className="stat-card-enter"
+          className="stat-card-enter flex flex-col items-start gap-5 p-5 lg:flex-row lg:items-center lg:gap-6 lg:p-[26px_30px]"
           style={{
             background: "linear-gradient(135deg, #0b1f13, #16321e)",
             borderRadius: 22,
-            padding: "26px 30px",
             border: "1px solid rgba(22,197,100,0.15)",
             boxShadow: "0 10px 40px rgba(0,0,0,0.18)",
-            display: "flex",
-            alignItems: "center",
             justifyContent: "space-between",
-            gap: 24,
             position: "relative",
             overflow: "hidden",
             animationDelay: "100ms",
@@ -1058,7 +1027,7 @@ export default function CoursesContent() {
             </p>
 
             {/* Path steps */}
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", rowGap: 8 }}>
               {PATH_STEPS.map((step, i) => (
                 <div
                   key={step.label}

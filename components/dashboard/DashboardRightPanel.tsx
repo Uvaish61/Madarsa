@@ -7,13 +7,8 @@ import StreakWidget from "@/components/dashboard/StreakWidget";
 export default function DashboardRightPanel() {
   return (
     <div
-      className="flex h-full flex-col overflow-y-auto"
-      style={{
-        borderLeft: "1px solid rgba(0,0,0,0.06)",
-        background: "rgba(237,241,237,0.5)",
-        padding: "24px 16px",
-        gap: 16,
-      }}
+      className="flex flex-col gap-4 p-4 lg:h-full lg:overflow-y-auto lg:border-l lg:border-black/6 lg:px-4 lg:py-6"
+      style={{ background: "rgba(237,241,237,0.5)" }}
     >
       <CalendarWidget />
       <StreakWidget />

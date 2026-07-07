@@ -55,11 +55,10 @@ function StatCard({
   return (
     <div className="stat-card-enter" style={{ animationDelay: `${enterDelay}ms` }}>
       <div
-        className="stat-card relative cursor-pointer overflow-hidden bg-white"
+        className="stat-card relative cursor-pointer overflow-hidden bg-white p-3 sm:p-[20px_22px]"
         style={
           {
             borderRadius: 18,
-            padding: "20px 22px",
             border: "1px solid rgba(0,0,0,0.06)",
             "--stat-glow": t.glow,
           } as React.CSSProperties
@@ -77,27 +76,25 @@ function StatCard({
         />
 
         {/* Icon + badge row */}
-        <div className="relative flex items-start justify-between">
+        <div className="relative flex items-start justify-between gap-1">
           <div
-            className="flex items-center justify-center"
+            className="flex h-7 w-7 shrink-0 items-center justify-center sm:h-[38px] sm:w-[38px]"
             style={{
-              width: 38,
-              height: 38,
               borderRadius: 11,
               background: `rgba(${t.rgb},0.11)`,
               border: `1px solid rgba(${t.rgb},0.2)`,
             }}
           >
-            <Icon className="h-[18px] w-[18px]" style={{ color: t.color }} />
+            <Icon className="h-3.5 w-3.5 sm:h-[18px] sm:w-[18px]" style={{ color: t.color }} />
           </div>
           {badge && (
             <span
+              className="truncate whitespace-nowrap text-[9px] sm:text-[10.5px]"
               style={{
-                fontSize: "10.5px",
                 fontWeight: 700,
                 background: "rgba(22,197,100,0.11)",
                 color: "#14a35a",
-                padding: "3px 9px",
+                padding: "3px 7px",
                 borderRadius: 999,
               }}
             >
@@ -108,14 +105,12 @@ function StatCard({
 
         {/* Number */}
         <div
-          className="relative"
+          className="relative mt-2 text-[24px] sm:mt-[14px] sm:text-[40px]"
           style={{
-            fontSize: "40px",
             fontWeight: 800,
             color: "#0d1f13",
-            letterSpacing: "-2px",
+            letterSpacing: "-1px",
             lineHeight: 1.1,
-            marginTop: 14,
           }}
         >
           <span
@@ -131,8 +126,8 @@ function StatCard({
 
         {/* Label */}
         <p
-          className="relative"
-          style={{ fontSize: "12.5px", color: "#7a8c81", marginTop: 2 }}
+          className="relative mt-0.5 truncate text-[10.5px] sm:mt-[2px] sm:text-[12.5px]"
+          style={{ color: "#7a8c81" }}
         >
           {label}
         </p>
@@ -170,7 +165,7 @@ export default function DashboardStats() {
   }, []);
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-3 gap-2 sm:gap-4">
       <StatCard
           theme="green"
           icon={BookOpen}

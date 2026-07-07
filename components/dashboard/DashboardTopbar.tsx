@@ -15,10 +15,10 @@ export default function DashboardTopbar() {
 
   return (
     <div
-      className="flex h-full flex-1 items-center justify-between px-7"
+      className="flex h-full flex-1 items-center justify-between px-4 sm:px-7"
     >
       {/* Left: label + welcome */}
-      <div>
+      <div className="min-w-0">
         <p
           className="uppercase"
           style={{
@@ -31,8 +31,8 @@ export default function DashboardTopbar() {
           Dashboard
         </p>
         <h1
+          className="truncate text-[16px] sm:text-[21px]"
           style={{
-            fontSize: "21px",
             fontWeight: 800,
             color: "#0d1f13",
             letterSpacing: "-0.4px",
@@ -43,10 +43,10 @@ export default function DashboardTopbar() {
       </div>
 
       {/* Right: search + bell + logout */}
-      <div className="flex items-center" style={{ gap: 10 }}>
-        {/* Search pill */}
+      <div className="flex shrink-0 items-center" style={{ gap: 10 }}>
+        {/* Search pill (hidden on small screens) */}
         <div
-          className="flex items-center gap-2"
+          className="hidden items-center gap-2 md:flex"
           style={{
             padding: "8px 14px",
             background: "#fff",
@@ -99,7 +99,7 @@ export default function DashboardTopbar() {
           }}
         >
           <LogOut className="h-4 w-4" style={{ color: "#444" }} />
-          Logout
+          <span className="hidden sm:inline">Logout</span>
         </button>
       </div>
     </div>
