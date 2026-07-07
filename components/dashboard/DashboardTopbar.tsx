@@ -99,7 +99,7 @@ export default function DashboardTopbar() {
           }}
         >
           <LogOut className="h-4 w-4" style={{ color: "#444" }} />
-          Logout
+          <span className="hidden sm:inline">Logout</span>
         </button>
       </div>
     </div>
