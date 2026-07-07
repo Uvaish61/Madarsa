@@ -380,14 +380,7 @@ export default function CoursesContent() {
       ══════════════════════════════════════════════════════════════ */}
       <section>
         {/* Section header */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 18,
-          }}
-        >
+        <div className="mb-4.5 flex flex-wrap items-center justify-between gap-3">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span
               style={{ fontSize: 16, fontWeight: 700, color: "#0d1f13" }}
