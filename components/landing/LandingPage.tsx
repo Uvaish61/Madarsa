@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight, BadgeCheck, BarChart2, Check, Cloud, Code2,
-  Globe, GraduationCap, Hammer, Languages, LayoutDashboard, Link2, Menu,
+  Globe, GraduationCap, Hammer, Languages, LayoutDashboard, Link2, LogIn, Menu,
   Paintbrush, Server, Smartphone,
   Sparkles, Star, UserCheck, Wifi, X,
   type LucideIcon,
@@ -225,7 +225,12 @@ export default function LandingPage() {
               </Link>
             ) : (
               <>
-                <Link href="/login" className="rounded-lg px-3 py-2 text-sm font-semibold text-muted transition hover:bg-green-50 hover:text-green-700">
+                <Link
+                  href="/login"
+                  className="group relative isolate inline-flex items-center gap-1.5 rounded-lg border-2 border-green-600/70 bg-white px-4 py-[7px] text-sm font-bold text-green-700 transition-all duration-200 hover:-translate-y-[1.5px] hover:border-green-700 hover:bg-green-600 hover:text-white hover:shadow-[0_10px_22px_-8px_var(--green-600)]"
+                >
+                  <span className="absolute -inset-1.5 -z-10 animate-pulseSoft rounded-xl bg-green-400/50 opacity-40 blur-md" />
+                  <LogIn className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
                   {pageText.signIn}
                 </Link>
                 <span className="mx-0.5 h-6 w-px bg-line" />
@@ -277,7 +282,12 @@ export default function LandingPage() {
                   Dashboard
                 </Link>
               ) : (
-                <Link href="/login" onClick={() => setMenuOpen(false)} className="flex-1 rounded-lg border border-line bg-white px-4 py-3 text-center text-sm font-bold text-green-700">
+                <Link
+                  href="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border-2 border-green-600/70 bg-white px-4 py-3 text-center text-sm font-bold text-green-700"
+                >
+                  <LogIn className="h-3.5 w-3.5" />
                   {pageText.signIn}
                 </Link>
               )}
