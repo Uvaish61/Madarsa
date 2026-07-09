@@ -21,6 +21,7 @@ export default function LottieWidget({
       loop={loop}
       autoplay={autoplay}
       className={className}
+      renderer="canvas"
       rendererSettings={{ preserveAspectRatio: "xMidYMid meet" }}
     />
   );

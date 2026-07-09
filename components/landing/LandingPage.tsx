@@ -231,7 +231,7 @@ export default function LandingPage() {
               <>
                 <Link
                   href="/login"
-                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-all duration-200 hover:-translate-y-[1.5px] hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
+                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-[transform,box-shadow] duration-200 hover:-translate-y-[1.5px] hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
                 >
                   <span className="absolute inset-y-0 left-0 z-0 w-[45%] -translate-x-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)] transition-transform duration-700 group-hover:translate-x-[320%]" />
                   <span className="relative z-10 flex items-center gap-1.5">
@@ -241,7 +241,7 @@ export default function LandingPage() {
                 </Link>
                 <Link
                   href="/signup"
-                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-all duration-200 hover:-translate-y-[1.5px] hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
+                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-[transform,box-shadow] duration-200 hover:-translate-y-[1.5px] hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
                 >
                   <span className="absolute inset-y-0 left-0 z-0 w-[45%] -translate-x-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)] transition-transform duration-700 group-hover:translate-x-[320%]" />
                   <span className="relative z-10 flex items-center gap-1.5">
@@ -372,7 +372,13 @@ export default function LandingPage() {
               <div className="absolute -bottom-8 -start-4 h-60 w-60 rounded-full bg-[radial-gradient(circle_at_50%_50%,var(--gold),transparent_70%)] blur-[22px] opacity-25 animate-aurora [animation-direction:reverse]" />
 
               <div className="relative overflow-hidden rounded-[24px] border border-line bg-white shadow-soft animate-floatY">
-                <Image src={heroStudentGreen} alt="Madrasa student learning tech on a laptop and mobile" priority className="h-auto w-full object-cover" />
+                <Image
+                  src={heroStudentGreen}
+                  alt="Madrasa student learning tech on a laptop and mobile"
+                  priority
+                  sizes="(min-width: 1024px) 45vw, 100vw"
+                  className="h-auto w-full object-cover"
+                />
               </div>
 
               <div className="absolute -bottom-4 end-0 z-10 flex items-center gap-3 rounded-2xl border border-line bg-white px-4 py-3 shadow-soft animate-floatY2">
@@ -513,7 +519,7 @@ export default function LandingPage() {
                 <article
                   key={course.title}
                   data-course-card
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-line/60 bg-white shadow-[0_2px_20px_-6px_rgba(0,0,0,0.10)] transition-all duration-300 hover:-translate-y-2 hover:border-green-200 hover:shadow-[0_24px_52px_-14px_rgba(0,0,0,0.18)]"
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-line/60 bg-white shadow-[0_2px_20px_-6px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-green-200 hover:shadow-[0_24px_52px_-14px_rgba(0,0,0,0.18)]"
                 >
                   {/* ── Tall header: logo fills bg, title overlaid at bottom ── */}
                   <div className="relative h-48 overflow-hidden">
@@ -580,7 +586,7 @@ export default function LandingPage() {
                     <div className="grid grid-cols-2 gap-2.5">
                       <a
                         href={`/courses/${course.slug}`}
-                        className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-line py-2.5 text-[12.5px] font-bold text-ink transition-all duration-200 hover:border-green-400 hover:bg-green-50 hover:text-green-700"
+                        className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-line py-2.5 text-[12.5px] font-bold text-ink transition-colors duration-200 hover:border-green-400 hover:bg-green-50 hover:text-green-700"
                       >
                         <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                           <line x1="2" y1="4" x2="14" y2="4" />
