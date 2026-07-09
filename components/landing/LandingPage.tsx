@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight, BadgeCheck, BarChart2, Check, Cloud, Code2,
-  Globe, GraduationCap, Hammer, Languages, LayoutDashboard, Link2, Menu,
+  Globe, GraduationCap, Hammer, Languages, LayoutDashboard, Link2, LogIn, Menu,
   Paintbrush, Server, Smartphone,
   Sparkles, Star, UserCheck, Wifi, X,
   type LucideIcon,
@@ -158,6 +158,10 @@ export default function LandingPage() {
       });
     }
 
+    // Custom fonts swap in after ScrollTrigger's initial measurements, shifting
+    // layout and staling every trigger position — re-measure once they settle.
+    document.fonts.ready.then(() => ScrollTrigger.refresh());
+
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
 
@@ -188,22 +192,23 @@ export default function LandingPage() {
           "radial-gradient(1100px_640px_at_50%_-280px, var(--green-50), transparent 62%), radial-gradient(760px_520px_at_100%_6%, color-mix(in oklab, var(--green-500) 8%, transparent), transparent 58%), radial-gradient(680px_520px_at_0%_30%, color-mix(in oklab, var(--green-500) 5%, transparent), transparent 60%)",
       }}
     >
-      <header className="sticky top-0 z-50 border-b border-line bg-paper/85 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-line bg-paper/85 shadow-soft-sm backdrop-blur-xl">
         <nav className="mx-auto flex max-w-7xl items-center gap-4 px-5 py-3 md:px-6">
-          <a href="#top" className="mr-auto flex items-center gap-3">
-            <span className="grid h-10 w-10 flex-none place-items-center rounded-[11px_11px_11px_3px] bg-gradient-to-br from-green-500 to-green-700 shadow-[0_6px_14px_-6px_var(--green-600)]">
+          <a href="#top" className="group mr-auto flex items-center gap-3">
+            <span className="grid h-10 w-10 flex-none place-items-center rounded-[11px_11px_11px_3px] bg-gradient-to-br from-green-500 to-green-700 shadow-[0_6px_14px_-6px_var(--green-600)] transition-transform duration-300 group-hover:scale-105">
               <span className="h-4 w-4 rotate-45 rounded-[9px_9px_9px_0] border-2 border-white border-b-transparent border-r-transparent" />
             </span>
             <span className="flex flex-col leading-none">
-              <span className="text-[16px] font-extrabold tracking-[-0.02em]">Madarsa Tech Academy</span>
-              <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-green-600">Tech Mastery · Deeni Excellence</span>
+              <span className="text-[14.5px] font-extrabold tracking-[-0.02em] sm:text-[16px]">Madarsa Tech Academy</span>
+              <span className="hidden text-[10.5px] font-semibold uppercase tracking-[0.14em] text-green-600 sm:block">Tech Mastery · Deeni Excellence</span>
             </span>
           </a>
 
           <div className="hidden items-center gap-7 lg:flex">
             {navigation.map((item) => (
-              <a key={item.href} href={item.href} className="text-sm font-semibold text-muted transition-colors hover:text-green-700">
+              <a key={item.href} href={item.href} className="group relative text-sm font-semibold text-muted transition-colors hover:text-green-700">
                 {text(item.label, locale)}
+                <span className="absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-green-600 transition-transform duration-300 group-hover:scale-x-100" />
               </a>
             ))}
           </div>
@@ -224,11 +229,25 @@ export default function LandingPage() {
               </Link>
             ) : (
               <>
-                <Link href="/login" className="text-sm font-semibold text-muted transition hover:text-ink">
-                  {pageText.signIn}
+                <Link
+                  href="/login"
+                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-[transform,box-shadow] duration-200 hover:-translate-y-[1.5px] hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
+                >
+                  <span className="absolute inset-y-0 left-0 z-0 w-[45%] -translate-x-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)] transition-transform duration-700 group-hover:translate-x-[320%]" />
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    <LogIn className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                    {pageText.signIn}
+                  </span>
                 </Link>
-                <Link href="/signup" className="rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-2 text-sm font-bold text-white shadow-[0_8px_18px_-9px_var(--green-600)] transition hover:translate-y-[-1px]">
-                  {pageText.navCta}
+                <Link
+                  href="/signup"
+                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-[transform,box-shadow] duration-200 hover:-translate-y-[1.5px] hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
+                >
+                  <span className="absolute inset-y-0 left-0 z-0 w-[45%] -translate-x-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)] transition-transform duration-700 group-hover:translate-x-[320%]" />
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    {pageText.navCta}
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                  </span>
                 </Link>
               </>
             )}
@@ -268,14 +287,24 @@ export default function LandingPage() {
                   Dashboard
                 </Link>
               ) : (
-                <Link href="/login" onClick={() => setMenuOpen(false)} className="flex-1 rounded-lg border border-line bg-white px-4 py-3 text-center text-sm font-bold text-green-700">
+                <Link
+                  href="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-3 text-center text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)]"
+                >
+                  <LogIn className="h-3.5 w-3.5" />
                   {pageText.signIn}
                 </Link>
               )}
             </div>
             {!user && (
-              <Link href="/signup" onClick={() => setMenuOpen(false)} className="mt-3 block rounded-lg bg-green-600 px-4 py-3 text-center text-sm font-bold text-white">
+              <Link
+                href="/signup"
+                onClick={() => setMenuOpen(false)}
+                className="mt-3 flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-3 text-center text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)]"
+              >
                 {pageText.navCta}
+                <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             )}
           </div>
@@ -283,7 +312,7 @@ export default function LandingPage() {
       </header>
 
       <main id="top">
-        <section className="relative mx-auto max-w-7xl px-5 pb-8 pt-16 md:px-6 md:pt-20">
+        <section className="relative mx-auto max-w-7xl px-5 pb-6 pt-10 sm:pt-14 md:px-6 md:pt-20">
           <div className="absolute inset-0 -z-0 pointer-events-none overflow-hidden">
             <div className="absolute -top-10 end-[-60px] h-[520px] w-[420px] rounded-[210px_210px_30px_30px] border border-green-100/80 opacity-55" />
             <div className="absolute top-5 end-0 h-[380px] w-[300px] rounded-[150px_150px_22px_22px] border border-green-100/70 opacity-40" />
@@ -307,11 +336,11 @@ export default function LandingPage() {
 
               <p data-hero-item className="max-w-2xl text-[17.5px] leading-7 text-muted md:text-[18px]">{text(heroDescription, locale)}</p>
 
-              <div data-hero-item className="mt-8 flex flex-wrap gap-3">
-                <Link href="/signup" className="rounded-xl bg-gradient-to-br from-green-500 to-green-700 px-6 py-3.5 text-[15.5px] font-bold text-white shadow-[0_12px_26px_-12px_var(--green-600)] transition hover:translate-y-[-1px]">
+              <div data-hero-item className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Link href="/signup" className="rounded-xl bg-gradient-to-br from-green-500 to-green-700 px-6 py-3.5 text-center text-[15.5px] font-bold text-white shadow-[0_12px_26px_-12px_var(--green-600)] transition hover:translate-y-[-1px]">
                   {pageText.startFree}
                 </Link>
-                <a href="#tracks" className="rounded-xl border border-line bg-white px-6 py-3.5 text-[15.5px] font-bold text-green-700 shadow-soft-sm transition hover:translate-y-[-1px]">
+                <a href="#tracks" className="rounded-xl border border-line bg-white px-6 py-3.5 text-center text-[15.5px] font-bold text-green-700 shadow-soft-sm transition hover:translate-y-[-1px]">
                   {pageText.explore}
                 </a>
               </div>
@@ -343,7 +372,13 @@ export default function LandingPage() {
               <div className="absolute -bottom-8 -start-4 h-60 w-60 rounded-full bg-[radial-gradient(circle_at_50%_50%,var(--gold),transparent_70%)] blur-[22px] opacity-25 animate-aurora [animation-direction:reverse]" />
 
               <div className="relative overflow-hidden rounded-[24px] border border-line bg-white shadow-soft animate-floatY">
-                <Image src={heroStudentGreen} alt="Madrasa student learning tech on a laptop and mobile" priority className="h-auto w-full object-cover" />
+                <Image
+                  src={heroStudentGreen}
+                  alt="Madrasa student learning tech on a laptop and mobile"
+                  priority
+                  sizes="(min-width: 1024px) 45vw, 100vw"
+                  className="h-auto w-full object-cover"
+                />
               </div>
 
               <div className="absolute -bottom-4 end-0 z-10 flex items-center gap-3 rounded-2xl border border-line bg-white px-4 py-3 shadow-soft animate-floatY2">
@@ -377,7 +412,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 pt-20 md:px-6">
+        <section className="mx-auto max-w-7xl px-5 pt-12 sm:pt-16 md:px-6 md:pt-20">
           <SectionHeading eyebrow={{ en: "How It Works", ur: "طریقہ کار" }} title={{ en: "Four simple steps", ur: "چار آسان مراحل" }} locale={locale} />
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -396,7 +431,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="tracks" className="mx-auto max-w-7xl px-5 pt-20 md:px-6">
+        <section id="tracks" className="mx-auto max-w-7xl px-5 pt-12 sm:pt-16 md:px-6 md:pt-20">
           <SectionHeading
             eyebrow={{ en: "Learning Tracks", ur: "سیکھنے کے ٹریکس" }}
             title={{ en: "A clear path — from the basics to a career", ur: "ایک واضح راستہ — بنیادی باتوں سے کیریئر تک" }}
@@ -441,8 +476,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="courses" className="mt-16 border-y border-line bg-paper-2 bg-grid-subtle">
-          <div className="mx-auto max-w-7xl px-5 py-16 md:px-6">
+        <section id="courses" className="mt-10 md:mt-16 border-y border-line bg-paper-2 bg-grid-subtle">
+          <div className="mx-auto max-w-7xl px-5 py-10 sm:py-12 md:px-6 md:py-16">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
                 <div className="mb-3 text-xs font-extrabold uppercase tracking-[0.18em] text-green-600">{pageText.featuredCourses}</div>
@@ -484,7 +519,7 @@ export default function LandingPage() {
                 <article
                   key={course.title}
                   data-course-card
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-line/60 bg-white shadow-[0_2px_20px_-6px_rgba(0,0,0,0.10)] transition-all duration-300 hover:-translate-y-2 hover:border-green-200 hover:shadow-[0_24px_52px_-14px_rgba(0,0,0,0.18)]"
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-line/60 bg-white shadow-[0_2px_20px_-6px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-green-200 hover:shadow-[0_24px_52px_-14px_rgba(0,0,0,0.18)]"
                 >
                   {/* ── Tall header: logo fills bg, title overlaid at bottom ── */}
                   <div className="relative h-48 overflow-hidden">
@@ -551,7 +586,7 @@ export default function LandingPage() {
                     <div className="grid grid-cols-2 gap-2.5">
                       <a
                         href={`/courses/${course.slug}`}
-                        className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-line py-2.5 text-[12.5px] font-bold text-ink transition-all duration-200 hover:border-green-400 hover:bg-green-50 hover:text-green-700"
+                        className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-line py-2.5 text-[12.5px] font-bold text-ink transition-colors duration-200 hover:border-green-400 hover:bg-green-50 hover:text-green-700"
                       >
                         <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                           <line x1="2" y1="4" x2="14" y2="4" />
@@ -569,7 +604,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="why" className="mx-auto max-w-7xl px-5 pt-20 md:px-6">
+        <section id="why" className="mx-auto max-w-7xl px-5 pt-12 sm:pt-16 md:px-6 md:pt-20">
           <SectionHeading
             eyebrow={{ en: "Why This Platform", ur: "یہ پلیٹ فارم کیوں" }}
             title={{ en: "Built for madrasa learners", ur: "مدرسہ کے طلبہ کے لیے بنایا گیا" }}
@@ -593,8 +628,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="stories" className="mt-16 border-y border-line bg-paper-2 bg-grid-subtle">
-          <div className="mx-auto max-w-7xl px-5 py-16 md:px-6">
+        <section id="stories" className="mt-10 md:mt-16 border-y border-line bg-paper-2 bg-grid-subtle">
+          <div className="mx-auto max-w-7xl px-5 py-10 sm:py-12 md:px-6 md:py-16">
             <SectionHeading eyebrow={{ en: "Success Stories", ur: "کامیابی کی کہانیاں" }} title={{ en: "Students across India, real results", ur: "بھارت بھر کے طلبہ، حقیقی نتائج" }} locale={locale} />
 
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -621,7 +656,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 pt-20 md:px-6">
+        <section className="mx-auto max-w-7xl px-5 pt-12 sm:pt-16 md:px-6 md:pt-20">
           <div className="grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
             <div>
               <div className="mb-3 text-xs font-extrabold uppercase tracking-[0.18em] text-green-600">{locale === "en" ? "Certification" : "سرٹیفکیشن"}</div>
@@ -643,8 +678,8 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="rounded-[20px] border border-line bg-white p-7 shadow-soft">
-              <div className="overflow-hidden rounded-[14px] border border-green-100 bg-[repeating-linear-gradient(45deg,var(--green-50)_0_2px,transparent_2px_18px)] p-6 text-center">
+            <div className="rounded-[20px] border border-line bg-white p-5 shadow-soft sm:p-7">
+              <div className="overflow-hidden rounded-[14px] border border-green-100 bg-[repeating-linear-gradient(45deg,var(--green-50)_0_2px,transparent_2px_18px)] p-4 text-center sm:p-6">
                 <div className="mb-4 flex items-center justify-center gap-2">
                   <span className="grid h-8 w-8 place-items-center rounded-[9px_9px_9px_2px] bg-gradient-to-br from-green-500 to-green-700">
                     <span className="h-3 w-3 rotate-45 rounded-[7px_7px_7px_0] border-2 border-white border-b-transparent border-r-transparent" />
@@ -673,8 +708,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="cta" className="mx-auto max-w-7xl px-5 pb-20 pt-20 md:px-6">
-          <div className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-green-700 to-green-600 px-6 py-14 text-center text-white shadow-[0_30px_60px_-30px_var(--green-700)] md:px-8">
+        <section id="cta" className="mx-auto max-w-7xl px-5 pb-12 pt-12 sm:pb-16 sm:pt-16 md:px-6 md:pb-20 md:pt-20">
+          <div className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-green-700 to-green-600 px-6 py-10 text-center text-white shadow-[0_30px_60px_-30px_var(--green-700)] sm:py-14 md:px-8">
             <div className="absolute inset-x-1/2 top-[-60px] h-[440px] w-[360px] -translate-x-1/2 rounded-[180px_180px_24px_24px] border border-white/15" />
             <div className="absolute inset-y-0 start-0 z-0 w-[38%] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent)] animate-shine" />
             {/* Lottie pulsing orb — bottom-right corner accent */}
