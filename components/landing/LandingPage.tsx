@@ -188,10 +188,10 @@ export default function LandingPage() {
           "radial-gradient(1100px_640px_at_50%_-280px, var(--green-50), transparent 62%), radial-gradient(760px_520px_at_100%_6%, color-mix(in oklab, var(--green-500) 8%, transparent), transparent 58%), radial-gradient(680px_520px_at_0%_30%, color-mix(in oklab, var(--green-500) 5%, transparent), transparent 60%)",
       }}
     >
-      <header className="sticky top-0 z-50 border-b border-line bg-paper/85 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-line bg-paper/85 shadow-soft-sm backdrop-blur-xl">
         <nav className="mx-auto flex max-w-7xl items-center gap-4 px-5 py-3 md:px-6">
-          <a href="#top" className="mr-auto flex items-center gap-3">
-            <span className="grid h-10 w-10 flex-none place-items-center rounded-[11px_11px_11px_3px] bg-gradient-to-br from-green-500 to-green-700 shadow-[0_6px_14px_-6px_var(--green-600)]">
+          <a href="#top" className="group mr-auto flex items-center gap-3">
+            <span className="grid h-10 w-10 flex-none place-items-center rounded-[11px_11px_11px_3px] bg-gradient-to-br from-green-500 to-green-700 shadow-[0_6px_14px_-6px_var(--green-600)] transition-transform duration-300 group-hover:scale-105">
               <span className="h-4 w-4 rotate-45 rounded-[9px_9px_9px_0] border-2 border-white border-b-transparent border-r-transparent" />
             </span>
             <span className="flex flex-col leading-none">
@@ -202,8 +202,9 @@ export default function LandingPage() {
 
           <div className="hidden items-center gap-7 lg:flex">
             {navigation.map((item) => (
-              <a key={item.href} href={item.href} className="text-sm font-semibold text-muted transition-colors hover:text-green-700">
+              <a key={item.href} href={item.href} className="group relative text-sm font-semibold text-muted transition-colors hover:text-green-700">
                 {text(item.label, locale)}
+                <span className="absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-green-600 transition-transform duration-300 group-hover:scale-x-100" />
               </a>
             ))}
           </div>
@@ -224,11 +225,19 @@ export default function LandingPage() {
               </Link>
             ) : (
               <>
-                <Link href="/login" className="text-sm font-semibold text-muted transition hover:text-ink">
+                <Link href="/login" className="rounded-lg px-3 py-2 text-sm font-semibold text-muted transition hover:bg-green-50 hover:text-green-700">
                   {pageText.signIn}
                 </Link>
-                <Link href="/signup" className="rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-2 text-sm font-bold text-white shadow-[0_8px_18px_-9px_var(--green-600)] transition hover:translate-y-[-1px]">
-                  {pageText.navCta}
+                <span className="mx-0.5 h-6 w-px bg-line" />
+                <Link
+                  href="/signup"
+                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-all duration-200 hover:-translate-y-[1.5px] hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
+                >
+                  <span className="absolute inset-y-0 left-0 z-0 w-[45%] -translate-x-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)] transition-transform duration-700 group-hover:translate-x-[320%]" />
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    {pageText.navCta}
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                  </span>
                 </Link>
               </>
             )}
@@ -274,8 +283,13 @@ export default function LandingPage() {
               )}
             </div>
             {!user && (
-              <Link href="/signup" onClick={() => setMenuOpen(false)} className="mt-3 block rounded-lg bg-green-600 px-4 py-3 text-center text-sm font-bold text-white">
+              <Link
+                href="/signup"
+                onClick={() => setMenuOpen(false)}
+                className="mt-3 flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-3 text-center text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)]"
+              >
                 {pageText.navCta}
+                <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             )}
           </div>
