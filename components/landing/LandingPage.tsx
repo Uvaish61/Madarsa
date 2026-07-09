@@ -195,7 +195,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 border-b border-line bg-paper/85 shadow-soft-sm backdrop-blur-xl">
         <nav className="mx-auto flex max-w-7xl items-center gap-4 px-5 py-3 md:px-6">
           <a href="#top" className="group mr-auto flex items-center gap-3">
-            <span className="grid h-10 w-10 flex-none place-items-center rounded-[11px_11px_11px_3px] bg-gradient-to-br from-green-500 to-green-700 shadow-[0_6px_14px_-6px_var(--green-600)] transition-transform duration-300 group-hover:scale-105">
+            <span className="grid h-10 w-10 flex-none place-items-center rounded-[11px_11px_11px_3px] bg-green-600 shadow-[0_6px_14px_-6px_var(--green-600)] transition-transform duration-300 group-hover:scale-105">
               <span className="h-4 w-4 rotate-45 rounded-[9px_9px_9px_0] border-2 border-white border-b-transparent border-r-transparent" />
             </span>
             <span className="flex flex-col leading-none">
@@ -223,7 +223,7 @@ export default function LandingPage() {
               {locale === "en" ? "اردو" : "English"}
             </button>
             {user ? (
-              <Link href="/dashboard" className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-2 text-sm font-bold text-white shadow-[0_8px_18px_-9px_var(--green-600)] transition hover:translate-y-[-1px]">
+              <Link href="/dashboard" className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-bold text-white shadow-[0_8px_18px_-9px_var(--green-600)] transition hover:translate-y-[-1px] hover:bg-green-700">
                 <LayoutDashboard className="h-4 w-4" />
                 Dashboard
               </Link>
@@ -231,7 +231,7 @@ export default function LandingPage() {
               <>
                 <Link
                   href="/login"
-                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-[transform,box-shadow] duration-200 hover:-translate-y-[1.5px] hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
+                  className="group relative overflow-hidden rounded-lg bg-green-600 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-[1.5px] hover:bg-green-700 hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
                 >
                   <span className="absolute inset-y-0 left-0 z-0 w-[45%] -translate-x-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)] transition-transform duration-700 group-hover:translate-x-[320%]" />
                   <span className="relative z-10 flex items-center gap-1.5">
@@ -241,7 +241,7 @@ export default function LandingPage() {
                 </Link>
                 <Link
                   href="/signup"
-                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-[transform,box-shadow] duration-200 hover:-translate-y-[1.5px] hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
+                  className="group relative overflow-hidden rounded-lg bg-green-600 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-[1.5px] hover:bg-green-700 hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
                 >
                   <span className="absolute inset-y-0 left-0 z-0 w-[45%] -translate-x-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)] transition-transform duration-700 group-hover:translate-x-[320%]" />
                   <span className="relative z-10 flex items-center gap-1.5">
@@ -263,7 +263,7 @@ export default function LandingPage() {
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </nav>
-        <div className="h-1 w-full bg-gradient-to-r from-green-500 to-green-700 shadow-[0_0_12px_var(--green-500)]" />
+        <div className="h-1 w-full bg-green-600 shadow-[0_0_12px_var(--green-500)]" />
 
         {menuOpen ? (
           <div className="border-t border-line bg-paper px-5 pb-5 pt-3 lg:hidden">
@@ -290,7 +290,7 @@ export default function LandingPage() {
                 <Link
                   href="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-3 text-center text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)]"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-green-600 px-4 py-3 text-center text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)]"
                 >
                   <LogIn className="h-3.5 w-3.5" />
                   {pageText.signIn}
@@ -301,7 +301,7 @@ export default function LandingPage() {
               <Link
                 href="/signup"
                 onClick={() => setMenuOpen(false)}
-                className="mt-3 flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-3 text-center text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)]"
+                className="mt-3 flex items-center justify-center gap-1.5 rounded-lg bg-green-600 px-4 py-3 text-center text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)]"
               >
                 {pageText.navCta}
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -337,7 +337,7 @@ export default function LandingPage() {
               <p data-hero-item className="max-w-2xl text-[17.5px] leading-7 text-muted md:text-[18px]">{text(heroDescription, locale)}</p>
 
               <div data-hero-item className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <Link href="/signup" className="rounded-xl bg-gradient-to-br from-green-500 to-green-700 px-6 py-3.5 text-center text-[15.5px] font-bold text-white shadow-[0_12px_26px_-12px_var(--green-600)] transition hover:translate-y-[-1px]">
+                <Link href="/signup" className="rounded-xl bg-green-600 px-6 py-3.5 text-center text-[15.5px] font-bold text-white shadow-[0_12px_26px_-12px_var(--green-600)] transition hover:translate-y-[-1px] hover:bg-green-700">
                   {pageText.startFree}
                 </Link>
                 <a href="#tracks" className="rounded-xl border border-line bg-white px-6 py-3.5 text-center text-[15.5px] font-bold text-green-700 shadow-soft-sm transition hover:translate-y-[-1px]">
@@ -444,7 +444,7 @@ export default function LandingPage() {
               <article
                 key={track.index}
                 data-track-card
-                className={`overflow-hidden rounded-[18px] border bg-white p-6 shadow-soft-sm transition-transform duration-300 hover:-translate-y-1 ${track.featured ? "border-green-700 bg-gradient-to-br from-green-700 to-green-600 text-white shadow-soft" : "border-line"}`}
+                className={`overflow-hidden rounded-[18px] border bg-white p-6 shadow-soft-sm transition-transform duration-300 hover:-translate-y-1 ${track.featured ? "border-green-700 bg-green-700 text-white shadow-soft" : "border-line"}`}
               >
                 <div className={`mb-4 grid h-12 w-12 place-items-center rounded-[13px_13px_13px_4px] border font-extrabold ${track.featured ? "border-white/20 bg-white/15 text-white" : "border-green-100 bg-green-50 text-green-700"}`}>
                   {track.index}
@@ -681,7 +681,7 @@ export default function LandingPage() {
             <div className="rounded-[20px] border border-line bg-white p-5 shadow-soft sm:p-7">
               <div className="overflow-hidden rounded-[14px] border border-green-100 bg-[repeating-linear-gradient(45deg,var(--green-50)_0_2px,transparent_2px_18px)] p-4 text-center sm:p-6">
                 <div className="mb-4 flex items-center justify-center gap-2">
-                  <span className="grid h-8 w-8 place-items-center rounded-[9px_9px_9px_2px] bg-gradient-to-br from-green-500 to-green-700">
+                  <span className="grid h-8 w-8 place-items-center rounded-[9px_9px_9px_2px] bg-green-600">
                     <span className="h-3 w-3 rotate-45 rounded-[7px_7px_7px_0] border-2 border-white border-b-transparent border-r-transparent" />
                   </span>
                   <span className="text-sm font-extrabold text-ink">Madarsa Tech Academy</span>
@@ -736,7 +736,7 @@ export default function LandingPage() {
           <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-[1.4fr_1fr_1fr_1fr]">
             <div>
               <div className="mb-4 flex items-center gap-3">
-                <span className="grid h-9 w-9 place-items-center rounded-[10px_10px_10px_3px] bg-gradient-to-br from-green-500 to-green-700">
+                <span className="grid h-9 w-9 place-items-center rounded-[10px_10px_10px_3px] bg-green-600">
                   <span className="h-3.5 w-3.5 rotate-45 rounded-[8px_8px_8px_0] border-2 border-white border-b-transparent border-r-transparent" />
                 </span>
                 <span className="text-[15px] font-extrabold text-white">Madarsa Tech Academy</span>
