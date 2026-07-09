@@ -199,8 +199,8 @@ export default function LandingPage() {
               <span className="h-4 w-4 rotate-45 rounded-[9px_9px_9px_0] border-2 border-white border-b-transparent border-r-transparent" />
             </span>
             <span className="flex flex-col leading-none">
-              <span className="text-[16px] font-extrabold tracking-[-0.02em]">Madarsa Tech Academy</span>
-              <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-green-600">Tech Mastery · Deeni Excellence</span>
+              <span className="text-[14.5px] font-extrabold tracking-[-0.02em] sm:text-[16px]">Madarsa Tech Academy</span>
+              <span className="hidden text-[10.5px] font-semibold uppercase tracking-[0.14em] text-green-600 sm:block">Tech Mastery · Deeni Excellence</span>
             </span>
           </a>
 
@@ -312,7 +312,7 @@ export default function LandingPage() {
       </header>
 
       <main id="top">
-        <section className="relative mx-auto max-w-7xl px-5 pb-8 pt-16 md:px-6 md:pt-20">
+        <section className="relative mx-auto max-w-7xl px-5 pb-6 pt-10 sm:pt-14 md:px-6 md:pt-20">
           <div className="absolute inset-0 -z-0 pointer-events-none overflow-hidden">
             <div className="absolute -top-10 end-[-60px] h-[520px] w-[420px] rounded-[210px_210px_30px_30px] border border-green-100/80 opacity-55" />
             <div className="absolute top-5 end-0 h-[380px] w-[300px] rounded-[150px_150px_22px_22px] border border-green-100/70 opacity-40" />
@@ -336,11 +336,11 @@ export default function LandingPage() {
 
               <p data-hero-item className="max-w-2xl text-[17.5px] leading-7 text-muted md:text-[18px]">{text(heroDescription, locale)}</p>
 
-              <div data-hero-item className="mt-8 flex flex-wrap gap-3">
-                <Link href="/signup" className="rounded-xl bg-gradient-to-br from-green-500 to-green-700 px-6 py-3.5 text-[15.5px] font-bold text-white shadow-[0_12px_26px_-12px_var(--green-600)] transition hover:translate-y-[-1px]">
+              <div data-hero-item className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Link href="/signup" className="rounded-xl bg-gradient-to-br from-green-500 to-green-700 px-6 py-3.5 text-center text-[15.5px] font-bold text-white shadow-[0_12px_26px_-12px_var(--green-600)] transition hover:translate-y-[-1px]">
                   {pageText.startFree}
                 </Link>
-                <a href="#tracks" className="rounded-xl border border-line bg-white px-6 py-3.5 text-[15.5px] font-bold text-green-700 shadow-soft-sm transition hover:translate-y-[-1px]">
+                <a href="#tracks" className="rounded-xl border border-line bg-white px-6 py-3.5 text-center text-[15.5px] font-bold text-green-700 shadow-soft-sm transition hover:translate-y-[-1px]">
                   {pageText.explore}
                 </a>
               </div>
@@ -412,7 +412,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 pt-20 md:px-6">
+        <section className="mx-auto max-w-7xl px-5 pt-12 sm:pt-16 md:px-6 md:pt-20">
           <SectionHeading eyebrow={{ en: "How It Works", ur: "طریقہ کار" }} title={{ en: "Four simple steps", ur: "چار آسان مراحل" }} locale={locale} />
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -431,7 +431,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="tracks" className="mx-auto max-w-7xl px-5 pt-20 md:px-6">
+        <section id="tracks" className="mx-auto max-w-7xl px-5 pt-12 sm:pt-16 md:px-6 md:pt-20">
           <SectionHeading
             eyebrow={{ en: "Learning Tracks", ur: "سیکھنے کے ٹریکس" }}
             title={{ en: "A clear path — from the basics to a career", ur: "ایک واضح راستہ — بنیادی باتوں سے کیریئر تک" }}
@@ -476,8 +476,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="courses" className="mt-16 border-y border-line bg-paper-2 bg-grid-subtle">
-          <div className="mx-auto max-w-7xl px-5 py-16 md:px-6">
+        <section id="courses" className="mt-10 md:mt-16 border-y border-line bg-paper-2 bg-grid-subtle">
+          <div className="mx-auto max-w-7xl px-5 py-10 sm:py-12 md:px-6 md:py-16">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
                 <div className="mb-3 text-xs font-extrabold uppercase tracking-[0.18em] text-green-600">{pageText.featuredCourses}</div>
@@ -604,7 +604,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="why" className="mx-auto max-w-7xl px-5 pt-20 md:px-6">
+        <section id="why" className="mx-auto max-w-7xl px-5 pt-12 sm:pt-16 md:px-6 md:pt-20">
           <SectionHeading
             eyebrow={{ en: "Why This Platform", ur: "یہ پلیٹ فارم کیوں" }}
             title={{ en: "Built for madrasa learners", ur: "مدرسہ کے طلبہ کے لیے بنایا گیا" }}
@@ -628,8 +628,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="stories" className="mt-16 border-y border-line bg-paper-2 bg-grid-subtle">
-          <div className="mx-auto max-w-7xl px-5 py-16 md:px-6">
+        <section id="stories" className="mt-10 md:mt-16 border-y border-line bg-paper-2 bg-grid-subtle">
+          <div className="mx-auto max-w-7xl px-5 py-10 sm:py-12 md:px-6 md:py-16">
             <SectionHeading eyebrow={{ en: "Success Stories", ur: "کامیابی کی کہانیاں" }} title={{ en: "Students across India, real results", ur: "بھارت بھر کے طلبہ، حقیقی نتائج" }} locale={locale} />
 
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -656,7 +656,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 pt-20 md:px-6">
+        <section className="mx-auto max-w-7xl px-5 pt-12 sm:pt-16 md:px-6 md:pt-20">
           <div className="grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
             <div>
               <div className="mb-3 text-xs font-extrabold uppercase tracking-[0.18em] text-green-600">{locale === "en" ? "Certification" : "سرٹیفکیشن"}</div>
@@ -678,8 +678,8 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="rounded-[20px] border border-line bg-white p-7 shadow-soft">
-              <div className="overflow-hidden rounded-[14px] border border-green-100 bg-[repeating-linear-gradient(45deg,var(--green-50)_0_2px,transparent_2px_18px)] p-6 text-center">
+            <div className="rounded-[20px] border border-line bg-white p-5 shadow-soft sm:p-7">
+              <div className="overflow-hidden rounded-[14px] border border-green-100 bg-[repeating-linear-gradient(45deg,var(--green-50)_0_2px,transparent_2px_18px)] p-4 text-center sm:p-6">
                 <div className="mb-4 flex items-center justify-center gap-2">
                   <span className="grid h-8 w-8 place-items-center rounded-[9px_9px_9px_2px] bg-gradient-to-br from-green-500 to-green-700">
                     <span className="h-3 w-3 rotate-45 rounded-[7px_7px_7px_0] border-2 border-white border-b-transparent border-r-transparent" />
@@ -708,8 +708,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="cta" className="mx-auto max-w-7xl px-5 pb-20 pt-20 md:px-6">
-          <div className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-green-700 to-green-600 px-6 py-14 text-center text-white shadow-[0_30px_60px_-30px_var(--green-700)] md:px-8">
+        <section id="cta" className="mx-auto max-w-7xl px-5 pb-12 pt-12 sm:pb-16 sm:pt-16 md:px-6 md:pb-20 md:pt-20">
+          <div className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-green-700 to-green-600 px-6 py-10 text-center text-white shadow-[0_30px_60px_-30px_var(--green-700)] sm:py-14 md:px-8">
             <div className="absolute inset-x-1/2 top-[-60px] h-[440px] w-[360px] -translate-x-1/2 rounded-[180px_180px_24px_24px] border border-white/15" />
             <div className="absolute inset-y-0 start-0 z-0 w-[38%] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent)] animate-shine" />
             {/* Lottie pulsing orb — bottom-right corner accent */}
