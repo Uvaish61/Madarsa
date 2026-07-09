@@ -158,6 +158,10 @@ export default function LandingPage() {
       });
     }
 
+    // Custom fonts swap in after ScrollTrigger's initial measurements, shifting
+    // layout and staling every trigger position — re-measure once they settle.
+    document.fonts.ready.then(() => ScrollTrigger.refresh());
+
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
 

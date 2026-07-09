@@ -8,7 +8,6 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
   variable: "--font-sans",
   weight: ["400", "500", "600", "700", "800"],
-  adjustFontFallback: false,
 });
 
 const cinzel = Cinzel({
@@ -16,7 +15,6 @@ const cinzel = Cinzel({
   display: "swap",
   variable: "--font-cinzel",
   weight: ["600"],
-  adjustFontFallback: false,
 });
 
 const lora = Lora({
@@ -25,7 +23,6 @@ const lora = Lora({
   variable: "--font-lora",
   weight: ["400", "500"],
   style: ["normal", "italic"],
-  adjustFontFallback: false,
 });
 
 const dmMono = DM_Mono({
@@ -33,7 +30,6 @@ const dmMono = DM_Mono({
   display: "swap",
   variable: "--font-mono",
   weight: ["400", "500"],
-  adjustFontFallback: false,
 });
 
 const newsreader = Newsreader({
@@ -41,7 +37,6 @@ const newsreader = Newsreader({
   display: "swap",
   variable: "--font-serif",
   weight: ["400", "500", "600"],
-  adjustFontFallback: false,
 });
 
 const urdu = Noto_Nastaliq_Urdu({
