@@ -227,13 +227,14 @@ export default function LandingPage() {
               <>
                 <Link
                   href="/login"
-                  className="group relative isolate inline-flex items-center gap-1.5 rounded-lg border-2 border-green-600/70 bg-white px-4 py-[7px] text-sm font-bold text-green-700 transition-all duration-200 hover:-translate-y-[1.5px] hover:border-green-700 hover:bg-green-600 hover:text-white hover:shadow-[0_10px_22px_-8px_var(--green-600)]"
+                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-all duration-200 hover:-translate-y-[1.5px] hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
                 >
-                  <span className="absolute -inset-1.5 -z-10 animate-pulseSoft rounded-xl bg-green-400/50 opacity-40 blur-md" />
-                  <LogIn className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-                  {pageText.signIn}
+                  <span className="absolute inset-y-0 left-0 z-0 w-[45%] -translate-x-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)] transition-transform duration-700 group-hover:translate-x-[320%]" />
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    <LogIn className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                    {pageText.signIn}
+                  </span>
                 </Link>
-                <span className="mx-0.5 h-6 w-px bg-line" />
                 <Link
                   href="/signup"
                   className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)] ring-1 ring-green-700/20 transition-all duration-200 hover:-translate-y-[1.5px] hover:shadow-[0_14px_30px_-8px_var(--green-600)]"
@@ -285,7 +286,7 @@ export default function LandingPage() {
                 <Link
                   href="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border-2 border-green-600/70 bg-white px-4 py-3 text-center text-sm font-bold text-green-700"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br from-green-500 to-green-700 px-4 py-3 text-center text-sm font-bold text-white shadow-[0_10px_24px_-8px_var(--green-600)]"
                 >
                   <LogIn className="h-3.5 w-3.5" />
                   {pageText.signIn}
